@@ -13,6 +13,16 @@ const nsWebpack = require("nativescript-dev-webpack");
 const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
 
+// start for nativescript-nodify
+const shims = require('nativescript-nodeify/shims.json');
+const aliases = {};
+for (const key of Object.keys(shims)) {
+        const value = shims[key];
+        aliases[key + '$'] = value;
+}
+aliases['inherits$'] = 'inherits/inherits_browser';
+// end for nativescript-nodify
+
 module.exports = env => {
     // Add your custom Activities, Services and other android app components here.
     const appComponents = [
@@ -94,10 +104,11 @@ module.exports = env => {
             alias: {
                 '~': appFullPath,
                 '@': appFullPath,
-                'vue': 'nativescript-vue'
+                'vue': 'nativescript-vue',
+                'string_decoder': 'string_decoder/lib/string_decoder.js',
+                ...aliases
             },
-            // don't resolve symlinks to symlinked modules
-            symlinks: false,
+            aliasFields: ["browser"],
         },
         resolveLoader: {
             // don't resolve symlinks to symlinked loaders

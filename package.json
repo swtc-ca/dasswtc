@@ -13,11 +13,15 @@
       "version": "4.2.0"
     }
   },
-  "dependencies": { 
-    "vuex": "^3.0.1",
+  "dependencies": {
+    "jingtum-lib": "^1.4.1",
+    "moment": "^2.22.2",
+    "nativescript-nodeify": "^0.8.0",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-vue": "^2.0.0",
-    "tns-core-modules": "^4.2.0"
+    "nativescript-websockets": "^1.5.2",
+    "tns-core-modules": "^4.2.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
