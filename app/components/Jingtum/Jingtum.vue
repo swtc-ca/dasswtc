@@ -81,6 +81,14 @@
             </TabViewItem>
             <TabViewItem :title="tabTitles[2]">
                 <StackLayout class="dapp">
+                  <GridLayout columns="80,*,160" rows="40">
+                    <Label text="关 于" col="0" row="0"/>
+                    <Label text="//daszichan.com" col="2" row="0"/>
+                  </GridLayout>
+                  <GridLayout columns="80,*,80" rows="40">
+                    <Label text="版 本" col="0" row="0"/>
+                    <Label text="0.1.2" col="2" row="0"/>
+                  </GridLayout>
                   <GridLayout columns="80,*,80" rows="40">
                     <Label text="冷钱包" col="0" row="0"/>
                     <Switch :checked="cold" @checkedChange="onColdChange" col="2" row="0"/>
@@ -93,6 +101,7 @@
                   <StackLayout>
                       <ListPicker :items="servers.map(s => s.display)" v-model="server" />
                       <Button text="选择井通节点" :isEnabled="!remoteStatus" @tap="onServerSelected" class="btn btn-primary btn-active"/>
+                      <Button text="更新节点列表" :isEnabled="false" @tap="onServerListRefresh" class="btn btn-primary"/>
                   </StackLayout>
                 </StackLayout>
             </TabViewItem>
@@ -165,6 +174,10 @@ export default {
       "appendmsg"
     ]),
     ...mapActions([]),
+    onServerListRefresh(){
+      console.log("refresh server list")
+      this.appendmsg(`更新服务器列表...`)
+    },
     onShowSecret() {
       console.log("toggle display secret")
       this.appendmsg(`切换秘钥显示...`)
