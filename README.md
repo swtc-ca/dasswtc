@@ -1,19 +1,19 @@
 # DAS SWTC
 
-> Jingtum Lib Play by DAS
-> 井通区块链node.js库
-> NativeScript + nativescript-nodeify
-> 无需Java和Swift/Objective c++
-> Build native mobile apps for both iOS and Android
-> 开发出原生应用
-> Selectable with javascript/angular/vue
-> 可用纯javascript或者angular或者vue
-> web base playgroud and GUI app  基于网页的和图形界面的应用加速开发
+-  Jingtum Lib Play by DAS
+-  井通区块链node.js库
+-  NativeScript + nativescript-nodeify
+-  无需Java和Swift/Objective c++
+-  Build native mobile apps for both iOS and Android
+-  开发出原生应用
+-  Selectable with javascript/angular/vue
+-  可用纯javascript或者angular或者vue
+-  web base playgroud and GUI app  基于网页的和图形界面的应用加速开发
 
 ## prerequisite 要求
 
-> known了解node.js/javascript
-> can setup development environment following documents 能按照文档搭建开发环境 nativescript.org
+-  known了解node.js/javascript
+-  can setup development environment following documents 能按照文档搭建开发环境 nativescript.org
 
 ## 准备
 
