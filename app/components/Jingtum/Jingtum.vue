@@ -14,12 +14,12 @@
                     </StackLayout>
                     <StackLayout :visibility="!!secret ? 'visible' : 'collapse'">
                       <GridLayout ref="walletRef" columns="80,*,2*,90" rows="36">
-                        <Label col="0" text="井通钱包" />
+                        <Label col="0" text="井通" />
                         <Label col="1" :text="sequence ? '序号' + sequence : ''" />
                         <Label col="2" :text="balance ? '余额' + balance : ''" />
                         <Label col="3" :text="!!price ? '价格' + price : ''" />
                       </GridLayout>
-                      <Label :text="'  地址: ' + address"  />
+                      <Label :text="' ' + address" @onTap="toClipboard(address)" style="text-align:right;" />
                     </StackLayout>
                     <StackLayout :visibility="!!remote ? 'collapse' : 'visible'">
                         <ListPicker :items="servers.map(s => s.display)" v-model="server" />
@@ -27,12 +27,12 @@
                     </StackLayout>
                     <StackLayout :visibility="!!remote ? 'visible' : 'collapse'">
                       <GridLayout ref="remoteRef" columns="100,100,*,80" rows="40">
-                        <Label col="0" text="井通节点" />
-                        <Label col="1" :text="remoteStatus ? '连接': ''" />
+                        <Label col="0" text="节点" />
+                        <Label col="1" :text="remoteStatus ? '已连接': ''" />
                         <button col="3" :isEnabled="!remoteconnecting" @tap="onRemote" :text="!remoteStatus ? '连接' : '断开'" style="width:80;height:40" class="btn btn-primary"/>
                       </GridLayout>
-                      <Label :text="'  地址: ' + remote"  />
-                      <Label :text="'  名称: ' + remoteDisplay"  />
+                      <Label :text="'  ' + remote"  />
+                      <Label :text="'  ' + remoteDisplay"  />
                       <GridLayout ref="queryRef" columns="80,*,80" rows="40" :visibility="remoteStatus && !remoteconnecting ? 'visible' : 'collapse'">
                         <button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:80;" class="btn btn-primary"/>
                         <TextField col="1" row="0" v-model="qrLedgerTransaction" autocorrect="false"/>
@@ -83,11 +83,11 @@
                 <StackLayout class="dapp">
                   <GridLayout columns="80,*,160" rows="40">
                     <Label text="关 于" col="0" row="0"/>
-                    <Label text="//daszichan.com" col="2" row="0"/>
+                    <Label text="http://swtc.daszichan.com" col="2" row="0"/>
                   </GridLayout>
                   <GridLayout columns="80,*,80" rows="40">
                     <Label text="版 本" col="0" row="0"/>
-                    <Label text="0.1.2" col="2" row="0"/>
+                    <Label text="0.1.3" col="2" row="0"/>
                   </GridLayout>
                   <GridLayout columns="80,*,80" rows="40">
                     <Label text="冷钱包" col="0" row="0"/>
@@ -97,7 +97,7 @@
                     <Label text="秘钥" col="0" row="0"/>
                     <Switch :checked="showSecretSwitch" @checkedChange="onShowSecret" v-model="showSecretSwitch" col="2" row="0"/>
                   </GridLayout>
-                  <Label :text="secret" :visibility="showSecret ? 'visible' : 'hidden'" style="font-size:16" />
+                  <Label :text="secret" :visibility="showSecret ? 'visible' : 'hidden'" @onTap="toClipboard(secret)" style="font-size:16" />
                   <StackLayout>
                       <ListPicker :items="servers.map(s => s.display)" v-model="server" />
                       <Button text="选择井通节点" :isEnabled="!remoteStatus" @tap="onServerSelected" class="btn btn-primary btn-active"/>
@@ -121,6 +121,9 @@ import * as platformModule from "tns-core-modules/platform";
 import JingtumService from '@/services/JingtumService';
 const jingtumService = new JingtumService();
 jingtumService.confPersist()
+const feedbackplugin = require('nativescript-feedback')
+var feedback = new feedbackplugin.Feedback()
+var clipboard = require("nativescript-clipboard")
 export default {
   data() {
     return {
@@ -174,13 +177,26 @@ export default {
       "appendmsg"
     ]),
     ...mapActions([]),
+    toClipboard(content){
+      clipboard.setText(content).then(() => { this.appendmsg(`${content}已拷贝到粘贴板`); this.showLastLog()});
+    },
+    showLastLog() {
+      feedback.show({
+        title: "输出",
+        message: this.msgs[0],
+        duration: 2000,
+        onTap: function() { console.log("点击")}
+      })
+    },
     onServerListRefresh(){
       console.log("refresh server list")
       this.appendmsg(`更新服务器列表...`)
+      this.showLastLog()
     },
     onShowSecret() {
       console.log("toggle display secret")
       this.appendmsg(`切换秘钥显示...`)
+      this.showLastLog()
       if (this.showSecretSwitch) {
         prompt({
           title: "查看秘钥",
@@ -213,6 +229,7 @@ export default {
     onOfferSell(){
       console.log("manage offers")
       this.appendmsg(`操作挂单...`)
+      this.showLastLog()
       let takerpays = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takergets = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       jingtumService.requestOffer('Sell', takergets, takerpays)
@@ -220,6 +237,7 @@ export default {
     onOfferBuy(){
       console.log("manage offers")
       this.appendmsg(`操作挂单...`)
+      this.showLastLog()
       let takergets = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takerpays = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       jingtumService.requestOffer('Buy', takergets, takerpays)
@@ -227,6 +245,7 @@ export default {
     onOrderBook() {
       console.log("query orderbooks")
       this.appendmsg(`查询市场...`)
+      this.showLastLog()
       var callbackGetPrice =  (err, result) => {
         if(err) {
           console.log(err); store.commit('appendmsg',err)
@@ -239,10 +258,12 @@ export default {
             result.offers.forEach(r => offers.push(`${Math.floor(Number(r.TakerPays) / 1000000)}SWT <-> ${Math.floor(r.TakerGets.value)}CNY`)) 
             this.appendmsg(JSON.stringify(offers,'',2))
             console.log(offers)
+            this.showLastLog()
             //this.appendmsg(JSON.stringify(result,'',2))
           } else {
             console.log(result);
             this.appendmsg(result)
+            this.showLastLog()
           }
         }
       }
@@ -255,53 +276,63 @@ export default {
     onWalletOffers() {
       console.log("query offers")
       this.appendmsg(`查询挂单...`)
+      this.showLastLog()
       jingtumService.requestAccountOffers()
     },
     onWalletRelations() {
       console.log("query relation")
       this.appendmsg(`查询关系...`)
+      this.showLastLog()
       jingtumService.requestAccountRelations(this.qrRelation)
     },
     onWalletTums() {
       console.log("available tums")
       this.appendmsg(`查询可用通证...`)
+      this.showLastLog()
       jingtumService.requestAccountTums()
     },
     onWalletHistory() {
       console.log("history")
       this.appendmsg(`查询支付记录...`)
+      this.showLastLog()
       jingtumService.requestAccountTx()
     },
     onPayment(){
       console.log("donation")
       this.appendmsg(`测试支付赞助 ${this.payMemo}`)
+      this.showLastLog()
       jingtumService.pay('jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo)
     },
     onQueryLedger(){
       console.log("querying ledger ...")
       this.appendmsg(`查询账本...`)
+      this.showLastLog()
       jingtumService.queryLedger(this.qrLedgerTransaction)
     },
     onQueryTransaction(){
       console.log("querying transaction ...")
       this.appendmsg(`查询交易...`)
+      this.showLastLog()
       jingtumService.queryTransaction(this.qrLedgerTransaction)
     },
     onLedger() {
       console.log("listen ledger_closed switch...")
       this.appendmsg(`更改账本接收...`)
+      this.showLastLog()
       jingtumService.ledgerReceive(!this.ledgerReceiving)
       this.ledgerReceiving = !this.ledgerReceiving
     },
     onTransaction() {
       console.log("listen transactions switch...")
       this.appendmsg(`更改交易接收...`)
+      this.showLastLog()
       jingtumService.transactionReceive(!this.transactionReceiving)
       this.transactionReceiving = !this.transactionReceiving
     },
     onWallet() {
       console.log("update balance")
-      this.appendmsg("updating balance");
+      this.appendmsg("查余额...");
+      this.showLastLog()
       var callbackAccount =  (err, result) => {if(err) { console.log(err); this.appendmsg(err); if (err === 'Account not found.') { this.setactivated(false); alert("账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试")}} else { this.setactivated(true); console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2)); this.setsequence(result.account_data.Sequence); this.setbalance(Math.floor(result.account_data.Balance / 10000) / 100)} else {this.appendmsg(result)}}}
       jingtumService.updateWallet(callbackAccount);
     },
@@ -314,6 +345,7 @@ export default {
           else { this.remoteStatus = !this.remoteStatus; console.log(result); 
             if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} 
             else {this.appendmsg(result)}
+            this.showLastLog()
           }
         }
       if (this.remoteStatus) {
@@ -343,6 +375,7 @@ export default {
         this.remoteDisplay = this.servers.filter( s => s.server === this.remote)[0].display
         jingtumService.refresh()
         this.appendmsg(JSON.stringify(this.servers[this.server], '', 2));
+        this.showLastLog()
         alert("服务器已更改")
       }
     },
@@ -355,25 +388,30 @@ export default {
         alert("something wrong selecting address")
       }
       this.appendmsg(`address:${this.address}\t secret:${this.secret}`);
+      this.showLastLog()
     },
     onMoacChange(args) {
       this.swapmoac();
       console.log(`this.moac=${this.moac}`);
       this.appendmsg(this.moac);
+      this.showLastLog()
     },
     onSwtcChange(args) {
       this.swapswtc();
       console.log(`this.swtc=${this.swtc}`);
       this.appendmsg(this.swtc);
+      this.showLastLog()
     },
     onColdChange(args) {
       this.swapcold();
       console.log(`this.cold=${this.cold}`);
       this.appendmsg(this.cold);
+      this.showLastLog()
     },
     onTap() {
       this.increment();
       this.appendmsg(`tapped ${this.counter}`);
+      this.showLastLog()
     },
     onDappTap(args) {
       this.appendmsg(`Dapp of index ${args.index} tapped`);
@@ -382,12 +420,15 @@ export default {
           switch (result) {
             case "打开":
               this.appendmsg(`onDappTap -> 打开`);
+              this.showLastLog()
               break;
             case "隐藏":
               this.appendmsg(`onDappTap -> 隐藏`);
+              this.showLastLog()
               break;
             case "取消" || undefined: // Dismisses the dialog.
               this.appendmsg(`onDappTap -> 取消`);
+              this.showLastLog()
               break;
           }
         }

@@ -1,6 +1,6 @@
 {
   "name": "dasswtc",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Jingtum Lib Play by DAS",
   "author": "lospringliu@gmail.com",
   "license": "MIT",
@@ -16,6 +16,8 @@
   "dependencies": {
     "jingtum-lib": "^1.4.1",
     "moment": "^2.22.2",
+    "nativescript-clipboard": "^1.1.7",
+    "nativescript-feedback": "^1.2.0",
     "nativescript-nodeify": "^0.8.0",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-vue": "^2.0.2",
