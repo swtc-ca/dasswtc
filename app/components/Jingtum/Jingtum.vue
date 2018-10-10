@@ -14,12 +14,12 @@
                     </StackLayout>
                     <StackLayout :visibility="!!secret ? 'visible' : 'collapse'">
                       <GridLayout ref="walletRef" columns="80,*,2*,90" rows="36">
-                        <Label col="0" text="井通" />
+                        <Label col="0" text="井通帐号" />
                         <Label col="1" :text="sequence ? '序号' + sequence : ''" />
                         <Label col="2" :text="balance ? '余额' + balance : ''" />
                         <Label col="3" :text="!!price ? '价格' + price : ''" />
                       </GridLayout>
-                      <Label :text="' ' + address" @onTap="toClipboard(address)" style="text-align:right;" />
+                      <Label :text="' 地址: ' + address" @onTap="toClipboard(address)" />
                     </StackLayout>
                     <StackLayout :visibility="!!remote ? 'collapse' : 'visible'">
                         <ListPicker :items="servers.map(s => s.display)" v-model="server" />
@@ -27,12 +27,12 @@
                     </StackLayout>
                     <StackLayout :visibility="!!remote ? 'visible' : 'collapse'">
                       <GridLayout ref="remoteRef" columns="100,100,*,80" rows="40">
-                        <Label col="0" text="节点" />
+                        <Label col="0" text="井通节点" />
                         <Label col="1" :text="remoteStatus ? '已连接': ''" />
                         <button col="3" :isEnabled="!remoteconnecting" @tap="onRemote" :text="!remoteStatus ? '连接' : '断开'" style="width:80;height:40" class="btn btn-primary"/>
                       </GridLayout>
-                      <Label :text="'  ' + remote"  />
-                      <Label :text="'  ' + remoteDisplay"  />
+                      <Label :text="' 节点: ' + remote"  />
+                      <Label :text="' 名称: ' + remoteDisplay"  />
                       <GridLayout ref="queryRef" columns="80,*,80" rows="40" :visibility="remoteStatus && !remoteconnecting ? 'visible' : 'collapse'">
                         <button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:80;" class="btn btn-primary"/>
                         <TextField col="1" row="0" v-model="qrLedgerTransaction" autocorrect="false"/>
@@ -81,21 +81,21 @@
             </TabViewItem>
             <TabViewItem :title="tabTitles[2]">
                 <StackLayout class="dapp">
-                  <GridLayout columns="80,*,160" rows="40">
-                    <Label text="关 于" col="0" row="0"/>
-                    <Label text="http://swtc.daszichan.com" col="2" row="0"/>
+                  <GridLayout columns="*" rows="40">
+                    <Label text="关 于" />
+                    <Label text="http://swtc.daszichan.com" style="horizontal-align:right;"/>
                   </GridLayout>
-                  <GridLayout columns="80,*,80" rows="40">
-                    <Label text="版 本" col="0" row="0"/>
-                    <Label text="0.1.3" col="2" row="0"/>
+                  <GridLayout columns="*" rows="40">
+                    <Label text="版 本" />
+                    <Label :text="appVersion" style="horizontal-align:right;"/>
                   </GridLayout>
-                  <GridLayout columns="80,*,80" rows="40">
-                    <Label text="冷钱包" col="0" row="0"/>
-                    <Switch :checked="cold" @checkedChange="onColdChange" col="2" row="0"/>
+                  <GridLayout columns="*" rows="40">
+                    <Label text="冷钱包" />
+                    <Switch :checked="cold" @checkedChange="onColdChange" style="horizontal-align:right;"/>
                   </GridLayout>
-                  <GridLayout columns="80,*,80" rows="40">
-                    <Label text="秘钥" col="0" row="0"/>
-                    <Switch :checked="showSecretSwitch" @checkedChange="onShowSecret" v-model="showSecretSwitch" col="2" row="0"/>
+                  <GridLayout columns="*" rows="40">
+                    <Label text="秘钥" />
+                    <Switch :checked="showSecretSwitch" @checkedChange="onShowSecret" v-model="showSecretSwitch" style="horizontal-align:right;"/>
                   </GridLayout>
                   <Label :text="secret" :visibility="showSecret ? 'visible' : 'hidden'" @onTap="toClipboard(secret)" style="font-size:16" />
                   <StackLayout>
@@ -127,6 +127,7 @@ var clipboard = require("nativescript-clipboard")
 export default {
   data() {
     return {
+      appVersion: '0.1.4',
       wallets: [],
       wallet: -1,
       states: [],
@@ -185,7 +186,7 @@ export default {
         title: "输出",
         message: this.msgs[0],
         duration: 2000,
-        onTap: function() { console.log("点击")}
+        onTap: function() { feedback.hide(); }
       })
     },
     onServerListRefresh(){
@@ -219,11 +220,10 @@ export default {
             this.setshowSecret(false)
             this.showSecretSwitch = false
           }
-        })
+        }).catch(error => { console.log(error); this.setshowSecret(false); this.showSecretSwitch = false;})
       } else {
           this.setshowSecret(false)
           this.showSecretSwitch = false
-
       }
     },
     onOfferSell(){
@@ -256,7 +256,7 @@ export default {
             this.setprice(Math.floor(10000 * Number(firstRecord.TakerGets.value) * 1000000 / Number(firstRecord.TakerPays)) / 10000) 
             this.offerCNY = this.price
             result.offers.forEach(r => offers.push(`${Math.floor(Number(r.TakerPays) / 1000000)}SWT <-> ${Math.floor(r.TakerGets.value)}CNY`)) 
-            this.appendmsg(JSON.stringify(offers,'',2))
+            this.appendmsg(JSON.stringify(offers.slice(0,10),'',2))
             console.log(offers)
             this.showLastLog()
             //this.appendmsg(JSON.stringify(result,'',2))
@@ -369,6 +369,9 @@ export default {
     },
     onServerSelected() {
       console.log("server seclected");
+      if (this.server === -1) {
+        this.server = 0
+      }
       if ( jingtumService.server != this.servers[this.server].server ) {
         jingtumService.server = this.servers[this.server].server 
         this.remote = this.servers[this.server].server;
@@ -376,7 +379,8 @@ export default {
         jingtumService.refresh()
         this.appendmsg(JSON.stringify(this.servers[this.server], '', 2));
         this.showLastLog()
-        alert("服务器已更改")
+        this.appendmsg("服务器已更改")
+        this.showLastLog()
       }
     },
     onWalletSelected() {

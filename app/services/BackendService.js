@@ -13,7 +13,7 @@ export default class BackendService {
     console.log('backend service initializing')
     this._swtcSecret = getString(swtcSecretKey) || '' ;
     this._jlibServer = getString(jlibServerKey) || '';
-    this._masterPassword = getString(masterPasswordKey) || '';
+    //this._masterPassword = getString(masterPasswordKey) || '';
     this._unlocked = false;
     //this.isunlocked = false;
     console.log('backend service initialized')
@@ -36,10 +36,10 @@ export default class BackendService {
   }
 
   get masterPassword() {
-    return this._masterPassword;
+    return getString(masterPasswordKey);
   }
   set masterPassword(password) {
-    this._masterPassword = password ;
+    //this._masterPassword = password ;
     setString(masterPasswordKey, password);
   }
 

@@ -79,11 +79,11 @@ export default {
       if (val) {
         const animations = []
 
-        animations.push({ target: this.$refs.unlockContainer.nativeView, opacity: 1, duration: 500 })
+        animations.push({ target: this.$refs.unlockContainer.nativeView, opacity: 1, duration: 300 })
 
         // Slide up the form controls and sign up container.
-        animations.push({ target: this.$refs.signUpStack.nativeView, translate: { x: 0, y: 0 }, opacity: 1, delay: 500, duration: 150 })
-        animations.push({ target: this.$refs.formControls.nativeView, translate: { x: 0, y: 0 }, opacity: 1, delay: 650, duration: 150 })
+        animations.push({ target: this.$refs.signUpStack.nativeView, translate: { x: 0, y: 0 }, opacity: 1, delay: 300, duration: 100 })
+        animations.push({ target: this.$refs.formControls.nativeView, translate: { x: 0, y: 0 }, opacity: 1, delay: 350, duration: 100 })
 
         // Kick off the animation queue
         new Animation(animations, false).play()
@@ -109,9 +109,7 @@ export default {
       //console.log('submit', this.user.password)
       if (this.isUnlocking) {
        if (this.user.password === unlockService.masterPassword) {
-         //console.log('unlocked')
          unlockService.unlocked = true
-         //console.log(unlockService.unlocked)
          this.$navigateTo(Jingtum)
        } else {
          alert("密码不对")
@@ -120,18 +118,13 @@ export default {
         console.log("set master password")
         unlockService.masterPassword = this.user.password
         unlockService.unlocked = true
-        //console.log(unlockService.masterPassword)
-         this.$navigateTo(Jingtum)
+        this.$navigateTo(Jingtum)
       }
     },
   },
 
   mounted() {
     console.log('unlock mounted...')
-    //console.log(unlockService.unlocked)
-    //console.log(unlockService.jlibServer)
-    //console.log(unlockService.swtcSecret)
-    //console.log(unlockService.masterPassword)
   },
 
   created() {
