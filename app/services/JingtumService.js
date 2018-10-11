@@ -19,13 +19,17 @@ var options_swt_cny = {
     gets: { currency: 'SWT', issuer: '' },
     pays: { currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or' }
 };
+var options_swt_cny = {
+    gets: { currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or' },
+    pays: { currency: 'SWT', issuer: '' }
+};
 
 export default class JingtumService extends BackendService {
 
   constructor() {
     console.log('jingtum service initializing')
     super()
-    this._address = this._swtcSecret ? Wallet.fromSecret(this._swtcSecret).address : ''
+    this._address = this._swtcSecret ? Wallet.fromSecret(this.swtcSecret).address : ''
     this._remote = this.jlibServer ? new Remote({server: this.jlibServer, local_sign: true }) : null
     this._connecting = false
     this._connected = false
@@ -43,7 +47,7 @@ export default class JingtumService extends BackendService {
     this.remote = server
   }
   get secret() {
-    return this._swtcSecret
+    return this.swtcSecret
   }
   set secret(secret) {
     this.swtcSecret = secret

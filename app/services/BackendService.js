@@ -11,27 +11,24 @@ const swtcSecretKey = 'swtcSecret';
 export default class BackendService {
   constructor() {
     console.log('backend service initializing')
-    this._swtcSecret = getString(swtcSecretKey) || '' ;
-    this._jlibServer = getString(jlibServerKey) || '';
+    //this._swtcSecret = getString(swtcSecretKey) || '' ;
+    //this._jlibServer = getString(jlibServerKey) || '';
     //this._masterPassword = getString(masterPasswordKey) || '';
-    this._unlocked = false;
-    //this.isunlocked = false;
+    //this._unlocked = false;
     console.log('backend service initialized')
   }
 
   get swtcSecret() {
-    return this._swtcSecret
+    return getString(swtcSecretKey) || '' ;
   }
   set swtcSecret(secret) {
-    this._swtcSecret = secret;
     setString(swtcSecretKey, secret);
   }
 
   get jlibServer() {
-    return this._jlibServer ;
+    return getString(jlibServerKey) || ''
   }
   set jlibServer(newServer) {
-    this._jlibServer = newServer ;
     setString(jlibServerKey, newServer);
   }
 
@@ -44,10 +41,9 @@ export default class BackendService {
   }
 
   get unlocked() {
-    return this._unlocked;
+    return getBoolean(unlockedKey);
   }
   set unlocked(truefalse) {
-    this._unlocked = truefalse;
     setBoolean(unlockedKey, truefalse);
   }
 }
