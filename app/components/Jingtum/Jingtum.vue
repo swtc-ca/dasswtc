@@ -66,7 +66,7 @@
                     </GridLayout>
                     <Button text="可触碰按钮 以下为输出" visibility="collapse" @tap="onTap" class="btn btn-primary btn-active"  style="width: 100%; height: 36" />
                     <ScrollView>
-                        <ListView class="functionClass" for="testFunction in testFunctions">
+                        <ListView height="100%" class="functionClass" for="testFunction in testFunctions">
                           <v-template>
                             <label class="m-10" :text="testFunction" />
                           </v-template>

@@ -15,9 +15,9 @@
 -  known了解node.js/javascript
 -  can setup development environment following documents 能按照文档搭建开发环境 nativescript.org
 
-## 准备
+## prepare 准备
 
--  纯javascript
+-  nativescript-core
    -  tns create myapp
    -  cd myapp
       - npm install
@@ -48,3 +48,13 @@
            - var JingtumLib = require("jingtum-lib")
            - var Wallet = JingtumLib.Wallet
            - var Remote = JingtumLib.Remote
+
+## iterate 迭代
+-  fast iteration since it is javascript and xml based with so may libraries
+
+## publish 发布
+-  google play is simple
+   - play console
+-  appstore is strict
+   - itunes connect
+
