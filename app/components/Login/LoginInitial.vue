@@ -4,7 +4,7 @@
     <StackLayout @tap="login()" class="initial-button">
       <Label text="体验JINGTUM-LIB应用" class="initial-button-label"></Label>
     </StackLayout>
-    <ListPicker :items="feathers" />
+    <!--<ListPicker :items="feathers" />-->
   </StackLayout>
 </template>
 

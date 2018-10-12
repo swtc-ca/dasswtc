@@ -10,11 +10,11 @@
                 <StackLayout>
                     <StackLayout :visibility="!!secret ? 'collapse' : 'visible'">
                         <ListPicker :items="wallets.map(w => w.address)" v-model="wallet" />
-                        <Button text="选择井通钱包" @tap="onWalletSelected" class="btn btn-primary btn-active"/>
+                        <Button text="选择井通地址" @tap="onWalletSelected" class="btn btn-primary btn-active"/>
                     </StackLayout>
                     <StackLayout :visibility="!!secret ? 'visible' : 'collapse'">
                       <GridLayout ref="walletRef" columns="80,*,2*,90" rows="36">
-                        <Label col="0" text="井通帐号" />
+                        <Label col="0" text="井通地址" />
                         <Label col="1" :text="sequence ? '序号' + sequence : ''" />
                         <Label col="2" :text="balance ? '余额' + balance : ''" />
                         <Label col="3" :text="!!price ? '价格' + price : ''" />
@@ -66,13 +66,18 @@
                     </GridLayout>
                     <Button text="可触碰按钮 以下为输出" visibility="collapse" @tap="onTap" class="btn btn-primary btn-active"  style="width: 100%; height: 36" />
                     <ScrollView>
-                      <TextView :text="msgs[0]" editable="false"></TextView>
+                        <ListView class="functionClass" for="testFunction in testFunctions">
+                          <v-template>
+                            <label class="m-10" :text="testFunction" />
+                          </v-template>
+                        </ListView>
                     </ScrollView>
                 </StackLayout>
             </TabViewItem>
             <TabViewItem :title="tabTitles[1]">
                 <StackLayout>
-                    <ListView class="listdapp" for="dapp in dapps" @itemTap="onDappTap" style="height:100%">
+                    <Label style="horizontal-align:center" height="40" text="可以用于开发"/>
+                    <ListView class="listdapp" for="dapp in dapps" @itemTap="onDappTap" style="height:80%">
                         <v-template>
                            <Label :text="dapp.name" class="dapp" />
                         </v-template>
@@ -88,10 +93,6 @@
                   <GridLayout columns="*" rows="40">
                     <Label text="版 本" />
                     <Label :text="appVersion" style="horizontal-align:right;"/>
-                  </GridLayout>
-                  <GridLayout columns="*" rows="40">
-                    <Label text="冷钱包" />
-                    <Switch :checked="cold" @checkedChange="onColdChange" style="horizontal-align:right;"/>
                   </GridLayout>
                   <GridLayout columns="*" rows="40">
                     <Label text="秘钥" />
@@ -127,7 +128,7 @@ var clipboard = require("nativescript-clipboard")
 export default {
   data() {
     return {
-      appVersion: '0.1.4',
+      appVersion: '0.1.6',
       wallets: [],
       wallet: -1,
       states: [],
@@ -148,6 +149,7 @@ export default {
       offerSWT: 1,
       offerCNY: 0.012,
       showSecretSwitch: false,
+      testFunctions: [ 'Remote', 'connect', 'disconnect', 'requestServerInfo', 'requestAccountInfo', 'requestOrderBook', 'requestAccountOffers', 'requestAccountRelations', 'requestAccountTums', 'requestAccountTx', 'buildPaymentTx', 'requestLedger', 'requestTx', 'on', 'removeListener' ]
     };
   },
   computed: {
@@ -248,7 +250,8 @@ export default {
       this.showLastLog()
       var callbackGetPrice =  (err, result) => {
         if(err) {
-          console.log(err); store.commit('appendmsg',err)
+          console.log(err)
+          this.appendmsg(err)
         } else {
           if (typeof(result) === 'object') {
             let firstRecord = result.offers[0]
@@ -283,50 +286,58 @@ export default {
       console.log("query relation")
       this.appendmsg(`查询关系...`)
       this.showLastLog()
-      jingtumService.requestAccountRelations(this.qrRelation)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.requestAccountRelations(this.qrRelation, cbErrResult)
     },
     onWalletTums() {
       console.log("available tums")
       this.appendmsg(`查询可用通证...`)
       this.showLastLog()
-      jingtumService.requestAccountTums()
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.requestAccountTums(cbErrResult)
     },
     onWalletHistory() {
       console.log("history")
       this.appendmsg(`查询支付记录...`)
       this.showLastLog()
-      jingtumService.requestAccountTx()
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.requestAccountTx(cbErrResult)
     },
     onPayment(){
       console.log("donation")
       this.appendmsg(`测试支付赞助 ${this.payMemo}`)
       this.showLastLog()
-      jingtumService.pay('jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.pay('jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo,cbErrResult)
     },
     onQueryLedger(){
       console.log("querying ledger ...")
       this.appendmsg(`查询账本...`)
       this.showLastLog()
-      jingtumService.queryLedger(this.qrLedgerTransaction)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.queryLedger(this.qrLedgerTransaction, false, cbErrResult)
     },
     onQueryTransaction(){
       console.log("querying transaction ...")
       this.appendmsg(`查询交易...`)
       this.showLastLog()
-      jingtumService.queryTransaction(this.qrLedgerTransaction)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.queryTransaction(this.qrLedgerTransaction, cbErrResult)
     },
     onLedger() {
       console.log("listen ledger_closed switch...")
       this.appendmsg(`更改账本接收...`)
       this.showLastLog()
-      jingtumService.ledgerReceive(!this.ledgerReceiving)
+      let cbMsg = msg => { console.log(msg); if (typeof(msg) === 'object') { this.appendmsg(JSON.stringify(msg,'',2)) } else { this.appendmsg(msg) } this.showLastLog()}
+      jingtumService.ledgerReceive(!this.ledgerReceiving, cbMsg)
       this.ledgerReceiving = !this.ledgerReceiving
     },
     onTransaction() {
       console.log("listen transactions switch...")
       this.appendmsg(`更改交易接收...`)
       this.showLastLog()
-      jingtumService.transactionReceive(!this.transactionReceiving)
+      let cbMsg = msg => { console.log(msg); if (typeof(msg) === 'object') { this.appendmsg(JSON.stringify(msg,'',2)) } else { this.appendmsg(msg) } this.showLastLog()}
+      jingtumService.transactionReceive(!this.transactionReceiving, cbMsg)
       this.transactionReceiving = !this.transactionReceiving
     },
     onWallet() {
@@ -365,7 +376,8 @@ export default {
       //callbackPost()
     },
     onRemoteInfo() {
-      jingtumService.serverInfo();
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendmsg(err)} else {console.log(result); if (typeof(result) === 'object') {this.appendmsg(JSON.stringify(result,'',2))} else {this.appendmsg(result)}} this.showLastLog()}
+      jingtumService.serverInfo(cbErrResult);
     },
     onServerSelected() {
       console.log("server seclected");

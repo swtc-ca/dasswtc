@@ -29,7 +29,7 @@ export default class JingtumService extends BackendService {
   constructor() {
     console.log('jingtum service initializing')
     super()
-    this._address = this._swtcSecret ? Wallet.fromSecret(this.swtcSecret).address : ''
+    this._address = this.swtcSecret ? Wallet.fromSecret(this.swtcSecret).address : ''
     this._remote = this.jlibServer ? new Remote({server: this.jlibServer, local_sign: true }) : null
     this._connecting = false
     this._connected = false
@@ -40,7 +40,7 @@ export default class JingtumService extends BackendService {
       return SERVERS;
   }
   get server() {
-    return this._jlibServer
+    return this.jlibServer
   }
   set server(server) {
     this.jlibServer = server

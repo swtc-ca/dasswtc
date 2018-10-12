@@ -1,7 +1,7 @@
 {
   "name": "dasswtc",
-  "version": "1.0.0",
-  "description": "Jingtum Lib Play by DAS",
+  "version": "0.1.6",
+  "description": "Jingtum-Lib functinality demo by DAS",
   "author": "lospringliu@gmail.com",
   "license": "MIT",
   "nativescript": {

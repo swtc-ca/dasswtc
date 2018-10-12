@@ -22,7 +22,7 @@ const store = new Vuex.Store({
   state: {
     // daszichan
     title: "DAPP钱包原型演示",
-    tabTitles: ["钱包", "应用", "设置", "信息"],
+    tabTitles: ["调用", "应用", "设置", "输出"],
     sequence: 0,
     balance: 0,
     activated: false,

@@ -5,6 +5,7 @@ import BackendService from './services/BackendService'
 const backendService = new BackendService()
 import Login from './components/Login/Login'
 import Jingtum from './components/Jingtum/Jingtum'
+//import Web from './components/Web'
 //import VueDevtools from 'nativescript-vue-devtools'
 
 import './styles.scss';
@@ -37,9 +38,10 @@ application.on(application.uncaughtErrorEvent, (args) => {
 
 new Vue({
   render: h => {
-    console.log("BackendService:", backendService.server)
-    return h('frame', [h(backendService.unlocked ? Jingtum : Login)])
+    //console.log("BackendService:", backendService.server)
+    return h('frame', [h(Login)])
+    //return h('frame', [h(backendService.unlocked ? Jingtum : Login)])
+    //return h('frame', [h(Web)])
   },
   store
-
 }).$start();
