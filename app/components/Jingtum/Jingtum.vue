@@ -65,13 +65,11 @@
                       <Button col="1" :text="!transactionReceiving ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteconnecting ? 'visible' : 'collapse'" @tap="onTransaction()" class="btn btn-primary btn-active"  style="width: 50%" />
                     </GridLayout>
                     <Button text="可触碰按钮 以下为输出" visibility="collapse" @tap="onTap" class="btn btn-primary btn-active"  style="width: 100%; height: 36" />
-                    <ScrollView>
-                        <ListView height="100%" class="functionClass" for="testFunction in testFunctions">
-                          <v-template>
-                            <label class="m-10" :text="testFunction" />
-                          </v-template>
-                        </ListView>
-                    </ScrollView>
+                    <ListView height="*" class="functionClass" for="testFunction in testFunctions">
+                      <v-template>
+                        <label class="m-10" :text="testFunction" />
+                      </v-template>
+                    </ListView>
                 </StackLayout>
             </TabViewItem>
             <TabViewItem :title="tabTitles[1]">
