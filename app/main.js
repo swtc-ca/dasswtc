@@ -10,6 +10,19 @@ const jingtumBaseLibService = new JingtumBaseLibService()
 import './styles.scss'
 
 Vue.use(RadListView)
+import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
+TNSFontIcon.debug = true
+TNSFontIcon.paths = {
+  fa: './assets/fontawesome.css',
+  fas: './assets/solid.css',
+  far: './assets/regular.css',
+  fab: './assets/brands.css',
+};
+TNSFontIcon.loadCss();
+Vue.filter('fonticon', fonticon);
+
+Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout);
+Vue.registerElement('CardView', () => require('nativescript-cardview').CardView);
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
 

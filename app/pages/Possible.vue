@@ -10,7 +10,7 @@
     </ActionBar>
 
     <GridLayout ~mainContent columns="*" rows="*">
-        <Label>欢迎加入</Label>
+        <Label style="horizontal-align:center;font-size:100;" class="fa fab" :text="'fa-github' | fonticon"></Label>
     </GridLayout>
   </Page>
 </template>
