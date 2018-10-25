@@ -120,7 +120,7 @@ export default {
     console.log('created')
   },
   mounted() {
-    console.log('mounted')
+		console.log('mounted')
   },
   destroyed () {
     console.log('destroyed')

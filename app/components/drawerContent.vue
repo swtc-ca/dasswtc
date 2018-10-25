@@ -11,7 +11,7 @@
         :text="page.name"
         :key="i"
       />
-      <Label text="我的" class="sideLabel sideLightGrayLabel"></Label>
+      <Label text="我的设置" class="sideLabel sideLightGrayLabel"></Label>
       <Label
         v-for="(page, i) in mines"
         @tap="goToPage(page.component, page.navigateoption)"
