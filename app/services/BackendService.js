@@ -1,49 +1,30 @@
-import { getString, setString, getBoolean, setBoolean } from 'tns-core-modules/application-settings'
+import * as applicationSettings from 'tns-core-modules/application-settings/application-settings'
 
-const unlockedKey = "unlocked";
-const jlibServerKey = 'jlibServer';
-const masterPasswordKey = 'masterPassword';
-const swtcSecretKey = 'swtcSecret';
+const masterPasswordKey = 'MASTERPASSWORD';
+const unlockedKey = "UNLOCKED";
+const swtcServerKey = 'SWTCSERVER';
+const swtcWalletKey = 'SWTCWALLET';
 
 /**
  * Parent service class. Has common configs and methods.
  */
 export default class BackendService {
-  constructor() {
-    console.log('backend service initializing')
-    //this._swtcSecret = getString(swtcSecretKey) || '' ;
-    //this._jlibServer = getString(jlibServerKey) || '';
-    //this._masterPassword = getString(masterPasswordKey) || '';
-    //this._unlocked = false;
-    console.log('backend service initialized')
-  }
-
-  get swtcSecret() {
-    return getString(swtcSecretKey) || '' ;
-  }
-  set swtcSecret(secret) {
-    setString(swtcSecretKey, secret);
-  }
-
-  get jlibServer() {
-    return getString(jlibServerKey) || ''
-  }
-  set jlibServer(newServer) {
-    setString(jlibServerKey, newServer);
+  constructor(v) {
+    console.log(`backend service ${v} initializing`)
+    console.log(`backend service ${v} initialized`)
   }
 
   get masterPassword() {
-    return getString(masterPasswordKey);
+    return applicationSettings.getString(masterPasswordKey);
   }
-  set masterPassword(password) {
-    //this._masterPassword = password ;
-    setString(masterPasswordKey, password);
+  set masterPassword(v) {
+    applicationSettings.setString(masterPasswordKey, v);
   }
 
   get unlocked() {
-    return getBoolean(unlockedKey);
+    return applicationSettings.getBoolean(unlockedKey);
   }
-  set unlocked(truefalse) {
-    setBoolean(unlockedKey, truefalse);
+  set unlocked(v) {
+    applicationSettings.setBoolean(unlockedKey, v);
   }
 }

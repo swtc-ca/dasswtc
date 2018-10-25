@@ -109,6 +109,8 @@ module.exports = env => {
                 ...aliases
             },
             aliasFields: ["browser"],
+            // don't resolve symlinks to symlinked modules
+            symlinks: false,
         },
         resolveLoader: {
             // don't resolve symlinks to symlinked loaders
@@ -155,6 +157,7 @@ module.exports = env => {
                             sequences: platform !== "android",
                         },
                         safari10: platform === "ios",
+                        keep_fnames: true,
                     },
                 }),
             ],

@@ -1,36 +1,108 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
-@import '~nativescript-theme-core/scss/skins/light/index';
+@import '~nativescript-theme-core/scss/light';
+
+// Override variables here
+
 @import '~nativescript-theme-core/scss/index';
 
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 
-page {
-    font-size: 15;
+ActionBar {
+    background-color: #53ba82;
+    color: #ffffff;
 }
 
-page.platform-ios {
-    margin-top: -20;
+Label {
+  vertical-align: center;
 }
 
-.list-page {
-    background-image: url("res://bg_inner");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.title {
+    text-align: center;
+    padding-left: 16;
 }
 
-action-bar {
-    background-color: black;
-    color: white;
+.message {
+    vertical-align: center;
+    text-align: center;
+    font-size: 20;
+    color: #333333;
 }
 
-text-field {
-    padding: 10;
-    font-size: 13;
+.drawer-close-button {
+  margin-top: 10;
+  padding: 10 10 10 10;
+  margin-bottom: 10;
+  background-color: #53ba82;
+  color: #ffffff;
 }
 
-.line-through {
-    text-decoration: line-through;
+.drawer-header {
+    padding: 50 16 16 16;
+    background-color: #333333;
+    color: #ffffff;
+    font-size: 24;
+}
+
+.drawer-item {
+    padding: 8 16;
+    color: #333333;
+    font-size: 12;
+}
+
+.page {
+    align-items: center;
+    flex-direction: column;
+  }
+
+.action-bar {
+  height: 50;
+}
+
+.item {
+  padding: 10;
+  background-color: white;
+  border-color: $grey;
+  border-bottom-width: 1;
+  border-bottom-style: solid;
+}
+
+.big {
+  font-size: 20;
+}
+
+.thumbnail {
+  margin-right: 10;
+}
+
+.swipe-item {
+  color: white;
+  padding: 8;
+}
+
+.swipe-item.left {
+  background-color: #240774;
+}
+
+.swipe-item.right {
+  background-color: #79000a;
+}
+
+.drawer {
+  padding: 10;
+  background-color: #333366;
+}
+
+.sideLogo {
+  margin-bottom: 10;
+}
+
+.sideLabel {
+  font-size: 16;
+  padding: 5;
+}
+
+.sideLightGrayLabel {
+  background-color: $grey;
 }

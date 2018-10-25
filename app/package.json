@@ -2,7 +2,8 @@
   "android": {
     "v8Flags": "--expose_gc"
   },
+  "discardUncaughtJsExceptions": true,
   "main": "main",
-  "name": "dasswtc",
-  "version": "0.1.6"
+  "name": "das井通",
+  "version": "0.2.0"
 }
