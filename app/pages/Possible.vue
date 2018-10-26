@@ -11,19 +11,18 @@
 
     <GridLayout ~mainContent columns="*" rows="*">
       <Stacklayout row="0">
-        <Label height="50"/>
         <Ripple rippleColor="red">
-        <Label style="horizontal-align:center;font-size:200;" class="fa fab" :text="'fa-github' | fonticon"></Label>
+        <Label height="50"/>
         </Ripple>
-        <Ripple rippleColor="blue">
+        <Label class="fa fab possible" :text="'fa-github' | fonticon"></Label>
         <qr-code></qr-code>
-        </Ripple>
       </Stacklayout>
     </GridLayout>
   </Page>
 </template>
 
 <script>
+require( "nativescript-platform-css" )
 import sideDrawer from '~/mixins/sideDrawer'
 import QrCode from './../components/qrCode'
 export default {
@@ -37,3 +36,7 @@ export default {
   }
 }
 </script>
+<style scoped>
+.ios .possible {  horizontal-align:center; font-size: 300; }
+.android .possible {  horizontal-align:center; font-size: 200; }
+</style>
