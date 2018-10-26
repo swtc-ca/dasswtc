@@ -5,7 +5,6 @@
 <script>
 var ZXing = require('nativescript-zxing')
 var imageSource = require('image-source')
-var newImg
 export default {
   name: 'qr-code',
   props: {
@@ -24,6 +23,7 @@ export default {
   },
   data () {
     return {
+        newImg: null,
         imgSrc: ''
     }
   },
@@ -36,11 +36,11 @@ export default {
   created() {
     console.log("qrcode components created")
     let zx = new ZXing()
-    newImg = zx.createBarcode({encode: this.text || "daszichan 2018", height: this.height || 300, width: this.width || 300});
+    this.newImg = zx.createBarcode({encode: this.text || "daszichan 2018", height: this.height || 300, width: this.width || 300});
   },
   mounted() {
     console.log("qrcode component mounted")
-    this.imgSrc = imageSource.fromNativeSource(newImg)
+    this.imgSrc = imageSource.fromNativeSource(this.newImg)
   }
 }
 </script>

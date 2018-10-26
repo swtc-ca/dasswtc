@@ -10,13 +10,14 @@
     </ActionBar>
 
     <GridLayout ~mainContent columns="*" rows="*">
-      <Stacklayout row="0">
-        <Ripple rippleColor="red">
-        <Label height="50"/>
-        </Ripple>
-        <Label class="fa fab possible" :text="'fa-github' | fonticon"></Label>
-        <qr-code></qr-code>
-      </Stacklayout>
+      <SwipeLayout class="sl" v-for="item in texts" :key="item" @swipeLeft="rewind" @swipeRight="forward">
+      <StackLayout horizontalAlignment="center">
+        <CardView elevation="20" margin="10" radius="10" backgroundColor="white" shadowOpacity=".2" shadowRadius="5">
+          <Label horizontalAlignment="center" class="fa fab possible" :text="item | fonticon"></Label>
+        </CardView>
+        <qr-code :text="item"></qr-code>
+      </StackLayout>
+      </SwipeLayout>
     </GridLayout>
   </Page>
 </template>
@@ -32,11 +33,26 @@ export default {
   },
   data() {
     return {
+      texts: ['fa-github', 'fa-slack', 'fa-docker', 'fa-linkedin', 'fa-twitter', 'fa-yelp', 'fa-uber'],
+      text: ''
     }
+  },
+  methods: {
+    rewind() {
+      this.text = this.texts[(this.texts.indexOf(this.text) - 1 + this.texts.length) % this.texts.length]
+    },
+    forward() {
+      this.text = this.texts[(this.texts.indexOf(this.text) + 1) % this.texts.length]
+    }
+  },
+  created (){
+    this.text = this.texts[Math.floor(Math.random() * this.texts.length)]
   }
 }
 </script>
 <style scoped>
-.ios .possible {  horizontal-align:center; font-size: 300; }
-.android .possible {  horizontal-align:center; font-size: 200; }
+.android .sl { horizontal-align: center; }
+.ios .sl { margin-top: 40; }
+.ios .possible { font-size: 250; }
+.android .possible { font-size: 200; }
 </style>
