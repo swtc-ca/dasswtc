@@ -7,10 +7,10 @@
   "nativescript": {
     "id": "com.daszichan.swtc",
     "tns-ios": {
-      "version": "5.0.0-rc-2018-10-17-161243-01"
+      "version": "5.0.0-2018-10-24-125735-01"
     },
     "tns-android": {
-      "version": "5.0.0-rc-2018-10-18-172901-01"
+      "version": "5.0.0-rc-2018-10-25-115200-01"
     }
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
-
+import { isIOS, isAndroid } from 'tns-core-modules/platform'
 import sideDrawer from './modules/sideDrawer'
 import swtc from './modules/swtc'
 import logger from './modules/logger'
@@ -14,6 +14,10 @@ let store = new Vuex.Store({
     sideDrawer,
     logger,
     swtc
+  },
+  state: {
+      isIOS,
+      isAndroid,
   },
   strict: debug
 })

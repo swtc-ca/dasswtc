@@ -43,7 +43,7 @@ const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
-import { mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 export default {
   mixins: [ sideDrawer ],
   components: {
@@ -59,6 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters({wallets: 'swtcWallets', wallet: 'swtcWallet'}),
+    ...mapState(['isIOS', 'isAndroid']),
     classItem1() {
         return this.isActive ? "raiseItem1" : "downItem1"
     },
@@ -121,6 +122,8 @@ export default {
   },
   mounted() {
 		console.log('mounted')
+		console.log(this.isIOS)
+		console.log(this.isAndroid)
   },
   destroyed () {
     console.log('destroyed')
