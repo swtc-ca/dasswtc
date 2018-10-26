@@ -14,9 +14,6 @@ import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
 TNSFontIcon.debug = true
 TNSFontIcon.paths = {
   fa: './assets/fontawesome.css',
-  fas: './assets/solid.css',
-  far: './assets/regular.css',
-  fab: './assets/brands.css',
 };
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);

@@ -9,16 +9,22 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="*">
-        <Label style="horizontal-align:center;font-size:100;" class="fa fab" :text="'fa-github' | fonticon"></Label>
+    <GridLayout ~mainContent columns="*" rows="250,*">
+      
+        <Label row="0" style="horizontal-align:center;font-size:200;" class="fa fab" :text="'fa-github' | fonticon"></Label>
+        <qr-code row="1"></qr-code>
     </GridLayout>
   </Page>
 </template>
 
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
+import QrCode from './../components/qrCode'
 export default {
   mixins: [ sideDrawer ],
+  components: {
+    QrCode,
+  },
   data() {
     return {
     }
