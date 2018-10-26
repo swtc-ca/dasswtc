@@ -18,8 +18,9 @@ TNSFontIcon.paths = {
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);
 
-Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout);
-Vue.registerElement('CardView', () => require('nativescript-cardview').CardView);
+Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
+Vue.registerElement('CardView', () => require('nativescript-cardview').CardView)
+Vue.registerElement('Ripple', () => require('nativescript-ripple').Ripple)
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
 

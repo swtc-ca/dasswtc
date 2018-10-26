@@ -9,10 +9,16 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="250,*">
-      
-        <Label row="0" style="horizontal-align:center;font-size:200;" class="fa fab" :text="'fa-github' | fonticon"></Label>
-        <qr-code row="1"></qr-code>
+    <GridLayout ~mainContent columns="*" rows="*">
+      <Stacklayout row="0">
+        <Label height="50"/>
+        <Ripple rippleColor="red">
+        <Label style="horizontal-align:center;font-size:200;" class="fa fab" :text="'fa-github' | fonticon"></Label>
+        </Ripple>
+        <Ripple rippleColor="blue">
+        <qr-code></qr-code>
+        </Ripple>
+      </Stacklayout>
     </GridLayout>
   </Page>
 </template>
