@@ -44,7 +44,7 @@ const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   mixins: [ sideDrawer ],
   components: {
@@ -59,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({servers: 'swtcServers', server: 'swtcServer'}),
+		...mapGetters({lastMsg: 'lastMsg', servers: 'swtcServers', server: 'swtcServer'}),
     classItem1() {
         return this.isActive ? "raiseItem1" : "downItem1"
     },
@@ -68,7 +68,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
+    ...mapMutations({ appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
+    ...mapActions(['scan', 'showLastLogToasts']),
     onFabItemTap(args) {
 			console.log(args)
       this.$navigateTo(this.$routes.SelectAddress)
@@ -76,7 +77,23 @@ export default {
     onFabButtonTap(args) {
 			this.isActive = !this.isActive
 			if (this.isActive) {
-        //setTimeout(() => this.$navigateTo(this.$routes.SelectAddress), 50)
+				//setTimeout(() => this.$navigateTo(this.$routes.SelectAddress), 50)
+				this.$store.dispatch('scan').then(
+				//this.scan().then(
+  	          (result) => {
+									console.log(result);
+									console.log("Scan format: " + result.format);
+									console.log("Scan text:   " + result.text);
+									this.appendMsg(result)
+									console.log(this.lastMsg.msg)
+									//alert(`测试二维码结果: ${result.text}`)
+									this.showLastLogToasts()
+									this.isActive = !this.isActive
+  	          },
+  	          (error) => {
+  	              console.log("No scan: " + error);
+  	          }
+  		  )
 			}
     },
     pageLoaded() {
@@ -96,7 +113,7 @@ export default {
       console.log("received watchrefersh")
     },
     onItemTap({ item }) {
-      console.log(`Tapped on ${item.display}`)
+			console.log(`Tapped on ${item.display}`)
     },
     onPulling (listview) {
       listview.notifyPullToRefreshFinished()

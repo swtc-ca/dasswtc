@@ -74,10 +74,6 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import * as platformModule from "tns-core-modules/platform";
 import JingtumLibService from './../services/JingtumLibService';
 const jingtumLibService = new JingtumLibService('jingtumlib');
-const feedbackplugin = require('nativescript-feedback')
-var feedback = new feedbackplugin.Feedback()
-var clipboard = require("nativescript-clipboard")
-var toasts = require('nativescript-toasts')
 import sideDrawer from '~/mixins/sideDrawer'
 require('nativescript-nodeify')
 const JingtumLib = require('jingtum-lib')
@@ -86,7 +82,7 @@ export default {
   mixins: [ sideDrawer ],
   data() {
     return {
-      appVersion: '1.1.0',
+      appVersion: '0.2.0',
       walletIndex: 0,
       serverIndex: 0,
       remote: null,
@@ -118,42 +114,19 @@ export default {
     ...mapMutations([
       "appendMsg", "addSwtcWallet", "saveSwtcWallets", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer", "setSwtcActivated","setSwtcPrice", "setSwtcSequence", "setSwtcBalance"
     ]),
-    ...mapActions([]),
+    ...mapActions(['showLastLogToasts','showLastLogFeedback', 'toClipboard']),
     callback_message (msg) {
       console.log(msg)
       this.$store.commit('appendMsg',msg)
       this.showLastLog()
     },
-    toClipboard(content){
-      clipboard.setText(content).then(() => { this.appendMsg(`${content}已拷贝到粘贴板`); this.showLastLogToasts()});
-    },
+   // toClipboard(content){
+   //   clipboard.setText(content).then(() => { this.appendMsg(`${content}已拷贝到粘贴板`); this.showLastLogToasts()});
+   // },
     showLastLog() {
       this.showLastLogToasts()
     },
-    showLastLogFeedback() {
-      let lastMessage = this.msgs[0]
-      let message = lastMessage.msg
-      if (typeof(lastMessage.msg) === typeof({})) {
-        message = JSON.stringify(lastMessage.msg, '', 2)
-      }
-      feedback.show({
-        title: "输出",
-        message: message,
-        duration: 2000,
-        onTap: function() { feedback.hide(); }
-      })
-    },
-    showLastLogToasts() {
-      let lastMessage = this.msgs[0]
-      let message = lastMessage.msg
-      if (typeof(lastMessage.msg) === typeof({})) {
-        message = JSON.stringify(lastMessage.msg, '', 2)
-      }
-      toasts.show({
-        text: message,
-        duration: toasts.DURATION.SHORT,
-      })
-    },
+
     onPayment(){
       console.log("donation")
       this.appendMsg(`测试支付赞助 ${this.payMemo}`)

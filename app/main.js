@@ -22,7 +22,6 @@ Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer')
 Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
 Vue.registerElement('CardView', () => require('nativescript-cardview').CardView)
 Vue.registerElement('Ripple', () => require('nativescript-ripple').Ripple)
-Vue.registerElement('Gradient', () => require('nativescript-gradient').Gradient)
 Vue.config.silent = (TNS_ENV === 'production')
 
 // test application lifecycle
