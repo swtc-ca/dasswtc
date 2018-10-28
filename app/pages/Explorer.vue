@@ -32,19 +32,19 @@
 
 <script>
 import JingtumLibService from './../services/JingtumLibService'
-var jingtumLibService = new JingtumLibService('explorer')
+//var jingtumLibService = new JingtumLibService('explorer')
 import LedgerList from './../components/ledgerList'
 var callback_on_ledger = () => {}
 import sideDrawer from '~/mixins/sideDrawer'
+import jingtumLib from '~/mixins/jingtumLib'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, jingtumLib ],
   components: {
     'item-list': LedgerList,
   },
   data() {
     return {
-      remote: null
     }
   },
   computed: {
@@ -74,14 +74,14 @@ export default {
     console.log("created")
     console.log("create local remote")
     console.log(this.server.server)
-    this.remote = jingtumLibService.newRemote(this.server)
-    console.log(this.remote._url)
+    this.swtcRemote = this.swtcNewRemote(this.server)
+    console.log(this.swtcRemote._url)
   },
   mounted() {
     console.log("mounted")
     console.log("connect local remote")
     console.log(this.server)
-    this.remote.connect((error, result) => {
+    this.swtcConnect((error, result) => {
       if (error) {
         console.log("connect error")
         console.log(error)
@@ -93,18 +93,18 @@ export default {
         // connected to the remote now, install ledger monitoring
         console.log("connected local remote")
         callback_on_ledger = msg => { console.log(msg); this.addSwtcLedger(msg); this.appendMsg(msg) }
-        this.remote.on('ledger_closed', callback_on_ledger)
+        this.swtcRemote.on('ledger_closed', callback_on_ledger)
       }
     })
     console.log(this.msgs)
   },
   destroyed () {
     console.log("destroyed")
-    if (this.remote && this.remote.isConnected()) {
+    if (this.swtcIsConnected()) {
       console.log("remove ledger monitoring")
-      this.remote.removeListener('ledger_closed', callback_on_ledger)
+      this.swtcRemote.removeListener('ledger_closed', callback_on_ledger)
       console.log("disconnect")
-      this.remote.disconnect()
+      this.swtcDisconnect()
       console.log("disconnected")
     }
   }

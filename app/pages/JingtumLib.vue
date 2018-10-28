@@ -76,9 +76,6 @@ import JingtumLibService from './../services/JingtumLibService';
 const jingtumLibService = new JingtumLibService('jingtumlib');
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
-require('nativescript-nodeify')
-const JingtumLib = require('jingtum-lib')
-const Remote = JingtumLib.Remote
 export default {
   mixins: [ sideDrawer, feedback ],
   data() {
