@@ -25,11 +25,11 @@
 <script>
 require( "nativescript-platform-css" )
 import sideDrawer from '~/mixins/sideDrawer'
-import QrCode from './../components/qrCode'
+import qrCode from './../components/qrCode'
 export default {
   mixins: [ sideDrawer ],
   components: {
-    QrCode,
+    qrCode,
   },
   data() {
     return {

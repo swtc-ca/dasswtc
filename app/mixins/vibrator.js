@@ -7,7 +7,7 @@ export default {
     }
   },
   methods: {
-    vibrate (v) {
+    vibrate (v=100) {
       vibrator.vibrate(v)
     }
   },

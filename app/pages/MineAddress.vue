@@ -43,10 +43,11 @@ const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
+import vibrator from '~/mixins/vibrator'
 import { mapState, mapGetters, mapMutations } from "vuex"
 import ModalWallet from './../components/modalWallet'
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, vibrator ],
   components: {
     'item-list': ItemList,
     FabItem,
@@ -98,6 +99,9 @@ export default {
     },
     onItemTap({ item }) {
 			console.log(`Tapped on ${item.address}`)
+			if (item.address == this.wallet.address) {
+			  this.vibrator.vibrate()
+			}
 			this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {

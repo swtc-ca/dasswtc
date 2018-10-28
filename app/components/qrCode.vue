@@ -1,9 +1,8 @@
 <template>
-    <Image :src="imgSrc" :width="width" :height="height" />
+    <Image :src="qrSource" :width="width" :height="height" />
 </template>
 
 <script>
-var ZXing = require('nativescript-zxing')
 var imageSource = require('image-source')
 export default {
   name: 'qr-code',
@@ -23,8 +22,9 @@ export default {
   },
   data () {
     return {
-        newImg: null,
-        imgSrc: ''
+      //zx: new ZXing(),
+      qrImage: null,
+      qrSource: '',
     }
   },
   methods: {
@@ -35,12 +35,12 @@ export default {
   },
   created() {
     console.log("qrcode components created")
-    let zx = new ZXing()
-    this.newImg = zx.createBarcode({encode: this.text || "daszichan 2018", height: this.height || 300, width: this.width || 300});
+    //this.qrImage = this.zx.createBarcode({encode: this.text, height: this.height, width: this.width})
   },
   mounted() {
     console.log("qrcode component mounted")
-    this.imgSrc = imageSource.fromNativeSource(this.newImg)
+    this.qrImage = this.$store.getters.zxing.createBarcode({encode: this.text, height: this.height, width: this.width})
+    this.qrSource = imageSource.fromNativeSource(this.qrImage)
   }
 }
 </script>

@@ -8,7 +8,6 @@
 </template>
 
 <script>
-var ZXing = require('nativescript-zxing')
 var imageSource = require('image-source')
 export default {
   name: 'qr-code',
@@ -42,7 +41,7 @@ export default {
   },
   created() {
     console.log("qrcode components created")
-    let zx = new ZXing()
+    let zx = this.$store.getters.zxing
     this.imgAddress = zx.createBarcode({encode: this.wallet.address || "daszichan 2018", height: this.height || 300, width: this.width || 300});
     this.imgSecret = zx.createBarcode({encode: this.wallet.secret || "daszichan 2018", height: this.height || 300, width: this.width || 300});
   },

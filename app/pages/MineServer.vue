@@ -44,9 +44,10 @@ const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
+import vibrator from '~/mixins/vibrator'
 import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, vibrator ],
   components: {
     'item-list': ItemList,
     FabItem,
@@ -114,16 +115,21 @@ export default {
     },
     onItemTap({ item }) {
 			console.log(`Tapped on ${item.display}`)
+			if (this.server.server == item.server) {
+				this.vibrator.vibrate()
+			}
     },
     onPulling (listview) {
       listview.notifyPullToRefreshFinished()
     },
     onItemSelected (item) {
+			this.vibrator.vibrate()
 			this.setServer(item)
 			this.$refs.list.refresh()
 			this.saveServer()
     },
     onItemDeleted (item) {
+			this.vibrator.vibrate()
 			console.log(item.display)
 			if (item.server === this.server.server) {
 			  this.$refs.bubble.show()

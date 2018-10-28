@@ -34,10 +34,11 @@ import FloatingBubble from "./../components/floatingBubble";
 
 import sideDrawer from '~/mixins/sideDrawer'
 import jingtumLib from '~/mixins/jingtumLib'
+import vibrator from '~/mixins/vibrator'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import ModalWallet from './../components/modalWallet'
 export default {
-  mixins: [ sideDrawer, jingtumLib ],
+  mixins: [ sideDrawer, vibrator, jingtumLib ],
   components: {
     'item-list': ItemList,
 		FloatingBubble
@@ -58,9 +59,10 @@ export default {
     onItemTap({ item }) {
       console.log(`Tapped on ${item.address}`)
       this.toClipboard(item.secret)
-			this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
+			//this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {
+      this.vibrator.vibrate()
 			this.$refs.bubble.show()
 			setTimeout(() => this.$refs.bubble.hide(),2000)
       setTimeout(() => {
@@ -72,12 +74,14 @@ export default {
       })
     },
     onItemSelected (item) {
+      this.vibrator.vibrate()
       this.addWallet(item)
       this.saveWallets()
       this.itemList.splice(this.itemList.indexOf(item), 1)
       this.$refs.list.refresh()
     },
     onItemDeleted (item) {
+      this.vibrator.vibrate()
       this.itemList.splice(this.itemList.indexOf(item), 1)
       this.$refs.list.refresh()
     },

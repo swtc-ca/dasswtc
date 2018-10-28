@@ -4,6 +4,7 @@ import { isIOS, isAndroid } from 'tns-core-modules/platform'
 import sideDrawer from './modules/sideDrawer'
 import swtc from './modules/swtc'
 import qrScan from './modules/qrScan'
+import qrCode from './modules/qrCode'
 import logger from './modules/logger'
 
 Vue.use(Vuex)
@@ -15,7 +16,8 @@ let store = new Vuex.Store({
     sideDrawer,
     logger,
     swtc,
-    qrScan
+    qrScan,
+    qrCode,
   },
   state: {
       isIOS,
