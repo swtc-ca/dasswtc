@@ -27,7 +27,7 @@
         </GridLayout>
         <Label :text="'     ' + wallet.address" @onTap="toClipboard(`${wallet.address}`)" />
       </StackLayout>
-      <StackLayout :visibility="remote === null ? 'collapse' : 'visible'">
+      <StackLayout :visibility="!swtcRemote ? 'collapse' : 'visible'">
         <GridLayout ref="remoteRef" columns="100,100,*,80" rows="40">
           <Label col="0" :text="server.display" />
           <Label col="1" :text="remoteStatus ? '已连接': ''" />
@@ -72,18 +72,19 @@
 const dialogs = require('tns-core-modules/ui/dialogs')
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import * as platformModule from "tns-core-modules/platform";
-import JingtumLibService from './../services/JingtumLibService';
-const jingtumLibService = new JingtumLibService('jingtumlib');
+//import JingtumLibService from './../services/JingtumLibService';
+//const jingtumLibService = new JingtumLibService('jingtumlib');
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
+import jingtumLib from '~/mixins/jingtumLib'
 export default {
-  mixins: [ sideDrawer, feedback ],
+  mixins: [ sideDrawer, feedback, jingtumLib ],
   data() {
     return {
       appVersion: '0.2.0',
       walletIndex: 0,
       serverIndex: 0,
-      remote: null,
+      //remote: null,
       remoteConnecting: false,
       qrLedgerTransaction: '',
       onTransaction: false,
@@ -98,7 +99,7 @@ export default {
   computed: {
     ...mapGetters({activated: 'swtcActivated', sequence: 'swtcSequence', balance: 'swtcBalance', price: 'swtcPrice', msgs: 'msgs', wallets: 'swtcWallets', wallet: 'swtcWallet', servers: 'swtcServers', server: 'swtcServer'}),
     remoteStatus: function () {
-      return this.remote && this.remote.isConnected() 
+      return this.swtcRemote && this.swtcRemote.isConnected() 
     },
     pageClasses: function() {
       return {
@@ -130,7 +131,7 @@ export default {
       this.appendMsg(`测试支付赞助 ${this.payMemo}`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.pay(this.remote, this.wallet, 'jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo,cbErrResult)
+      this.swtcPay(this.wallet, 'jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo,cbErrResult)
     },
     onOfferSell(){
       console.log("manage offers")
@@ -138,7 +139,7 @@ export default {
       this.showLastLog()
       let takerpays = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takergets = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
-      jingtumLibService.requestOffer(this.remote, this.wallet, 'Sell', takergets, takerpays)
+      this.swtcRequestOffer(this.wallet, 'Sell', takergets, takerpays)
     },
     onOfferBuy(){
       console.log("manage offers")
@@ -146,7 +147,7 @@ export default {
       this.showLastLog()
       let takergets = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takerpays = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
-      jingtumLibService.requestOffer(this.remote, this.wallet, 'Buy', takergets, takerpays)
+      this.swtcRequestOffer(this.wallet, 'Buy', takergets, takerpays)
     },
     onOrderBook() {
       console.log("query orderbooks")
@@ -176,16 +177,16 @@ export default {
           gets: { currency: 'SWT', issuer: '' },
           pays: { currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or' }
       };
-      jingtumLibService.requestOrderBook(this.remote,options_swt_cny,callbackGetPrice)
+      this.swtcRequestOrderBook(options_swt_cny,callbackGetPrice)
     },
     onListenLedger() {
       console.log("listen ledger_closed switch...")
       //let cbMsg = msg => { console.log(msg); this.appendMsg(msg); this.showLastLog() }
       //jingtumLibService.onLedger(this.remote, this.callback_message)
       if (this.onLedger) {
-        this.remote.removeListener('ledger_closed', this.callback_message)
+        this.swtcRemote.removeListener('ledger_closed', this.callback_message)
       } else {
-        this.remote.on('ledger_closed', this.callback_message)
+        this.swtcRemote.on('ledger_closed', this.callback_message)
       }
       this.appendMsg(`更改账本接收...`)
       this.showLastLog()
@@ -194,9 +195,9 @@ export default {
     onListenTransaction() {
       console.log("listen transactions switch...")
       if (this.onTransaction) {
-        this.remote.removeListener('transactions', this.callback_message)
+        this.swtcRemote.removeListener('transactions', this.callback_message)
       } else {
-        this.remote.on('transactions', this.callback_message)
+        this.swtcRemote.on('transactions', this.callback_message)
       }
       this.appendMsg(`更改交易接收...`)
       this.showLastLog()
@@ -207,28 +208,28 @@ export default {
       this.appendMsg(`查询挂单...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.requestAccountOffers(this.remote, this.wallet.address, cbErrResult)
+      this.swtcRequestAccountOffers(this.wallet.address, cbErrResult)
     },
     onWalletRelations() {
       console.log("query relation")
       this.appendMsg(`查询关系...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.requestAccountRelations(this.remote, this.wallet.address, this.qrRelation, cbErrResult)
+      this.swtcRequestAccountRelations(this.wallet.address, this.qrRelation, cbErrResult)
     },
     onWalletTums() {
       console.log("available tums")
       this.appendMsg(`查询可用通证...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.requestAccountTums(this.remote, this.wallet.address, cbErrResult)
+      this.swtcRequestAccountTums(this.wallet.address, cbErrResult)
     },
     onWalletHistory() {
       console.log("history")
       this.appendMsg(`查询支付记录...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.requestAccountTx(this.remote, this.wallet.address, cbErrResult)
+      this.swtcRequestAccountTx(this.wallet.address, cbErrResult)
     },
     onWalletBalance() {
       console.log("update balance")
@@ -254,25 +255,25 @@ export default {
         }
         this.showLastLog()
       }
-      jingtumLibService.requestAccountInfo(this.remote, this.wallet.address, callbackAccount);
+      this.swtcRequestAccountInfo(this.wallet.address, callbackAccount);
     },
     onQueryLedger(){
       console.log("querying ledger ...")
       this.appendMsg(`查询账本...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.queryLedger(this.remote, this.qrLedgerTransaction, true, cbErrResult)
+      this.swtcQueryLedger(this.qrLedgerTransaction, true, cbErrResult)
     },
     onQueryTransaction(){
       console.log("querying transaction ...")
       this.appendMsg(`查询交易...`)
       this.showLastLog()
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.queryTransaction(this.remote,this.qrLedgerTransaction, cbErrResult)
+      this.swtcQueryTransaction(this.qrLedgerTransaction, cbErrResult)
     },
     onRemoteInfo() {
       let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
-      jingtumLibService.requestServerInfo(this.remote, cbErrResult);
+      this.swtcRequestServerInfo(cbErrResult);
     },
     onRemoteConnection() {
       console.log("switching remote connection")
@@ -290,7 +291,7 @@ export default {
           this.showLastLog()
         }
       if (this.remoteStatus) {
-        jingtumLibService.disconnect(this.remote)
+        this.swtcDisconnect()
         this.onLedger = false
         this.onTransaction = false
         this.remoteConnecting = false
@@ -298,7 +299,7 @@ export default {
         this.setSwtcBalance(0)
         this.appendMsg('remote disconnected')
       } else {
-        jingtumLibService.connect(this.remote,callbackConnect)
+        this.swtcConnect(callbackConnect)
       }
       //callbackPost()
     },
@@ -308,7 +309,7 @@ export default {
         this.setSwtcServer(this.servers[this.serverIndex])
         this.saveSwtcServer()
         console.log(this.server)
-        this.remote = jingtumLibService.newRemote(this.server.server)
+        this.swtcRemote = this.swtcNewRemote(this.server.server)
         console.log(this.server.server)
         this.appendMsg(this.server)
       } else {
@@ -354,7 +355,7 @@ export default {
     console.log("jingtum app mounted")
     if (this.server && this.server.hasOwnProperty('server')) {
       console.log("set jingtumlib.remote")
-      this.remote = jingtumLibService.newRemote(this.server)
+      this.swtcRemote = this.swtcNewRemote(this.server)
     }
   }
 };
