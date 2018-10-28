@@ -43,7 +43,8 @@ const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex"
+import ModalWallet from './../components/modalWallet'
 export default {
   mixins: [ sideDrawer ],
   components: {
@@ -97,6 +98,7 @@ export default {
     },
     onItemTap({ item }) {
 			console.log(`Tapped on ${item.address}`)
+			this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {
       listview.notifyPullToRefreshFinished()

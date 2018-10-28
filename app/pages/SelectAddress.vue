@@ -36,6 +36,7 @@ import FloatingBubble from "./../components/floatingBubble";
 
 import sideDrawer from '~/mixins/sideDrawer'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import ModalWallet from './../components/modalWallet'
 export default {
   mixins: [ sideDrawer ],
   components: {
@@ -51,11 +52,14 @@ export default {
   },
   methods: {
     ...mapMutations({addWallet: 'addSwtcWallet', saveWallets: 'saveSwtcWallets'}),
+    ...mapActions(['showLastLogToasts','showLastLogFeedback', 'toClipboard']),
     onWatchRefresh() {
       console.log("received watchrefersh")
     },
     onItemTap({ item }) {
       console.log(`Tapped on ${item.address}`)
+      this.toClipboard(item.secret)
+			this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {
 			this.$refs.bubble.show()
