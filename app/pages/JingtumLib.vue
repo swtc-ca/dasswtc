@@ -75,11 +75,12 @@ import * as platformModule from "tns-core-modules/platform";
 import JingtumLibService from './../services/JingtumLibService';
 const jingtumLibService = new JingtumLibService('jingtumlib');
 import sideDrawer from '~/mixins/sideDrawer'
+import feedback from '~/mixins/feedback'
 require('nativescript-nodeify')
 const JingtumLib = require('jingtum-lib')
 const Remote = JingtumLib.Remote
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, feedback ],
   data() {
     return {
       appVersion: '0.2.0',
@@ -114,7 +115,7 @@ export default {
     ...mapMutations([
       "appendMsg", "addSwtcWallet", "saveSwtcWallets", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer", "setSwtcActivated","setSwtcPrice", "setSwtcSequence", "setSwtcBalance"
     ]),
-    ...mapActions(['showLastLogToasts','showLastLogFeedback', 'toClipboard']),
+    ...mapActions(['showLastLogToasts', 'toClipboard']),
     callback_message (msg) {
       console.log(msg)
       this.$store.commit('appendMsg',msg)
