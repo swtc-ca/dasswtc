@@ -49,7 +49,6 @@ application.on(application.uncaughtErrorEvent, (args) => {
 // test application lifecycle
 
 
-import JingtumBaseLibService from '~/services/JingtumBaseLibService'
 new Vue({
   store, // global available
   render (h){
@@ -60,16 +59,6 @@ new Vue({
   },
   created(){
     // initialize jingtum servers
-    const jingtumBaseLibService = new JingtumBaseLibService()
-    if (store.getters.swtcWallet.length === 0) {
-      if (store.getters.swtcWallets.length > 0) {
-        store.commit('setSwtcWallet', store.getters.swtcWallets[0])
-        store.commit('saveSwtcWallet')
-      } else {
-        store.commit('setSwtcWallet', jingtumBaseLibService.newWallet())
-        store.commit('saveSwtcWallet')
-      }
-    }
     const SWTCSERVERS = [{ server: "wss://c04.jingtum.com:5020", display: "井通节点04"}, { server: "wss://c05.jingtum.com:5020", display: "井通节点05"}, {server: "ws://swtc.daszichan.com:5020", display: "CA生态节点" }]
     if (store.getters.swtcServers.length === 0) {
       console.log("add servers")

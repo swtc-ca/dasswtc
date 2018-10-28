@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import JingtumLibService from './../services/JingtumLibService'
-//var jingtumLibService = new JingtumLibService('explorer')
 import LedgerList from './../components/ledgerList'
 var callback_on_ledger = () => {}
 import sideDrawer from '~/mixins/sideDrawer'

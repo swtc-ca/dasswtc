@@ -29,16 +29,15 @@
 </template>
 
 <script>
-import JingtumBaseLibService from './../services/JingtumBaseLibService'
-var jingtumBaseLibService = new JingtumBaseLibService('address')
 import ItemList from './../components/addressList'
 import FloatingBubble from "./../components/floatingBubble";
 
 import sideDrawer from '~/mixins/sideDrawer'
+import jingtumLib from '~/mixins/jingtumLib'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import ModalWallet from './../components/modalWallet'
 export default {
-  mixins: [ sideDrawer ],
+  mixins: [ sideDrawer, jingtumLib ],
   components: {
     'item-list': ItemList,
 		FloatingBubble
@@ -52,7 +51,7 @@ export default {
   },
   methods: {
     ...mapMutations({addWallet: 'addSwtcWallet', saveWallets: 'saveSwtcWallets'}),
-    ...mapActions(['showLastLogToasts','showLastLogFeedback', 'toClipboard']),
+    ...mapActions(['showLastLogToasts', 'toClipboard']),
     onWatchRefresh() {
       console.log("received watchrefersh")
     },
@@ -66,7 +65,7 @@ export default {
 			setTimeout(() => this.$refs.bubble.hide(),2000)
       setTimeout(() => {
         for (let i=0; i < 10; i++){
-          this.itemList.unshift(jingtumBaseLibService.newWallet())
+          this.itemList.unshift(this.swtcNewWallet())
         }
         listview.notifyPullToRefreshFinished()
         listview.refresh()
@@ -85,7 +84,7 @@ export default {
   },
   created() {
     for (let i = 0; i < 20; i++) {
-      this.itemList.push(jingtumBaseLibService.newWallet())
+      this.itemList.push(this.swtcNewWallet())
     }
     if ( this.$store.debug ) {
       console.log("itemlist")

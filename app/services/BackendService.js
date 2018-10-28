@@ -3,8 +3,6 @@ import { openUrl } from "tns-core-modules/utils/utils";
 
 const masterPasswordKey = 'MASTERPASSWORD'
 const unlockedKey = "UNLOCKED"
-const swtcServerKey = 'SWTCSERVER'
-const swtcWalletKey = 'SWTCWALLET'
 
 /**
  * Parent service class. Has common configs and methods.
