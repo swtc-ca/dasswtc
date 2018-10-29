@@ -4,12 +4,56 @@
       color="white"
       backgroundColor="#53ba82"
       class="action-bar"
-      title="井通客户端库">
+      title="井通开发库">
       <ActionItem icon="res://ic_menu" ios.position="right"
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <StackLayout ~mainContent>
+    <Gridlayout ~mainContent rows="*,auto" cols="*">
+      <StackLayout row="0" :visibility="activeSegment === 'lib' ? 'visible' : 'collapse'">
+        <GridLayout columns="*,auto" verticalAlignment="top">
+          <Label textVerticalAlignment="center" class="openrul" text="jingtum-lib" col="0" />
+          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('https://www.npmjs.com/package/jingtum-lib')"></Label>
+        </GridLayout>
+        <Label class="docimportant" text="本地签名" />
+        <StackLayout>
+          <Label text="Remote({server: server, local_sign: true})" />
+        </StackLayout>
+      </StackLayout>
+      <StackLayout row="0" :visibility="activeSegment === 'base' ? 'visible' : 'collapse'">
+        <GridLayout columns="*,auto" verticalAlignment="top">
+          <Label textVerticalAlignment="center" class="openrul" text="基础库钱包签名" col="0" />
+          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('https://www.npmjs.com/package/jingtum-base-lib')"></Label>
+        </GridLayout>
+        <Label class="docimportant" text="离线签名" />
+        <StackLayout>
+          <Label text="Wallet.sign" />
+          <Label text="Wallet.verify" />
+          <Label text="Wallet.signTx" />
+          <Label text="Wallet.verifyTx" />
+        </StackLayout>
+      </StackLayout>
+      <StackLayout row="0" :visibility="activeSegment === 'api' ? 'visible' : 'collapse'">
+        <GridLayout columns="*,auto" verticalAlignment="top">
+          <Label textVerticalAlignment="center" class="openrul" text="API 访问适合移动应用" col="0" />
+          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
+        </GridLayout>
+        <Label class="docimportant" text="提交本地签名的交易" />
+        <ScrollView>
+          <TextView style="font-size:20;" editable="false">
+          POST /v2/blob
+
+          { "blob": "123456787...." }
+          </TextView>
+        </ScrollView>
+      </StackLayout>
+      <StackLayout row="0" :visibility="activeSegment === 'output' ? 'visible' : 'collapse'">
+        <ScrollView>
+          <TextView :text="logMsgs">
+          </TextView>
+        </ScrollView>
+      </StackLayout>
+      <StackLayout row="0" :visibility="activeSegment === 'play' ? 'visible' : 'collapse'">
       <StackLayout :visibility="!wallet || wallet.address === 'undefined' ? 'visible' : 'collapse'">
           <ListPicker :items="wallets.map(w => w.address)" v-model="walletIndex" />
           <Button text="选择井通地址" @tap="onWalletSelected" class="btn btn-primary btn-active"/>
@@ -64,7 +108,15 @@
           <Button col="3" width="80" :text="!onTransaction ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenTransaction()" class="btn btn-primary btn-active" />
         </GridLayout>
       </StackLayout>
-    </StackLayout>
+      </StackLayout>
+      <GridLayout col="1" backgroundColor="aqua" verticalAlignment="bottom" columns="*,*,*,*,*">
+        <Button class="p-5" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
+        <Button class="p-5" col="1" @tap="activeSegment='api'" text="API"></Button>
+        <Button class="p-5" col="2" @tap="activeSegment='base'" text="BASE"></Button>
+        <Button class="p-5" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
+        <Button class="p-5" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
+      </Gridlayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -77,6 +129,7 @@ import * as platformModule from "tns-core-modules/platform";
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
+import { openUrl } from "tns-core-modules/utils/utils"
 export default {
   mixins: [ sideDrawer, feedback, jingtumLib ],
   data() {
@@ -84,7 +137,6 @@ export default {
       appVersion: '0.2.0',
       walletIndex: 0,
       serverIndex: 0,
-      //remote: null,
       remoteConnecting: false,
       qrLedgerTransaction: '',
       onTransaction: false,
@@ -94,6 +146,12 @@ export default {
       qrRelation: 'trust',
       offerSWT: 1,
       offerCNY: 0.01,
+      segmentItems: ['api', 'base', 'lib', 'play', 'output'],
+      segmentIndex: 3,
+      activeSegment: 'play',
+      apis: [],
+      base: ['Wallet.generate', 'Wallet.fromSecret', 'Wallet.isValidAddress', 'Wallet.isValidSecret', 'Wallet.sign', 'Wallet.verify', 'Wallet.address', 'Wallet.secret', 'Wallet.toJson', 'Wallet.getPublicKey', 'Wallet.signTx', 'Wallet.verifyTx'],
+      lib: []
     };
   },
   computed: {
@@ -107,6 +165,9 @@ export default {
         "platform-ios": platformModule.isIOS,
         "platform-android": platformModule.isAndroid
       };
+    },
+    logMsgs() {
+      return this.msgs.map( e => `${JSON.stringify(e.msg, '', 2)}\n`)
     }
   },
   methods: {
@@ -122,6 +183,16 @@ export default {
    // toClipboard(content){
    //   clipboard.setText(content).then(() => { this.appendMsg(`${content}已拷贝到粘贴板`); this.showLastLogToasts()});
    // },
+    openurl(url) {
+      openUrl(url)
+    },
+    onSegmentChange(args) {
+      console.log(args.object.__vue_element_ref__)
+      console.log(this.segmentIndex)
+      console.log(this.activeSegment)
+//      this.appendMsg(args.object.__vue_element_ref__)
+      this.showLastLog()
+    },
     showLastLog() {
       this.showLastLogToasts()
     },
@@ -240,7 +311,7 @@ export default {
           console.log(err)
           this.appendMsg(err)
           if (err === 'Account not found.') {
-            alert("账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试")
+            alert({title: "注意", message: "账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试", okButtonText: "好"})
           }
         } else {
           this.setSwtcActivated(true)
@@ -381,5 +452,10 @@ Button {
   font-size: 12;
   height: 36;
   text-align: center;
+}
+.openurl {
+  font-size: 24;
+  horizontal-align: right;
+
 }
 </style>

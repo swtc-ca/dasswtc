@@ -1,7 +1,7 @@
 <template lang="html">
   <ScrollView>
     <StackLayout width="100%">
-      <Label class="drawer-header" text="井通首科" @tap="closeDrawer()"/>
+      <Label class="drawer-header" text="井通工具箱" @tap="closeDrawer()"/>
 
       <Label text="井通应用" class="sideLabel sideLightGrayLabel"></Label>
       <Label
@@ -47,7 +47,7 @@ export default {
       // define our pages, making sure the component matches that defined in /app/router/index.js
       dapps: [
         { name: '靓号选', component: this.$routes.SelectAddress, navigateoption: { clearHistory: true }, },
-        { name: '井通库', component: this.$routes.JingtumLib, navigateoption: { clearHistory: true }, },
+        { name: '开发库', component: this.$routes.JingtumLib, navigateoption: { clearHistory: true }, },
         { name: '账本浏览器', component: this.$routes.Explorer, navigateoption: { clearHistory: true }, },
       ],
       possibles: [
