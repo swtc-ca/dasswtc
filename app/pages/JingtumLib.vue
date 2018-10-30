@@ -1,5 +1,5 @@
 <template>
-  <Page ref="page" class="page" backgroundSpanUnderStatusBar="true">
+  <Page ref="page" actionBarHidden="false" class="page" backgroundSpanUnderStatusBar="true">
     <ActionBar
       color="white"
       backgroundColor="#53ba82"
@@ -11,45 +11,51 @@
 
     <Gridlayout ~mainContent rows="*,auto" cols="*">
       <StackLayout row="0" :visibility="activeSegment === 'lib' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto" verticalAlignment="top">
+        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="jingtum-lib" col="0" />
-          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('https://www.npmjs.com/package/jingtum-lib')"></Label>
+          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
         </GridLayout>
+        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
         <Label class="docimportant" text="本地签名" />
-        <StackLayout>
-          <Label text="Remote({server: server, local_sign: true})" />
-        </StackLayout>
+        <ScrollView>
+          <TextView style="font-size:16;" editable="false">
+          Remote({server: server, local_sign: true})
+          </TextView>
+        </ScrollView>
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'base' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto" verticalAlignment="top">
+        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="基础库钱包签名" col="0" />
-          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('https://www.npmjs.com/package/jingtum-base-lib')"></Label>
+          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
         </GridLayout>
+        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
         <Label class="docimportant" text="离线签名" />
-        <StackLayout>
-          <Label text="Wallet.sign" />
-          <Label text="Wallet.verify" />
-          <Label text="Wallet.signTx" />
-          <Label text="Wallet.verifyTx" />
-        </StackLayout>
+        <ScrollView>
+          <TextView style="font-size:16;" editable="false">
+          Wallet.sign
+          Wallet.verify
+          Wallet.signTx
+          Wallet.verifyTx
+          </TextView>
+        </ScrollView>
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'api' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto" verticalAlignment="top">
+        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="API 访问适合移动应用" col="0" />
-          <Label class="openurl fa fas" col="1" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
+          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
         </GridLayout>
+        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
         <Label class="docimportant" text="提交本地签名的交易" />
         <ScrollView>
-          <TextView style="font-size:20;" editable="false">
+          <TextView style="font-size:16;" editable="false">
           POST /v2/blob
-
           { "blob": "123456787...." }
           </TextView>
         </ScrollView>
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'output' ? 'visible' : 'collapse'">
         <ScrollView>
-          <TextView :text="logMsgs">
+          <TextView :text="logMsgs" fontSize="12" editable="false">
           </TextView>
         </ScrollView>
       </StackLayout>
@@ -63,58 +69,57 @@
           <Button text="选择井通服务器" @tap="onServerSelected" class="btn btn-primary btn-active"/>
       </StackLayout>
       <StackLayout :visibility="wallet.address === 'undefined' ? 'collapse' : 'visible'">
-        <GridLayout ref="walletRef" columns="80,*,2*,90" rows="36">
+        <GridLayout ref="walletRef" columns="80,*,2*,90" rows="40">
           <Label col="0">井通</Label>
-          <Label col="1" :text="sequence ? '序号' + sequence : ''" />
-          <Label col="2" :text="balance ? '余额' + balance : ''" />
-          <Label col="3" :text="!!price ? '价格' + price : ''" />
+          <Label col="1" :text="sequence ? '序' + sequence : ''" />
+          <Label col="2" :text="balance ? '余' + balance : ''" />
+          <Label col="3" :text="!!price ? '价' + price : ''" />
         </GridLayout>
         <Label :text="'     ' + wallet.address" @onTap="toClipboard(`${wallet.address}`)" />
       </StackLayout>
       <StackLayout :visibility="!swtcRemote ? 'collapse' : 'visible'">
-        <GridLayout ref="remoteRef" columns="100,100,*,80" rows="40">
+        <GridLayout ref="remoteRef" columns="100,*,*,80" rows="44">
           <Label col="0" :text="server.display" />
-          <Label col="1" :text="remoteStatus ? '已连接': ''" />
           <Button col="3" :isEnabled="!remoteConnecting" @tap="onRemoteConnection" :text="!remoteStatus ? '连接' : '断开'" style="width:80;height:40" class="btn btn-primary"/>
         </GridLayout>
-        <GridLayout ref="queryRef" columns="80,*,80" rows="40" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
-          <Button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:80;" class="btn btn-primary"/>
+        <GridLayout ref="queryRef" columns="120,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
+          <Button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:120;" class="btn btn-primary"/>
           <TextField col="1" row="0" hint="帐本高度/哈希 交易哈希" v-model="qrLedgerTransaction" autocorrect="false"/>
-          <Button col="2" row="0" @tap="onQueryTransaction" text="查交易" style="width:80;" class="btn btn-primary"/>
+          <Button col="2" row="0" @tap="onQueryTransaction" text="查交易" style="width:120;" class="btn btn-primary"/>
         </GridLayout>
-        <GridLayout ref="queryRefa" columns="80,*,*,80" rows="40" :visibility="remoteStatus && !remoteConnecting && wallet? 'visible' : 'collapse'">                     
-          <Button col="0" :isEnabled="remoteStatus && !remoteConnecting" @tap="onWalletBalance" text="查余额" style="width:80" class="btn btn-primary"/>                
-          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting && activated" row="1" text="查通证" @tap="onWalletTums" class="btn btn-primary"  style="width:80;" />
+        <GridLayout ref="queryRefa" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting && wallet? 'visible' : 'collapse'">                     
+          <Button col="0" :isEnabled="remoteStatus && !remoteConnecting" @tap="onWalletBalance" text="查余额" style="width:120" class="btn btn-primary"/>                
+          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting && activated" row="1" text="查通证" @tap="onWalletTums" class="btn btn-primary"  style="width:120;" />
         </GridLayout>
-        <GridLayout ref="queryRefb" columns="80,*,*,80" rows="40" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">                     
-          <Button col="0" text="查市场" :isEnabled="remoteStatus && !remoteConnecting" @tap="onOrderBook" class="btn btn-primary"  style="width:80;" />      
-          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting" @tap="onRemoteInfo" text="服务器" style="width:80;" class="btn btn-primary"/>           
+        <GridLayout ref="queryRefb" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">                     
+          <Button col="0" text="查市场" :isEnabled="remoteStatus && !remoteConnecting" @tap="onOrderBook" class="btn btn-primary"  style="width:120;" />      
+          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting" @tap="onRemoteInfo" text="服务器" style="width:120;" class="btn btn-primary"/>           
         </GridLayout>
-        <GridLayout ref="paymentRef" columns="80,*,*,80" rows="40,40,40" :visibility="remoteStatus && !remoteConnecting && activated ? 'visible' : 'collapse'">  
-          <Button col="0" row="0" text="作支付" @tap="onPayment" class="btn btn-primary"  style="width:80;" />
+        <GridLayout ref="paymentRef" columns="120,*,*,120" rows="48,48,48" :visibility="remoteStatus && !remoteConnecting && activated ? 'visible' : 'collapse'">  
+          <Button col="0" row="0" :isEnabled="!isIOS && isAndroid" text="作支付" @tap="onPayment" class="btn btn-primary"  style="width:120;" />
           <TextField col="1" row="0" v-model="payMemo" autocorrect="false"/>
           <TextField col="2" row="0" v-model="payValue" autocorrect="false"/>
-          <Button col="3" row="0" text="查记录" @tap="onWalletHistory" class="btn btn-primary"  style="width:80;" />
-          <Button col="0" row="1" text="查关系" @tap="onWalletRelations" class="btn btn-primary"  style="width:80;" />
+          <Button col="3" row="0" text="查记录" @tap="onWalletHistory" class="btn btn-primary"  style="width:120;" />
+          <Button col="0" row="1" text="查关系" @tap="onWalletRelations" class="btn btn-primary"  style="width:120;" />
           <TextField col="1" row="1" v-model="qrRelation" autocorrect="false"/>
-          <Button col="3" row="1" text="查挂单" @tap="onWalletOffers" class="btn btn-primary"  style="width:80;" />
-          <Button col="0" row="2" text="挂单买" @tap="onOfferBuy" class="btn btn-primary"  style="width:80;" />
+          <Button col="3" row="1" text="查挂单" @tap="onWalletOffers" class="btn btn-primary"  style="width:120;" />
+          <Button col="0" row="2" text="挂单买" :isEnabled="!isIOS && isAndroid" @tap="onOfferBuy" class="btn btn-primary"  style="width:120;" />
           <TextField col="1" row="2" v-model="offerSWT" autocorrect="false"/>
           <TextField col="2" row="2" v-model="offerCNY" autocorrect="false"/>
-          <Button col="3" row="2" text="挂单卖" @tap="onOfferSell" class="btn btn-primary"  style="width:80;" />
+          <Button col="3" row="2" text="挂单卖" :isEnabled="!isIOS && isAndroid" @tap="onOfferSell" class="btn btn-primary"  style="width:120;" />
         </GridLayout>
-        <GridLayout ref="listenRef" columns="80,*,*,80" rows="40" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
-          <Button col="0" width="80" :text="!onLedger ? '监听账本' : '停止监听账本'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenLedger()" class="btn btn-primary btn-active" />
-          <Button col="3" width="80" :text="!onTransaction ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenTransaction()" class="btn btn-primary btn-active" />
+        <GridLayout ref="listenRef" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
+          <Button col="0" width="120" :text="!onLedger ? '监听账本' : '停止监听账本'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenLedger()" class="btn btn-primary btn-active" />
+          <Button col="3" width="120" :text="!onTransaction ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenTransaction()" class="btn btn-primary btn-active" />
         </GridLayout>
       </StackLayout>
       </StackLayout>
       <GridLayout col="1" backgroundColor="aqua" verticalAlignment="bottom" columns="*,*,*,*,*">
-        <Button class="p-5" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
-        <Button class="p-5" col="1" @tap="activeSegment='api'" text="API"></Button>
-        <Button class="p-5" col="2" @tap="activeSegment='base'" text="BASE"></Button>
-        <Button class="p-5" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
-        <Button class="p-5" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
+        <Button class="segmentitem" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
+        <Button class="segmentitem" col="1" @tap="activeSegment='api'" text="API"></Button>
+        <Button class="segmentitem" col="2" @tap="activeSegment='base'" text="BASE"></Button>
+        <Button class="segmentitem" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
+        <Button class="segmentitem" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
       </Gridlayout>
     </GridLayout>
   </Page>
@@ -130,11 +135,12 @@ import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
 import { openUrl } from "tns-core-modules/utils/utils"
+import { openAdvancedUrl, AdvancedWebViewOptions } from 'nativescript-advanced-webview'
 export default {
   mixins: [ sideDrawer, feedback, jingtumLib ],
   data() {
     return {
-      appVersion: '0.2.0',
+      appVersion: '0.2.1',
       walletIndex: 0,
       serverIndex: 0,
       remoteConnecting: false,
@@ -155,6 +161,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['isIOS', 'isAndroid']),
     ...mapGetters({activated: 'swtcActivated', sequence: 'swtcSequence', balance: 'swtcBalance', price: 'swtcPrice', msgs: 'msgs', wallets: 'swtcWallets', wallet: 'swtcWallet', servers: 'swtcServers', server: 'swtcServer'}),
     remoteStatus: function () {
       return this.swtcRemote && this.swtcRemote.isConnected() 
@@ -183,6 +190,23 @@ export default {
    // toClipboard(content){
    //   clipboard.setText(content).then(() => { this.appendMsg(`${content}已拷贝到粘贴板`); this.showLastLogToasts()});
    // },
+   	awv(url) {
+      try {
+        //let AdvancedWebViewOptions = {
+        let opt = {
+          url: url,
+          showTitle: true,
+          toolbarColor: '#336699',
+          toolbarControlsColor: '#333',
+          isClosed: closed => {
+            console.log(closed);
+          }
+        }
+        openAdvancedUrl(opt);
+      } catch (error) {
+        console.log(error);
+      }
+	  },
     openurl(url) {
       openUrl(url)
     },
@@ -317,12 +341,10 @@ export default {
           this.setSwtcActivated(true)
           console.log(result)
           if (typeof(result) === 'object') {
-            this.appendMsg(JSON.stringify(result,'',2))
             this.setSwtcSequence(result.account_data.Sequence)
             this.setSwtcBalance(Math.floor(result.account_data.Balance / 10000) / 100)
-          } else {
-            this.appendMsg(result)
           }
+          this.appendMsg(result)
         }
         this.showLastLog()
       }
@@ -446,16 +468,26 @@ ActionBar {
   text-align: left;
   font-size: 16;
   color: #333333;
-  line-height: 20%;
+  line-height: 10%;
 }
 Button {
-  font-size: 12;
-  height: 36;
+  padding-bottom: 1;
+  margin: 0;
+  height: 44;
   text-align: center;
+  vertical-align: middle;
 }
 .openurl {
-  font-size: 24;
+  font-size: 20;
   horizontal-align: right;
-
+}
+.docimportant {
+  font-size: 20;
+  horizontal-align: center;
+}
+.segmentitem {
+  padding-left: 2;
+  padding-right: 2;
+  margin: 0;
 }
 </style>

@@ -32,7 +32,7 @@
       <Label text="SWTC基金会" class="drawer-item"></Label>
       <Label text="井通公链" class="drawer-item"></Label>
       <Label text="版本" class="drawer-item sideLightGrayLabel"></Label>
-      <Label text="v0.2.0" class="drawer-item"></Label>
+      <Label text="v0.2.1" class="drawer-item"></Label>
 
     </StackLayout>
   </ScrollView>
@@ -51,14 +51,14 @@ export default {
         { name: '账本浏览器', component: this.$routes.Explorer, navigateoption: { clearHistory: true }, },
       ],
       possibles: [
-        { name: '溯源', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '防伪', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '留证', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '菠菜', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '交易', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '生态节点', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '快速转账', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
-        { name: '智能合约', component: this.$routes.Possible, navigateoption: { clearHistory: true }, },
+        { name: '溯源', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '防伪', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '留证', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '菠菜', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '交易', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '生态节点', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '快速转账', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
+        { name: '智能合约', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
       ],
       mines: [
         { name: '地址', component: this.$routes.MineAddress, navigateoption: {clearHistory: true}, },

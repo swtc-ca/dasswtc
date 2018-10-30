@@ -1,5 +1,4 @@
 // Add your native dependencies here:
-
 android {
   defaultConfig {  
     generatedDensities = []

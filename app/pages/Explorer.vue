@@ -46,10 +46,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ledgers: 'swtcLedgers', msgs: 'msgs', server: 'swtcServer'}),
+    ...mapGetters({ledgers: 'swtcLedgers', msgs: 'msgs', server: 'swtcServer', servers: 'swtcServers'}),
   },
   methods: {
-    ...mapMutations(['appendMsg', 'addSwtcLedger']),
+    ...mapMutations(['appendMsg', 'addSwtcLedger', 'setSwtcServer', 'saveSwtcServer']),
     onWatchRefresh() {
       console.log("received watchrefersh")
     },
@@ -71,9 +71,14 @@ export default {
   created() {
     console.log("created")
     console.log("create local remote")
-    console.log(this.server.server)
+    if (this.server && this.server.hasOwnProperty('server')) {
+      console.log(this.server.server)
+    } else {
+      let swtcServer =  this.servers[Math.floor(Math.random() * this.servers.length)]
+      this.setSwtcServer(swtcServer)
+      this.saveSwtcServer()
+    }
     this.swtcRemote = this.swtcNewRemote(this.server)
-    console.log(this.swtcRemote._url)
   },
   mounted() {
     console.log("mounted")

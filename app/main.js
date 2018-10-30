@@ -5,6 +5,8 @@ import routes from '~/router'
 import store from '~/store'
 import sideDrawer from '~/components/sideDrawer'
 import drawerContent from '~/components/drawerContent'
+var AdvancedWebView = require("nativescript-advanced-webview")
+AdvancedWebView.init()
 
 import './styles.scss'
 

@@ -26,10 +26,10 @@ const getters = {
 }
 const mutations = {
     addSwtcLedger: (state, v) => state._swtcLedgers.unshift(v),
-    addSwtcWallet: (state, v) => state._swtcWallets.unshift(v),
+    addSwtcWallet: (state, v) => { if (state._swtcWallets.filter(e => e.address === v.address).length < 1)  { state._swtcWallets.unshift(v) } },
     removeSwtcWallet: (state, v) => state._swtcWallets.splice(state._swtcWallets.indexOf(v),1),
     setSwtcWallet: (state, v) => state._swtcWallet = Object.assign({}, {address: v.address, secret: v.secret}),
-    addSwtcServer: (state, v) => state._swtcServers.unshift(v),
+    addSwtcServer: (state, v) => { if (state._swtcServers.filter(e => e.server === v.server).length < 1)  { state._swtcServers.unshift(v) } },
     removeSwtcServer: (state, v) => state._swtcServers.splice(state._swtcServers.indexOf(v),1),
     setSwtcServer: (state, v) => state._swtcServer = Object.assign({}, {server: v.server, display: v.display}),
     setSwtcSequence: (state, v) => state._swtcSequence = v,
