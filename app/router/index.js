@@ -4,6 +4,7 @@ import MineServer from './../pages/MineServer'
 import Explorer from './../pages/Explorer'
 import JingtumLib from './../pages/JingtumLib'
 import Possible from './../pages/Possible'
+import Configuration from './../pages/Configuration'
 
 const routes = {
     MineAddress,
@@ -11,7 +12,8 @@ const routes = {
     SelectAddress,
     Explorer,
     JingtumLib,
-    Possible
+    Possible,
+    Configuration
 }
 
 export default routes

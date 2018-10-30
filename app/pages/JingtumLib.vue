@@ -185,11 +185,7 @@ export default {
     callback_message (msg) {
       console.log(msg)
       this.$store.commit('appendMsg',msg)
-      this.showLastLog()
     },
-   // toClipboard(content){
-   //   clipboard.setText(content).then(() => { this.appendMsg(`${content}已拷贝到粘贴板`); this.showLastLogToasts()});
-   // },
    	awv(url) {
       try {
         //let AdvancedWebViewOptions = {
@@ -215,7 +211,6 @@ export default {
       console.log(this.segmentIndex)
       console.log(this.activeSegment)
 //      this.appendMsg(args.object.__vue_element_ref__)
-      this.showLastLog()
     },
     showLastLog() {
       this.showLastLogToasts()
@@ -224,14 +219,12 @@ export default {
     onPayment(){
       console.log("donation")
       this.appendMsg(`测试支付赞助 ${this.payMemo}`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
       this.swtcPay(this.wallet, 'jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo,cbErrResult)
     },
     onOfferSell(){
       console.log("manage offers")
       this.appendMsg(`操作挂单...`)
-      this.showLastLog()
       let takerpays = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takergets = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       this.swtcRequestOffer(this.wallet, 'Sell', takergets, takerpays)
@@ -239,7 +232,6 @@ export default {
     onOfferBuy(){
       console.log("manage offers")
       this.appendMsg(`操作挂单...`)
-      this.showLastLog()
       let takergets = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takerpays = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       this.swtcRequestOffer(this.wallet, 'Buy', takergets, takerpays)
@@ -247,7 +239,6 @@ export default {
     onOrderBook() {
       console.log("query orderbooks")
       this.appendMsg(`查询市场...`)
-      this.showLastLog()
       var callbackGetPrice =  (err, result) => {
         if(err) {
           console.log(err)
@@ -266,7 +257,6 @@ export default {
             this.appendMsg(result)
           }
         }
-        this.showLastLog()
       }
       var options_swt_cny = {
           gets: { currency: 'SWT', issuer: '' },
@@ -276,7 +266,6 @@ export default {
     },
     onListenLedger() {
       console.log("listen ledger_closed switch...")
-      //let cbMsg = msg => { console.log(msg); this.appendMsg(msg); this.showLastLog() }
       //jingtumLibService.onLedger(this.remote, this.callback_message)
       if (this.onLedger) {
         this.swtcRemote.removeListener('ledger_closed', this.callback_message)
@@ -284,7 +273,6 @@ export default {
         this.swtcRemote.on('ledger_closed', this.callback_message)
       }
       this.appendMsg(`更改账本接收...`)
-      this.showLastLog()
       this.onLedger = !this.onLedger
     },
     onListenTransaction() {
@@ -295,41 +283,35 @@ export default {
         this.swtcRemote.on('transactions', this.callback_message)
       }
       this.appendMsg(`更改交易接收...`)
-      this.showLastLog()
       this.onTransaction = !this.onTransaction
     },
     onWalletOffers() {
       console.log("query offers")
       this.appendMsg(`查询挂单...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
       this.swtcRequestAccountOffers(this.wallet.address, cbErrResult)
     },
     onWalletRelations() {
       console.log("query relation")
       this.appendMsg(`查询关系...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
       this.swtcRequestAccountRelations(this.wallet.address, this.qrRelation, cbErrResult)
     },
     onWalletTums() {
       console.log("available tums")
       this.appendMsg(`查询可用通证...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
       this.swtcRequestAccountTums(this.wallet.address, cbErrResult)
     },
     onWalletHistory() {
       console.log("history")
       this.appendMsg(`查询支付记录...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
       this.swtcRequestAccountTx(this.wallet.address, cbErrResult)
     },
     onWalletBalance() {
       console.log("update balance")
       this.appendMsg("查余额...");
-      this.showLastLog()
       let callbackAccount =  (err, result) => {
         if(err) {
           console.log(err)
@@ -346,26 +328,23 @@ export default {
           }
           this.appendMsg(result)
         }
-        this.showLastLog()
       }
       this.swtcRequestAccountInfo(this.wallet.address, callbackAccount);
     },
     onQueryLedger(){
       console.log("querying ledger ...")
       this.appendMsg(`查询账本...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
       this.swtcQueryLedger(this.qrLedgerTransaction, true, cbErrResult)
     },
     onQueryTransaction(){
       console.log("querying transaction ...")
       this.appendMsg(`查询交易...`)
-      this.showLastLog()
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
       this.swtcQueryTransaction(this.qrLedgerTransaction, cbErrResult)
     },
     onRemoteInfo() {
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} this.showLastLog()}
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
       this.swtcRequestServerInfo(cbErrResult);
     },
     onRemoteConnection() {
@@ -381,7 +360,6 @@ export default {
             console.log(result)
             this.appendMsg(result)
           }
-          this.showLastLog()
         }
       if (this.remoteStatus) {
         this.swtcDisconnect()
@@ -409,7 +387,6 @@ export default {
         console.log('no server selected')
         this.appendMsg('请选择一个服务器')
       }
-      this.showLastLog()
     },
     onWalletSelected() {
       console.log("wallet selected");
@@ -422,7 +399,6 @@ export default {
         console.log('no wallet selected')
         this.appendMsg('请选择一个钱包')
       }
-      this.showLastLog()
     },
   },
   created() { 
@@ -458,18 +434,10 @@ export default {
 };
 </script>
 
-<style scoped>
-ActionBar {
-  background-color: #53ba82;
-  color: #ffffff;
-}
-.message {
-  vertical-align: center;
-  text-align: left;
-  font-size: 16;
-  color: #333333;
-  line-height: 10%;
-}
+<style scoped lang="scss">
+@import '~nativescript-theme-core/scss/light';
+@import '~nativescript-theme-core/scss/index';
+
 Button {
   padding-bottom: 1;
   margin: 0;
@@ -484,6 +452,9 @@ Button {
 .docimportant {
   font-size: 20;
   horizontal-align: center;
+}
+.segmentGroup {
+  background-color: $accent;
 }
 .segmentitem {
   padding-left: 2;

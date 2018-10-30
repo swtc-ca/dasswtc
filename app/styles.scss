@@ -9,11 +9,6 @@
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 
-ActionBar {
-    background-color: #53ba82;
-    color: #ffffff;
-}
-
 Label {
   vertical-align: center;
 }
@@ -57,7 +52,7 @@ Label {
   }
 
 .action-bar {
-  height: 50;
+  height: 40;
 }
 
 .item {

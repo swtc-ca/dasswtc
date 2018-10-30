@@ -2,31 +2,33 @@
   <ScrollView>
     <StackLayout width="100%">
       <Label class="drawer-header" text="井通工具箱" @tap="closeDrawer()"/>
-
       <Label text="井通应用" class="sideLabel sideLightGrayLabel"></Label>
-      <Label
-        v-for="(page, i) in dapps"
-        @tap="goToPage(page.component, page.navigateoption)"
-        class="sideLabel"
-        :text="page.name"
-        :key="i"
-      />
+      <GridLayout rows="*" columns="*,auto"
+        v-for="(page, i) in dapps" :key="i"
+        @tap="goToPage(page.component, page.navigateoption)">
+        <Label col="0"
+          class="sideLabel"
+          :text="page.name" />
+          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+      </GridLayout>
       <Label text="我的设置" class="sideLabel sideLightGrayLabel"></Label>
-      <Label
-        v-for="(page, i) in mines"
-        @tap="goToPage(page.component, page.navigateoption)"
-        class="sideLabel"
-        :text="page.name"
-        :key="i + 100"
-      />
+      <GridLayout rows="*" columns="*,auto"
+        v-for="(page, i) in mines" :key="i + 100"
+        @tap="goToPage(page.component, page.navigateoption)">
+        <Label col="0"
+          class="sideLabel"
+          :text="page.name" />
+          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+      </GridLayout>
       <Label text="可行应用" class="sideLabel sideLightGrayLabel"></Label>
-      <Label
-        v-for="(page, i) in possibles"
-        @tap="goToPage(page.component, page.navigateoption)"
-        class="sideLabel"
-        :text="page.name"
-        :key="i + 200"
-      />
+      <GridLayout rows="*" columns="*,auto"
+        v-for="(page, i) in possibles" :key="i + 200"
+        @tap="goToPage(page.component, page.navigateoption)">
+        <Label col="0"
+          class="sideLabel"
+          :text="page.name" />
+          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+      </GridLayout>
       <Label text="关于" class="drawer-item sideLightGrayLabel"></Label>
       <Label text="CA生态节点" class="drawer-item"></Label>
       <Label text="SWTC基金会" class="drawer-item"></Label>
@@ -60,9 +62,12 @@ export default {
         { name: '快速转账', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
         { name: '智能合约', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
       ],
-      mines: [
+      hiddens: [
         { name: '地址', component: this.$routes.MineAddress, navigateoption: {clearHistory: true}, },
         { name: '节点', component: this.$routes.MineServer, navigateoption: { clearHistory: true }, },
+      ],
+      mines: [
+        { name: '设置', component: this.$routes.Configuration, navigateoption: { clearHistory: true }, },
       ]
     }
   },

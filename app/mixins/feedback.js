@@ -6,19 +6,27 @@ export default {
     data () {
       return {
         feedback: new feedbackplugin.Feedback(),
-        auto_feedback: false
       }
     },
     computed: {
       lastMsgFeedback: {
         get () {return this.$store.getters.lastMsg},
-        set (v) {return this.$store.commit('appendMsg',v)}
+        set (v) {this.$store.commit('appendMsg',v)}
+      },
+      autoFeedback: {
+        get () { return this.$store.getters.autoFeedback },
+        set (v) { this.$store.commit('setAutoFeedback', v) }
+      },
+      autoToast: {
+        get () { return this.$store.getters.autoToast },
+        set (v) { this.$store.commit('setAutoToast', v) }
       }
     },
     watch: {
       // we watch the drawer prop for changes and open/close the sideDrawer accordingly
       lastMsgFeedback (v) {
-        if (this.auto_feedback) { this.showLastLogFeedback() }
+        if (this.autoFeedback) { this.showLastLogFeedback() }
+        if (this.autoToast) { this.$store.dispatch('showLastLogToasts') }
       }
     },
     methods: {
