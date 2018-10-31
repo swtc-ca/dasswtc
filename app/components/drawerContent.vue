@@ -37,7 +37,7 @@
       <Label text="SWTC基金会" class="drawer-item"></Label>
       <Label text="井通公链" class="drawer-item"></Label>
       <Label text="版本" class="drawer-item sideLightGrayLabel"></Label>
-      <Label :text="0.2.2" class="drawer-item"></Label>
+      <Label text="0.2.2" class="drawer-item"></Label>
 
     </StackLayout>
   </ScrollView>
