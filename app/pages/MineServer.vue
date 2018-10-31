@@ -77,22 +77,7 @@ export default {
 			this.isActive = !this.isActive
 			if (this.isActive) {
 				//setTimeout(() => this.$navigateTo(this.$routes.SelectAddress), 50)
-				this.$store.dispatch('scan').then(
-				//this.scan().then(
-  	          (result) => {
-									console.log(result);
-									console.log("Scan format: " + result.format);
-									console.log("Scan text:   " + result.text);
-									this.appendMsg(result)
-									console.log(this.lastMsg.msg)
-									//alert(`测试二维码结果: ${result.text}`)
-									this.showLastLogToasts()
-									this.isActive = !this.isActive
-  	          },
-  	          (error) => {
-  	              console.log("No scan: " + error);
-  	          }
-  		  )
+				this.appendMsg('添加服务器')
 			}
     },
     pageLoaded() {

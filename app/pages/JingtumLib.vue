@@ -134,7 +134,6 @@ export default {
   mixins: [ sideDrawer, feedback, jingtumLib ],
   data() {
     return {
-      appVersion: '0.2.1',
       walletIndex: 0,
       serverIndex: 0,
       remoteConnecting: false,

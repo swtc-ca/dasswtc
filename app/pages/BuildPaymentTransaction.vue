@@ -7,7 +7,7 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="60,auto,auto,auto,100,*" ref="mainLayout">
+    <GridLayout ~mainContent columns="*" rows="60,80,80,auto,100,*" ref="mainLayout">
       <DropDown ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <GridLayout row="1" columns="auto,*">
         <Label col="0" text="支付方" />
