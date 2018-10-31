@@ -6,6 +6,7 @@ import JingtumLib from './../pages/JingtumLib'
 import Possible from './../pages/Possible'
 import Configuration from './../pages/Configuration'
 import OfflineSign from './../pages/OfflineSign'
+import BuildPaymentTransaction from './../pages/BuildPaymentTransaction'
 
 const routes = {
     MineAddress,
@@ -15,7 +16,8 @@ const routes = {
     JingtumLib,
     Possible,
     Configuration,
-    OfflineSign
+    OfflineSign,
+    BuildPaymentTransaction
 }
 
 export default routes

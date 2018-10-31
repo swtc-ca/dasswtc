@@ -37,7 +37,10 @@ export default {
     }
   },
   computed: {
-	...mapGetters({ wallets: 'swtcWallets', wallet: 'swtcWallet'}),
+	...mapGetters({ wallets: 'swtcWallets'}),
+    wallet () {
+        return this.wallets[this.walletIndex]
+    }
   },
   methods: {
     ...mapMutations({ appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
@@ -52,7 +55,7 @@ export default {
 			this.$showModal(ModalText, {props: {text: this.result, width: 300, height: 300}})
     },
     onSign(args) {
-      let signWallet = this.swtcClassWallet(this.wallets[this.walletIndex].secret)
+      let signWallet = this.swtcClassWallet(this.wallet.secret)
       this.result = signWallet.sign(this.toSign)
     },
     onScan(args) {

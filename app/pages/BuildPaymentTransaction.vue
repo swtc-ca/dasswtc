@@ -2,21 +2,28 @@
   <Page class="page" @loaded="pageLoaded">
     <ActionBar
       class="action-bar"
-      title="离线签名">
+      title="创建支付交易">
       <ActionItem icon="res://ic_menu" ios.position="right"
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="auto,auto,100,100,*" ref="mainLayout">
+    <GridLayout ~mainContent columns="*" rows="auto,auto,auto,auto,100,*" ref="mainLayout">
       <ListPicker row="0" :items="wallets.map(w => w.address)" v-model="walletIndex" />
-        <GridLayout row="1" columns="auto,*,auto">
-          <Button col="0" text="使用钱包签名" @tap="onSign" />
-          <Label class="fa fas" col="2" :text="'fa-qrcode' | fonticon" @tap="onScan" />
-        </GridLayout>
-      <TextView hint="需要签名的数据
-      可以扫码
-      通常时签署交易" row="2" autocorrect="false" maxLength="3000" v-model="toSign" />
-      <TextView hint="签名后数据" row="3" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
+      <GridLayout row="1" columns="auto,*">
+        <Label col="0" text="支付方" />
+        <TextField col="1" :text="wallet.address" editable="false" style="font-size:12" />
+      </GridLayout>
+      <GridLayout row="2" columns="auto,*,auto">
+        <Label col="0" text="接收方" />
+        <TextField col="1" v-model="destination" style="font-size:12" />
+        <Label class="fa fas" col="2" :text="'fa-qrcode' | fonticon" @tap="onScanDestination" />
+      </GridLayout>
+      <GridLayout row="3" columns="100,*,auto">
+        <Label col="0" text="支付SWTC" />
+        <TextField col="1" v-model="quantity" />
+        <Button col="2" text="生成交易" @tap="onGenerate" />
+      </GridLayout>
+      <TextView hint="交易数据" row="4" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
     </GridLayout>
   </Page>
 </template>
@@ -32,36 +39,47 @@ export default {
   data() {
     return {
       walletIndex: 0,
-      toSign: '',
+      destination: '',
+      quantity: 1,
       result: '',
     }
   },
   computed: {
-	...mapGetters({ wallets: 'swtcWallets', wallet: 'swtcWallet'}),
+    ...mapGetters({ wallets: 'swtcWallets',  server: 'swtcServer', servers: 'swtcServers'}),
+    wallet () {
+        return this.wallets[this.walletIndex]
+    }
   },
   methods: {
     ...mapMutations({ appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
     ...mapActions(['scan', 'showLastLogToasts', 'toClipboard']),
-    onFabItemTap(args) {
-			console.log(args)
-      this.$navigateTo(this.$routes.SelectAddress)
-    }, 
     showResult() {
       this.toClipboard(this.result)
       this.appendMsg('拷贝到粘贴板')
-			this.$showModal(ModalText, {props: {text: this.result, width: 300, height: 300}})
+	  this.$showModal(ModalText, {props: {text: this.result, width: 300, height: 300}})
     },
-    onSign(args) {
-      let signWallet = this.swtcClassWallet(this.wallets[this.walletIndex].secret)
-      this.result = signWallet.sign(this.toSign)
+    onGenerate() {
+      console.log("生成交易")
+      this.appendMsg("生成交易")
+      let tx = this.swtcRemote.buildPaymentTx({
+          account: this.wallet.address,
+          to: this.destination,
+          amount: {
+              value: this.quantity,
+              currency: 'SWT',
+              issuer: ''
+          }
+      })
+      console.log(tx.tx_json)
+      this.result = JSON.stringify(tx.tx_json)
     },
-    onScan(args) {
+    onScanDestination(args) {
 		this.$store.dispatch('scan').then(
            (result) => {
 				console.log(result);
 				console.log("Scan format: " + result.format);
-        console.log("Scan text:   " + result.text);
-        this.toSign = result.text
+                console.log("Scan text:   " + result.text);
+                this.destination = result.text
 				this.appendMsg(result)
            },
            (error) => {
@@ -75,9 +93,19 @@ export default {
     },
   },
   created() {
+    console.log("created")
     if (this.wallet && this.wallet.hasOwnProperty('address')) {
       this.walletIndex = this.wallets.indexOf(this.wallets.filter(w => w.address === this.wallet.address)[0])
     }
+    console.log("create local remote")
+    if (this.server && this.server.hasOwnProperty('server')) {
+      console.log(this.server.server)
+    } else {
+      let swtcServer =  this.servers[Math.floor(Math.random() * this.servers.length)]
+      this.setSwtcServer(swtcServer)
+      this.saveSwtcServer()
+    }
+    this.swtcRemote = this.swtcNewRemote(this.server)
   },
   mounted() {
   },
