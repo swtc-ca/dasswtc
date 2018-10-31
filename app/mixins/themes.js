@@ -12,7 +12,7 @@ export default {
         set (v) {this.$store.commit('setCurrentTheme',v)}
       },
       currentTheme: {
-        get () {return this.$store.getters.currentThemeFileS}
+        get () {return this.$store.getters.currentThemeFile}
       }
     },
     watch: {
@@ -28,7 +28,7 @@ export default {
         this.$store.commit('appendMsg', `apply theme ${this.$store.getters.currentThemeFile}`)
         //const cssText = require(this.$store.getters.currentThemeFileS)
         //Themes.applyThemeCss(cssText, themeFile)
-        Themes.applyTheme(this.$store.getters.currentThemeFile)
+        //Themes.applyTheme(this.$store.getters.currentThemeFile)
       },
     },
     created () {

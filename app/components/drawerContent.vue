@@ -1,24 +1,27 @@
 <template>
   <ScrollView>
     <StackLayout width="100%">
-      <Label class="drawer-header" text="井通工具箱" @tap="closeDrawer()"/>
+      <GridLayout columns="20,auto,20,*">
+        <Image col="1" class="sidedrawer-header-image" src="~/assets/images/das256.png" @tap="closeDrawer()" />
+        <Label col="3" class="sidedrawer-header-brand" text="井通工具箱" @tap="closeDrawer()" />
+      </GridLayout>
       <Label text="井通应用" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"
+          class="sidedrawer-list-item" :class="active"
         v-for="(page, i) in dapps" :key="i"
         @tap="goToPage(page.component, page.navigateoption)">
         <Label col="0"
-          class="sideLabel"
           :text="page.name" />
-          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+          <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
       </GridLayout>
       <Label text="我的设置" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"
+          class="sidedrawer-list-item"
         v-for="(page, i) in mines" :key="i + 100"
         @tap="goToPage(page.component, page.navigateoption)">
         <Label col="0"
-          class="sideLabel"
           :text="page.name" />
-          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+          <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
       </GridLayout>
       <Label text="可行应用" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"

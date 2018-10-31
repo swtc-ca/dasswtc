@@ -1,6 +1,6 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
-@import '~nativescript-theme-core/scss/light';
+@import '~nativescript-theme-core/scss/forest';
 
 // Override variables here
 
@@ -28,11 +28,6 @@ Label {
   margin-top: 10;
   padding: 10 10 10 10;
   margin-bottom: 10;
-}
-
-.drawer-header {
-    padding: 50 16 16 16;
-    font-size: 24;
 }
 
 .drawer-item {
@@ -79,6 +74,7 @@ Label {
 
 .drawer {
   padding: 10;
+  background-color: $background;
 }
 
 .sideLogo {

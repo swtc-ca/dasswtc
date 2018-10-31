@@ -18,6 +18,10 @@
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
           Remote({server: server, local_sign: true})
+          tx = Remote.buildTx()
+          tx.setSequence()
+          tx.setSecret()
+          tx.sign()
           </TextView>
         </ScrollView>
       </StackLayout>
@@ -58,59 +62,51 @@
         </ScrollView>
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'play' ? 'visible' : 'collapse'">
-      <StackLayout :visibility="!wallet || wallet.address === 'undefined' ? 'visible' : 'collapse'">
-          <ListPicker :items="wallets.map(w => w.address)" v-model="walletIndex" />
-          <Button text="选择井通地址" @tap="onWalletSelected" class="btn btn-primary btn-active"/>
-      </StackLayout>
-      <StackLayout :visibility="!server || server.server === 'undefined' ? 'visible' : 'collapse'">
-          <ListPicker :items="servers.map(s => s.display)" v-model="serverIndex" />
-          <Button text="选择井通服务器" @tap="onServerSelected" class="btn btn-primary btn-active"/>
-      </StackLayout>
-      <StackLayout :visibility="wallet.address === 'undefined' ? 'collapse' : 'visible'">
-        <GridLayout ref="walletRef" columns="80,*,2*,90" rows="40">
-          <Label col="0">井通</Label>
-          <Label col="1" :text="sequence ? '序' + sequence : ''" />
-          <Label col="2" :text="balance ? '余' + balance : ''" />
-          <Label col="3" :text="!!price ? '价' + price : ''" />
-        </GridLayout>
-        <Label :text="'     ' + wallet.address" @onTap="toClipboard(`${wallet.address}`)" />
-      </StackLayout>
-      <StackLayout :visibility="!swtcRemote ? 'collapse' : 'visible'">
-        <GridLayout ref="remoteRef" columns="100,*,*,80" rows="44">
-          <Label col="0" :text="server.display" />
-          <Button col="3" :isEnabled="!remoteConnecting" @tap="onRemoteConnection" :text="!remoteStatus ? '连接' : '断开'" style="width:80;height:40" class="btn btn-primary"/>
-        </GridLayout>
-        <GridLayout ref="queryRef" columns="120,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
-          <Button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:120;" class="btn btn-primary"/>
-          <TextField col="1" row="0" hint="帐本高度/哈希 交易哈希" v-model="qrLedgerTransaction" autocorrect="false"/>
-          <Button col="2" row="0" @tap="onQueryTransaction" text="查交易" style="width:120;" class="btn btn-primary"/>
-        </GridLayout>
-        <GridLayout ref="queryRefa" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting && wallet? 'visible' : 'collapse'">                     
-          <Button col="0" :isEnabled="remoteStatus && !remoteConnecting" @tap="onWalletBalance" text="查余额" style="width:120" class="btn btn-primary"/>                
-          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting && activated" row="1" text="查通证" @tap="onWalletTums" class="btn btn-primary"  style="width:120;" />
-        </GridLayout>
-        <GridLayout ref="queryRefb" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">                     
-          <Button col="0" text="查市场" :isEnabled="remoteStatus && !remoteConnecting" @tap="onOrderBook" class="btn btn-primary"  style="width:120;" />      
-          <Button col="3" :isEnabled="remoteStatus && !remoteConnecting" @tap="onRemoteInfo" text="服务器" style="width:120;" class="btn btn-primary"/>           
-        </GridLayout>
-        <GridLayout ref="paymentRef" columns="120,*,*,120" rows="48,48,48" :visibility="remoteStatus && !remoteConnecting && activated ? 'visible' : 'collapse'">  
-          <Button col="0" row="0" :isEnabled="!isIOS && isAndroid" text="作支付" @tap="onPayment" class="btn btn-primary"  style="width:120;" />
-          <TextField col="1" row="0" v-model="payMemo" autocorrect="false"/>
-          <TextField col="2" row="0" v-model="payValue" autocorrect="false"/>
-          <Button col="3" row="0" text="查记录" @tap="onWalletHistory" class="btn btn-primary"  style="width:120;" />
-          <Button col="0" row="1" text="查关系" @tap="onWalletRelations" class="btn btn-primary"  style="width:120;" />
-          <TextField col="1" row="1" v-model="qrRelation" autocorrect="false"/>
-          <Button col="3" row="1" text="查挂单" @tap="onWalletOffers" class="btn btn-primary"  style="width:120;" />
-          <Button col="0" row="2" text="挂单买" :isEnabled="!isIOS && isAndroid" @tap="onOfferBuy" class="btn btn-primary"  style="width:120;" />
-          <TextField col="1" row="2" v-model="offerSWT" autocorrect="false"/>
-          <TextField col="2" row="2" v-model="offerCNY" autocorrect="false"/>
-          <Button col="3" row="2" text="挂单卖" :isEnabled="!isIOS && isAndroid" @tap="onOfferSell" class="btn btn-primary"  style="width:120;" />
-        </GridLayout>
-        <GridLayout ref="listenRef" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
-          <Button col="0" width="120" :text="!onLedger ? '监听账本' : '停止监听账本'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenLedger()" class="btn btn-primary btn-active" />
-          <Button col="3" width="120" :text="!onTransaction ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenTransaction()" class="btn btn-primary btn-active" />
-        </GridLayout>
-      </StackLayout>
+        <StackLayout :visibility="wallet.address === 'undefined' ? 'collapse' : 'visible'">
+          <GridLayout ref="walletRef" columns="80,*,2*,90" rows="40">
+            <Label col="0">井通</Label>
+            <Label col="1" :text="sequence ? '序' + sequence : ''" />
+            <Label col="2" :text="balance ? '余' + balance : ''" />
+            <Label col="3" :text="!!price ? '价' + price : ''" />
+          </GridLayout>
+          <Label :text="'     ' + wallet.address" @onTap="toClipboard(`${wallet.address}`)" />
+        </StackLayout>
+        <StackLayout :visibility="!swtcRemote ? 'collapse' : 'visible'">
+          <GridLayout ref="remoteRef" columns="100,*,*,80" rows="44">
+            <Label col="0" :text="server.display" />
+            <Button col="3" :isEnabled="!remoteConnecting" @tap="onRemoteConnection" :text="!remoteStatus ? '连接' : '断开'" style="width:80;height:40" class="btn btn-primary"/>
+          </GridLayout>
+          <GridLayout ref="queryRef" columns="120,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
+            <Button col="0" row="0" @tap="onQueryLedger" text="查账本" style="width:120;" class="btn btn-primary"/>
+            <TextField col="1" row="0" hint="帐本高度/哈希 交易哈希" v-model="qrLedgerTransaction" autocorrect="false"/>
+            <Button col="2" row="0" @tap="onQueryTransaction" text="查交易" style="width:120;" class="btn btn-primary"/>
+          </GridLayout>
+          <GridLayout ref="queryRefa" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting && wallet? 'visible' : 'collapse'">                     
+            <Button col="0" :isEnabled="remoteStatus && !remoteConnecting" @tap="onWalletBalance" text="查余额" style="width:120" class="btn btn-primary"/>                
+            <Button col="3" :isEnabled="remoteStatus && !remoteConnecting && activated" row="1" text="查通证" @tap="onWalletTums" class="btn btn-primary"  style="width:120;" />
+          </GridLayout>
+          <GridLayout ref="queryRefb" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">                     
+            <Button col="0" text="查市场" :isEnabled="remoteStatus && !remoteConnecting" @tap="onOrderBook" class="btn btn-primary"  style="width:120;" />      
+            <Button col="3" :isEnabled="remoteStatus && !remoteConnecting" @tap="onRemoteInfo" text="服务器" style="width:120;" class="btn btn-primary"/>           
+          </GridLayout>
+          <GridLayout ref="paymentRef" columns="120,*,*,120" rows="48,48,48" :visibility="remoteStatus && !remoteConnecting && activated ? 'visible' : 'collapse'">  
+            <Button col="0" row="0" :isEnabled="!isIOS && isAndroid" text="作支付" @tap="onPayment" class="btn btn-primary"  style="width:120;" />
+            <TextField col="1" row="0" v-model="payMemo" autocorrect="false"/>
+            <TextField col="2" row="0" v-model="payValue" autocorrect="false"/>
+            <Button col="3" row="0" text="查记录" @tap="onWalletHistory" class="btn btn-primary"  style="width:120;" />
+            <Button col="0" row="1" text="查关系" @tap="onWalletRelations" class="btn btn-primary"  style="width:120;" />
+            <TextField col="1" row="1" v-model="qrRelation" autocorrect="false"/>
+            <Button col="3" row="1" text="查挂单" @tap="onWalletOffers" class="btn btn-primary"  style="width:120;" />
+            <Button col="0" row="2" text="挂单买" :isEnabled="!isIOS && isAndroid" @tap="onOfferBuy" class="btn btn-primary"  style="width:120;" />
+            <TextField col="1" row="2" v-model="offerSWT" autocorrect="false"/>
+            <TextField col="2" row="2" v-model="offerCNY" autocorrect="false"/>
+            <Button col="3" row="2" text="挂单卖" :isEnabled="!isIOS && isAndroid" @tap="onOfferSell" class="btn btn-primary"  style="width:120;" />
+          </GridLayout>
+          <GridLayout ref="listenRef" columns="120,*,*,120" rows="48" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'">
+            <Button col="0" width="120" :text="!onLedger ? '监听账本' : '停止监听账本'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenLedger()" class="btn btn-primary btn-active" />
+            <Button col="3" width="120" :text="!onTransaction ? '监听交易' : '停止监听交易'" :visibility="remoteStatus && !remoteConnecting ? 'visible' : 'collapse'" @tap="onListenTransaction()" class="btn btn-primary btn-active" />
+          </GridLayout>
+        </StackLayout>
       </StackLayout>
       <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*,*,*">
         <Button class="segmentitem" col="0" @tap="activeSegment='play'" text="PLAY"></Button>

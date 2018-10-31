@@ -50,7 +50,7 @@ import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
 import themes from '~/mixins/themes'
-import Themes from 'nativescript-themes'
+//import Themes from 'nativescript-themes'
 export default {
   mixins: [ sideDrawer, feedback, jingtumLib, themes ],
   data() {

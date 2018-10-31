@@ -9,7 +9,7 @@
 
     <GridLayout ~mainContent columns="*" rows="auto,auto,100,100,*" ref="mainLayout">
       <ListPicker row="0" :items="wallets.map(w => w.address)" v-model="walletIndex" />
-        <GridLayout row="1" columns="auto,*,auto">
+        <GridLayout row="1" columns="auto,*,auto,10">
           <Button col="0" text="使用钱包签名" @tap="onSign" />
           <Label class="fa fas" col="2" :text="'fa-qrcode' | fonticon" @tap="onScan" />
         </GridLayout>
@@ -25,10 +25,11 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import vibrator from '~/mixins/vibrator'
 import jingtumLib from '~/mixins/jingtumLib'
+import feedback from '~/mixins/feedback'
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import ModalText from './../components/modalText'
 export default {
-  mixins: [ sideDrawer, jingtumLib, vibrator ],
+  mixins: [ sideDrawer, jingtumLib, vibrator, feedback ],
   data() {
     return {
       walletIndex: 0,
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     ...mapMutations({ appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
-    ...mapActions(['scan', 'showLastLogToasts', 'toClipboard']),
+    ...mapActions(['scan', 'toClipboard']),
     onFabItemTap(args) {
 			console.log(args)
       this.$navigateTo(this.$routes.SelectAddress)

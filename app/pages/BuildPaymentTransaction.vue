@@ -13,7 +13,7 @@
         <Label col="0" text="支付方" />
         <TextField col="1" :text="wallet.address" editable="false" style="font-size:12" />
       </GridLayout>
-      <GridLayout row="2" columns="auto,*,auto">
+      <GridLayout row="2" columns="auto,*,auto,10">
         <Label col="0" text="接收方" />
         <TextField col="1" v-model="destination" style="font-size:12" />
         <Label class="fa fas" col="2" :text="'fa-qrcode' | fonticon" @tap="onScanDestination" />
@@ -32,10 +32,11 @@
 import sideDrawer from '~/mixins/sideDrawer'
 import vibrator from '~/mixins/vibrator'
 import jingtumLib from '~/mixins/jingtumLib'
+import feedback from '~/mixins/feedback'
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import ModalText from './../components/modalText'
 export default {
-  mixins: [ sideDrawer, jingtumLib, vibrator ],
+  mixins: [ sideDrawer, jingtumLib, vibrator, feedback ],
   data() {
     return {
       walletIndex: 0,

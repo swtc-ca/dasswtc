@@ -38,7 +38,7 @@ const actions = {
     })
   },
   toClipboard: ({dispatch, getters, commit}, content) => {
-    getters.clipboard.setText(content).then(() => { commit('appendMsg', `${content}已拷贝到粘贴板`); dispatch('showLastLogToasts')})
+    getters.clipboard.setText(content).then(() => { commit('appendMsg', `${content}已拷贝到粘贴板`)})
   },
 }
 // export this module.
