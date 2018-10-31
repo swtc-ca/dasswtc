@@ -1,8 +1,6 @@
 <template>
   <Page ref="page" actionBarHidden="false" class="page" backgroundSpanUnderStatusBar="true">
     <ActionBar
-      color="white"
-      backgroundColor="#53ba82"
       class="action-bar"
       title="应用设置">
       <ActionItem icon="res://ic_menu" ios.position="right"
@@ -31,11 +29,15 @@
               <Switch col="1" v-model="autoToast" />
             </GridLayout>
         </StackLayout>
+        <StackLayout :visibility="activeSegment === '风格' ? 'visible' : 'collapse'">
+            <ListPicker :items="cssThemes" v-model="themeId" />
+        </StackLayout>
       </Stacklayout>
-      <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*">
+      <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*,*">
         <Button class="segmentitem" col="0" @tap="activeSegment='钱包'" text="钱包"></Button>
         <Button class="segmentitem" col="1" @tap="activeSegment='服务器'" text="服务器"></Button>
         <Button class="segmentitem" col="2" @tap="activeSegment='反馈'" text="反馈"></Button>
+        <Button class="segmentitem" col="3" @tap="activeSegment='风格'" text="风格"></Button>
       </Gridlayout>
     </GridLayout>
   </Page>
@@ -47,8 +49,10 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
+import themes from '~/mixins/themes'
+import Themes from 'nativescript-themes'
 export default {
-  mixins: [ sideDrawer, feedback, jingtumLib ],
+  mixins: [ sideDrawer, feedback, jingtumLib, themes ],
   data() {
     return {
       walletIndex: 0,
@@ -58,13 +62,20 @@ export default {
   },
   computed: {
     ...mapState(['isIOS', 'isAndroid']),
-    ...mapGetters({ msgs: 'msgs', wallets: 'swtcWallets', wallet: 'swtcWallet', servers: 'swtcServers', server: 'swtcServer'}),
+    ...mapGetters({ cssThemes: 'cssThemes', scssThemes: 'scssThemes', msgs: 'msgs', wallets: 'swtcWallets', wallet: 'swtcWallet', servers: 'swtcServers', server: 'swtcServer'}),
   },
   methods: {
     ...mapMutations([
       "appendMsg", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer"
     ]),
     ...mapActions(['showLastLogToasts', 'toClipboard']),
+    applySelectedTheme () {
+        this.appendMsg('应用主题')
+        let themeFile = this.$store.getters.currentThemeFile.split('/').reverse()[0]
+        //const cssText = require(this.$store.getters.currentThemeFileS)
+        //Themes.applyThemeCss(cssText, themeFile)
+        Themes.applyTheme(this.$store.getters.currentThemeFile)
+    },
     onServerSelected() {
       console.log("server selected");
       if (this.serverIndex > -1 && this.serverIndex < this.servers.length) {
@@ -102,15 +113,12 @@ export default {
     }
   },
   mounted() {
-    console.log("conf app mounted")
+    console.log("conf app mounted ")
   }
 };
 </script>
 
-<style scoped lang="scss">
-@import '~nativescript-theme-core/scss/light';
-@import '~nativescript-theme-core/scss/index';
-
+<style scoped>
 Button {
   padding-bottom: 1;
   margin: 0;
@@ -119,7 +127,6 @@ Button {
   vertical-align: middle;
 }
 .segmentGroup {
-  background-color: $accent;
 }
 .segmentitem {
   padding-left: 2;

@@ -8,7 +8,8 @@ import drawerContent from '~/components/drawerContent'
 var AdvancedWebView = require("nativescript-advanced-webview")
 AdvancedWebView.init()
 
-import './styles.scss'
+//Themes.applyTheme('./assets/scssThemes/dark.scss')
+
 
 Vue.prototype.$routes = routes
 Vue.use(RadListView)
@@ -19,6 +20,7 @@ TNSFontIcon.paths = {
 };
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);
+//Themes.applyTheme('./assets/cssThemes/core.light.css')
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
@@ -49,8 +51,10 @@ application.on(application.uncaughtErrorEvent, (args) => {
   console.log(`uncaughtError`)
 })
 // test application lifecycle
+import './styles.scss'
 
-
+import Themes from 'nativescript-themes'
+Themes.applyTheme(store.getters.currentThemeFile)
 new Vue({
   store, // global available
   render (h){

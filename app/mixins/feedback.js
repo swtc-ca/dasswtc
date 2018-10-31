@@ -1,5 +1,3 @@
-import { clipToBoundsProperty } from '../../node_modules/tns-core-modules/ui/layouts/layout-base';
-
 const feedbackplugin = require('nativescript-feedback')
 
 export default {
@@ -39,7 +37,7 @@ export default {
           title: "输出",
           message: message,
           duration: 2000,
-          onTap: function() { this.feedback.hide(); }
+          onTap: () => this.feedback.hide()
         })
       },
     },

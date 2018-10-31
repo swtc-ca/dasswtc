@@ -1,8 +1,6 @@
 <template>
   <Page class="page">
     <ActionBar
-      color="white"
-      backgroundColor="#53ba82"
       class="action-bar"
       title="可行应用">
       <ActionItem icon="res://ic_menu" ios.position="right"

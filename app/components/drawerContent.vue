@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <ScrollView>
     <StackLayout width="100%">
       <Label class="drawer-header" text="井通工具箱" @tap="closeDrawer()"/>

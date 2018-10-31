@@ -1,8 +1,6 @@
 <template>
   <Page ref="page" actionBarHidden="false" class="page" backgroundSpanUnderStatusBar="true">
     <ActionBar
-      color="white"
-      backgroundColor="#53ba82"
       class="action-bar"
       title="井通开发库">
       <ActionItem icon="res://ic_menu" ios.position="right"
@@ -114,7 +112,7 @@
         </GridLayout>
       </StackLayout>
       </StackLayout>
-      <GridLayout col="1" backgroundColor="aqua" verticalAlignment="bottom" columns="*,*,*,*,*">
+      <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*,*,*">
         <Button class="segmentitem" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
         <Button class="segmentitem" col="1" @tap="activeSegment='api'" text="API"></Button>
         <Button class="segmentitem" col="2" @tap="activeSegment='base'" text="BASE"></Button>
@@ -434,10 +432,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-@import '~nativescript-theme-core/scss/light';
-@import '~nativescript-theme-core/scss/index';
-
+<style scoped>
 Button {
   padding-bottom: 1;
   margin: 0;
@@ -454,7 +449,6 @@ Button {
   horizontal-align: center;
 }
 .segmentGroup {
-  background-color: $accent;
 }
 .segmentitem {
   padding-left: 2;

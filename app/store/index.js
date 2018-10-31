@@ -6,6 +6,7 @@ import swtc from './modules/swtc'
 import qrScan from './modules/qrScan'
 import qrCode from './modules/qrCode'
 import logger from './modules/logger'
+import themes from './modules/themes'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ let store = new Vuex.Store({
     swtc,
     qrScan,
     qrCode,
+    themes,
   },
   state: {
       isIOS,

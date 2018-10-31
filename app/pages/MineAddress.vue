@@ -1,8 +1,6 @@
 <template>
   <Page class="page" @loaded="pageLoaded">
     <ActionBar
-      color="white"
-      backgroundColor="#53ba82"
       class="action-bar"
       :title="wallet.address">
       <ActionItem icon="res://ic_menu" ios.position="right"
@@ -44,6 +42,7 @@ const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
 import vibrator from '~/mixins/vibrator'
+//import themes from '~/mixins/themes'
 import { mapState, mapGetters, mapMutations } from "vuex"
 import ModalWallet from './../components/modalWallet'
 export default {

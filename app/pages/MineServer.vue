@@ -1,8 +1,6 @@
 <template>
   <Page class="page" @loaded="pageLoaded">
     <ActionBar
-      color="white"
-      backgroundColor="#53ba82"
       class="action-bar"
       :title="server.display">
       <ActionItem icon="res://ic_menu" ios.position="right"
@@ -231,5 +229,4 @@ export default {
 			transform: translate(0, -128);
 		}
 	}
-</style>
 </style>

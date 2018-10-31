@@ -5,7 +5,7 @@ const state = {
   _toasts: require('nativescript-toasts'),
   _clipboard: require("nativescript-clipboard"),
   _autoToast: false,
-  _autoFeedback: false 
+  _autoFeedback: true
 }
   
 const mutations = {

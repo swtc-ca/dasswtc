@@ -28,6 +28,7 @@
     "nativescript-ripple": "^2.1.0",
     "nativescript-swipe-layout": "^1.0.5",
     "nativescript-theme-core": "^1.0.4",
+    "nativescript-themes": "^1.9.9",
     "nativescript-toasts": "^1.0.3",
     "nativescript-ui-listview": "^3.7.2",
     "nativescript-ui-sidedrawer": "^4.3.0",
