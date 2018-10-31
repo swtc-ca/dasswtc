@@ -50,6 +50,7 @@ export default {
       dapps: [
         { name: '靓号选', component: this.$routes.SelectAddress, navigateoption: { clearHistory: true }, },
         { name: '开发库', component: this.$routes.JingtumLib, navigateoption: { clearHistory: true }, },
+        { name: '离线签', component: this.$routes.OfflineSign, navigateoption: { clearHistory: true }, },
         { name: '账本浏览器', component: this.$routes.Explorer, navigateoption: { clearHistory: true }, },
       ],
       possibles: [

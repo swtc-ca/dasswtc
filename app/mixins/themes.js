@@ -17,9 +17,9 @@ export default {
     },
     watch: {
       // we watch the drawer prop for changes and open/close the sideDrawer accordingly
-      currentTheme (v) {
-        this.applyTheme()
-      }
+     // currentTheme (v) {
+     //   this.applyTheme()
+     // }
     },
     methods: {
       applyTheme() {

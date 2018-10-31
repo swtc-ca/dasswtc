@@ -54,7 +54,7 @@ application.on(application.uncaughtErrorEvent, (args) => {
 import './styles.scss'
 
 import Themes from 'nativescript-themes'
-Themes.applyTheme(store.getters.currentThemeFile)
+//Themes.applyTheme(store.getters.currentThemeFile)
 new Vue({
   store, // global available
   render (h){

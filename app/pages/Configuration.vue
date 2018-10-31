@@ -74,7 +74,7 @@ export default {
         let themeFile = this.$store.getters.currentThemeFile.split('/').reverse()[0]
         //const cssText = require(this.$store.getters.currentThemeFileS)
         //Themes.applyThemeCss(cssText, themeFile)
-        Themes.applyTheme(this.$store.getters.currentThemeFile)
+        //Themes.applyTheme(this.$store.getters.currentThemeFile)
     },
     onServerSelected() {
       console.log("server selected");

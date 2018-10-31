@@ -29,6 +29,9 @@ export default {
     computed: {
     },
     methods: {
+      swtcClassWallet(secret) {
+          return new Wallet(secret)
+      },
       swtcNewWallet(secret=false) {
           if (secret) {
               return Wallet.fromSecret(secret)
