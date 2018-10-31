@@ -13,7 +13,7 @@
           <Label textVerticalAlignment="center" class="openrul" text="jingtum-lib" col="0" />
           <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
+        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
         <Label class="docimportant" text="本地签名" />
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
@@ -30,7 +30,7 @@
           <Label textVerticalAlignment="center" class="openrul" text="基础库钱包签名" col="0" />
           <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
+        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
         <Label class="docimportant" text="离线签名" />
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
@@ -46,7 +46,7 @@
           <Label textVerticalAlignment="center" class="openrul" text="API 访问适合移动应用" col="0" />
           <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
+        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
         <Label class="docimportant" text="提交本地签名的交易" />
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
@@ -432,7 +432,6 @@ export default {
 Button {
   padding-bottom: 1;
   margin: 0;
-  height: 44;
   text-align: center;
   vertical-align: middle;
 }
@@ -441,8 +440,10 @@ Button {
   horizontal-align: right;
 }
 .docimportant {
-  font-size: 20;
+  font-size: 24;
+  padding-bottom: 6;
   horizontal-align: center;
+  vertical-align: middle;
 }
 .segmentGroup {
 }

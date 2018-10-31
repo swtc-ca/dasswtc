@@ -25,7 +25,7 @@ export default {
       applyTheme() {
         let themeFile = this.$store.getters.currentThemeFile.split('/').reverse()[0]
         console.log(`apply theme ${this.$store.getters.currentThemeFile}`)
-        this.$store.commit('appendMsg', `apply theme ${this.$store.getters.currentThemeFile}`)
+        this.$store.commit('appendMsg', `delay applying theme ${this.$store.getters.currentThemeFile} before stablized`)
         //const cssText = require(this.$store.getters.currentThemeFileS)
         //Themes.applyThemeCss(cssText, themeFile)
         //Themes.applyTheme(this.$store.getters.currentThemeFile)

@@ -8,15 +8,13 @@ import drawerContent from '~/components/drawerContent'
 var AdvancedWebView = require("nativescript-advanced-webview")
 AdvancedWebView.init()
 
-//Themes.applyTheme('./assets/scssThemes/dark.scss')
-
-
 Vue.prototype.$routes = routes
 Vue.use(RadListView)
 Vue.filter("L", localize)
 import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
 TNSFontIcon.paths = {
   fa: './assets/fontawesome.css',
+  ion: './assets/ionicons.css',
 };
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);
@@ -26,6 +24,13 @@ Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer')
 Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
 Vue.registerElement('CardView', () => require('nativescript-cardview').CardView)
 Vue.registerElement('Ripple', () => require('nativescript-ripple').Ripple)
+Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown)
+Vue.registerElement('CheckBox', () => require('nativescript-checkbox').CheckBox, {
+  model: {
+    prop: 'checked',
+    event: 'checkedChange'
+  }
+})
 Vue.config.silent = (TNS_ENV === 'production')
 
 // test application lifecycle
@@ -53,7 +58,7 @@ application.on(application.uncaughtErrorEvent, (args) => {
 // test application lifecycle
 import './styles.scss'
 
-import Themes from 'nativescript-themes'
+//import Themes from 'nativescript-themes'
 //Themes.applyTheme(store.getters.currentThemeFile)
 new Vue({
   store, // global available

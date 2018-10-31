@@ -11,9 +11,8 @@
       <SwipeLayout class="sl" v-for="item in texts" :key="item" @swipeLeft="rewind" @swipeRight="forward">
       <StackLayout horizontalAlignment="center">
         <CardView elevation="20" margin="10" radius="10" backgroundColor="white" shadowOpacity=".2" shadowRadius="5">
-          <Label horizontalAlignment="center" class="fa fab possible" :text="item | fonticon"></Label>
+          <qr-code :text="item"></qr-code>
         </CardView>
-        <qr-code :text="item"></qr-code>
       </StackLayout>
       </SwipeLayout>
     </GridLayout>

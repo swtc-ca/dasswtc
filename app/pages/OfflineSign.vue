@@ -7,16 +7,14 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="auto,auto,100,100,*" ref="mainLayout">
-      <ListPicker row="0" :items="wallets.map(w => w.address)" v-model="walletIndex" />
-        <GridLayout row="1" columns="auto,*,auto,10">
-          <Button col="0" text="使用钱包签名" @tap="onSign" />
-          <Label class="fa fas" col="2" :text="'fa-qrcode' | fonticon" @tap="onScan" />
-        </GridLayout>
+    <GridLayout ~mainContent columns="*" rows="60,100,auto,auto,100,*" ref="mainLayout">
+      <DropDown ref="dropdown" row="0" hint="选择签名钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <TextView hint="需要签名的数据
       可以扫码
-      通常时签署交易" row="2" autocorrect="false" maxLength="3000" v-model="toSign" />
-      <TextView hint="签名后数据" row="3" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
+      通常用于签署交易" row="1" autocorrect="false" maxLength="3000" v-model="toSign" />
+      <Label horizontalAlignment="center" class="ion ionicon" row="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
+      <Button class="btn btn-primary btn-active" row="3" text="使用钱包签名" @tap="onSign" />
+      <TextView hint="签名后数据" row="4" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
     </GridLayout>
   </Page>
 </template>
@@ -54,6 +52,10 @@ export default {
       this.toClipboard(this.result)
       this.appendMsg('拷贝到粘贴板')
 			this.$showModal(ModalText, {props: {text: this.result, width: 300, height: 300}})
+    },
+    onSelect(args) {
+      this.walletIndex = args.newIndex
+      this.$refs.dropdown.nativeView.close()
     },
     onSign(args) {
       let signWallet = this.swtcClassWallet(this.wallet.secret)

@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
   <RadSideDrawer ref="drawer" drawerLocation="Left" :gesturesEnabled="gesturesEnabled">
     <StackLayout ~drawerContent class="sidedrawer-left">
       <slot name="drawerContent"></slot>
