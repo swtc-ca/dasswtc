@@ -11,7 +11,7 @@
       <SwipeLayout class="sl" v-for="item in texts" :key="item" @swipeLeft="rewind" @swipeRight="forward">
       <StackLayout horizontalAlignment="center">
         <CardView elevation="20" margin="10" radius="10" backgroundColor="white" shadowOpacity=".2" shadowRadius="5">
-          <qr-code :text="item"></qr-code>
+            <qr-code row="0" :text="item"></qr-code>
         </CardView>
       </StackLayout>
       </SwipeLayout>
@@ -30,7 +30,8 @@ export default {
   },
   data() {
     return {
-      texts: ['fa-github', 'fa-slack', 'fa-docker', 'fa-linkedin', 'fa-twitter', 'fa-yelp', 'fa-uber'],
+      //texts: ['fa-github', 'fa-slack', 'fa-docker', 'fa-linkedin', 'fa-twitter', 'fa-yelp', 'fa-uber'],
+      texts: ['溯源', '防伪', '留证', '菠菜', '交易', '生态节点', '快速转账', '智能合约'],
       text: ''
     }
   },

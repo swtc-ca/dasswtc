@@ -7,7 +7,7 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="60,auto,80,80,auto,100,*" ref="mainLayout">
+    <GridLayout ~mainContent columns="*" rows="60,auto,auto,auto,auto,auto,100,100,*" ref="mainLayout">
       <DropDown ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <Label row="1" class="hr-light" />
       <GridLayout row="2" columns="auto,*">
@@ -19,12 +19,19 @@
         <TextField class="t-14" col="1" v-model="destination" />
         <Label class="ion ionicon" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
       </GridLayout>
-      <GridLayout row="4" columns="100,*,auto">
+      <GridLayout row="4" columns="100,*">
+        <Label col="0" text="账号序号" />
+        <TextField class="t-14" col="1" v-model="sequence" />
+      </GridLayout>
+      <GridLayout row="5" columns="100,*,auto">
         <Label col="0" text="支付SWTC" />
         <TextField class="t-14" col="1" v-model="quantity" />
         <Button class="btn btn-primary btn-active" col="2" text="生成交易" @tap="onGenerate" />
       </GridLayout>
-      <TextView class="t-14" hint="交易数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
+      <TextView class="t-14" hint="交易数据" row="6" autocorrect="false" maxLength="3000" :text="result" editable="false" @tap="showResult"/>
+      <Button class="btn btn-primary" :isEnabled="!!tx" row="7" text="签名" :visibility="signed ? 'collapse' : 'visible'" @tap="onSign" />
+      <TextView :visibility="signed ? 'visible' : 'collapse'" class="t-14" hint="签名数据" row="7" autocorrect="false" maxLength="3000" :text="result_signed" editable="false" @tap="showResult2"/>
+      <TextView :visibility="signed ? 'visible' : 'collapse'" @tap="showResult3" class="t-14" hint="签名" row="8" autocorrect="false" maxLength="3000" :text="signature" editable="false"/>
     </GridLayout>
   </Page>
 </template>
@@ -36,6 +43,9 @@ import jingtumLib from '~/mixins/jingtumLib'
 import feedback from '~/mixins/feedback'
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import ModalText from './../components/modalText'
+require("nativescript-nodeify")
+const jser = require('jingtum-lib/lib/Serializer.js').Serializer
+const PREFIX = 0x53545800
 export default {
   mixins: [ sideDrawer, jingtumLib, vibrator, feedback ],
   data() {
@@ -43,7 +53,12 @@ export default {
       walletIndex: 0,
       destination: '',
       quantity: 1,
+      tx: false,
+      signed: false,
       result: '',
+      result_signed: '',
+      signature: '',
+      sequence: 0
     }
   },
   computed: {
@@ -55,19 +70,47 @@ export default {
   methods: {
     ...mapMutations({ addSwtcWallet: 'addSwtcWallet', setSwtcWallet: 'setSwtcWallet', saveSwtcWallets: 'saveSwtcWallets', saveSwtcWallet: 'saveSwtcWallet', appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
     ...mapActions(['scan', 'showLastLogToasts', 'toClipboard']),
+    showResult3() {
+      this.toClipboard(this.result_signed)
+      this.appendMsg('拷贝到粘贴板')
+	    this.$showModal(ModalText, {props: {title: '签名印戳', text: this.signature, width: 300, height: 300}})
+    },
+    showResult2() {
+      this.toClipboard(this.result_signed)
+      this.appendMsg('拷贝到粘贴板')
+	    this.$showModal(ModalText, {props: {title: '签名数据', text: this.result_signed, width: 300, height: 300}})
+    },
     showResult() {
       this.toClipboard(this.result)
       this.appendMsg('拷贝到粘贴板')
-	  this.$showModal(ModalText, {props: {text: this.result, width: 300, height: 300}})
+	    this.$showModal(ModalText, {props: {title: '交易数据', text: this.result, width: 300, height: 300}})
     },
     onSelect(args) {
       this.walletIndex = args.newIndex
       this.$refs.dropdown.nativeView.close()
     },
+    onSign() {
+      this.tx.sign( (e,r) => {
+        if (e) { console.log(e) }
+          console.log(r)
+          console.log('signed')
+          this.signed = true
+          this.result_signed = r
+          this.signature = this.tx.tx_json.TxnSignature
+          delete this.tx.tx_json.TxnSignature
+          delete this.tx.tx_json.blob
+          this.result = jser.from_json(this.tx.tx_json).hash(0x53545800)
+
+          console.log(this.tx.tx_json)
+          console.log(this.result)
+          console.log(this.signature)
+          console.log(this.wallet.secret)
+      })
+    },
     onGenerate() {
       console.log("生成交易")
       this.appendMsg("生成交易")
-      let tx = this.swtcRemote.buildPaymentTx({
+      this.tx = this.swtcRemote.buildPaymentTx({
           account: this.wallet.address,
           to: this.destination,
           amount: {
@@ -76,8 +119,10 @@ export default {
               issuer: ''
           }
       })
-      console.log(tx.tx_json)
-      this.result = JSON.stringify(tx.tx_json)
+      this.tx.setSequence(this.sequence)
+      this.tx.setSecret(this.wallet.secret)
+      console.log(this.tx.tx_json)
+      this.result = JSON.stringify(this.tx.tx_json)
     },
     onScanDestination(args) {
 		this.$store.dispatch('scan').then(

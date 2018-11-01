@@ -17,45 +17,43 @@
       <Label text="我的设置" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"
           class="sidedrawer-list-item"
-        v-for="(page, i) in mines" :key="i + 100"
-        @tap="goToPage(page.component, page.navigateoption)">
-        <Label col="0"
-          :text="page.name" />
-          <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
+          v-for="(page, i) in mines" :key="i + 100"
+          @tap="goToPage(page.component, page.navigateoption)">
+        <Label col="0" :text="page.name" />
+        <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
       </GridLayout>
-      <Label text="可行应用" class="sideLabel sideLightGrayLabel"></Label>
+      <Label text="关于" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"
-        v-for="(page, i) in possibles" :key="i + 200"
-        @tap="goToPage(page.component, page.navigateoption)">
-        <Label col="0"
-          class="sideLabel"
-          :text="page.name" />
-          <Label col="1" class="fa fas sideLabel" :text="'fa-angle-right' | fonticon" />
+          v-for="(org, i) in abouts" :key="i"
+          @tap="awv(org.url)">
+        <Label col="0" :text="org.name" class="drawer-item"></Label>
+        <Label col="1" class="t-12 ion" :text="'ion-md-open' | fonticon" />
       </GridLayout>
-      <Label text="关于" class="drawer-item sideLightGrayLabel"></Label>
-      <Label text="CA生态节点" class="drawer-item"></Label>
-      <Label text="SWTC基金会" class="drawer-item"></Label>
-      <Label text="井通公链" class="drawer-item"></Label>
-      <Label text="版本" class="drawer-item sideLightGrayLabel"></Label>
-      <Label text="0.2.2" class="drawer-item"></Label>
-
+      <Label text="版本:  0.2.2" class="sideLabel sideLightGrayLabel"></Label>
     </StackLayout>
   </ScrollView>
 </template>
 
 <script>
 import sideDrawer from '~/mixins/sideDrawer'
+import advancedWebView from '~/mixins/advancedWebView'
 export default {
-  mixins: [sideDrawer],
+  mixins: [sideDrawer, advancedWebView],
   data () {
     return {
       // define our pages, making sure the component matches that defined in /app/router/index.js
+      abouts: [
+        { name: "CA生态节点", url: "http://daszichan.com"},
+        { name: "SWTC基金会", url: "https://swtc.top"},
+        { name: "井通公链", url: "https://jingtum.com"}
+      ],
       dapps: [
-        { name: '靓号选', component: this.$routes.SelectAddress, navigateoption: { clearHistory: true }, },
         { name: '开发库', component: this.$routes.JingtumLib, navigateoption: { clearHistory: true }, },
-        { name: '离线签', component: this.$routes.OfflineSign, navigateoption: { clearHistory: true }, },
+        { name: '靓号选', component: this.$routes.SelectAddress, navigateoption: { clearHistory: true }, },
         { name: '建交易', component: this.$routes.BuildPaymentTransaction, navigateoption: { clearHistory: true }, },
+        { name: '离线签', component: this.$routes.OfflineSignTx, navigateoption: { clearHistory: true }, },
         { name: '账本浏览器', component: this.$routes.Explorer, navigateoption: { clearHistory: true }, },
+        { name: '可行应用', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
       ],
       possibles: [
         { name: '溯源', component: this.$routes.Possible, navigateoption: { clearHistory: false }, },
@@ -82,7 +80,7 @@ export default {
       this.$navigateTo(pageComponent, navigateoption)
       // and we probably want to close the drawer when changing pages
       this.closeDrawer()
-    }
+    },
   }
 }
 </script>

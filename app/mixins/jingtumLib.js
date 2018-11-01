@@ -1,5 +1,7 @@
 require('nativescript-nodeify/nodeify')
 const JLib = require('jingtum-lib')
+const jser = require('jingtum-lib/lib/Serializer.js').Serializer
+const PREFIX = 0x53545800
 const Remote = JLib.Remote
 const Wallet = JLib.Wallet
 

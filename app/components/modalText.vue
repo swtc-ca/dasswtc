@@ -1,6 +1,6 @@
 <template>
     <StackLayout>
-      <Label class="h3" text="签名后数据" horizontalAlignment="center"></Label>
+      <Label class="h2 p-10" :text="title" horizontalAlignment="center"></Label>
       <Image :src="src" :width="width" :height="height" />
     </StackLayout>
 </template>
@@ -10,6 +10,10 @@ var imageSource = require('image-source')
 export default {
   name: 'qr-code',
   props: {
+    title: {
+      type: String,
+      default: 'title',
+    },
     text: {
       type: String,
       default: '',

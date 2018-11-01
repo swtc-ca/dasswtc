@@ -2,7 +2,7 @@
   <Page class="page" @loaded="pageLoaded">
     <ActionBar
       class="action-bar"
-      title="离线签名">
+      title="离线签名TX">
       <ActionItem icon="res://ic_menu" ios.position="right"
                   @tap="switchDrawer()"/>
     </ActionBar>
@@ -71,11 +71,11 @@ export default {
     },
     onVerify() {
       let verifyWallet = this.swtcClassWallet(this.wallet.secret)
-      this.verified = verifyWallet.verify(this.toSign, this.result)
+      this.verified = verifyWallet.verifyTx(this.toSign, this.result)
     },
     onSign(args) {
       let signWallet = this.swtcClassWallet(this.wallet.secret)
-      this.result = signWallet.sign(this.toSign)
+      this.result = signWallet.signTx(this.toSign)
     },
     onScan(args) {
 		this.$store.dispatch('scan').then(

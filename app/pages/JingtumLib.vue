@@ -11,7 +11,7 @@
       <StackLayout row="0" :visibility="activeSegment === 'lib' ? 'visible' : 'collapse'">
         <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="jingtum-lib" col="0" />
-          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
+          <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
         </GridLayout>
         <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
         <Label class="docimportant" text="本地签名" />
@@ -28,7 +28,7 @@
       <StackLayout row="0" :visibility="activeSegment === 'base' ? 'visible' : 'collapse'">
         <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="基础库钱包签名" col="0" />
-          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
+          <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
         </GridLayout>
         <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
         <Label class="docimportant" text="离线签名" />
@@ -44,7 +44,7 @@
       <StackLayout row="0" :visibility="activeSegment === 'api' ? 'visible' : 'collapse'">
         <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="API 访问适合移动应用" col="0" />
-          <Label class="openurl fa fas" col="3" :text="'fa-external-link-alt' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
+          <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
         </GridLayout>
         <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
         <Label class="docimportant" text="提交本地签名的交易" />
@@ -128,10 +128,10 @@ import * as platformModule from "tns-core-modules/platform";
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
+import advancedWebView from '~/mixins/advancedWebView'
 import { openUrl } from "tns-core-modules/utils/utils"
-import { openAdvancedUrl, AdvancedWebViewOptions } from 'nativescript-advanced-webview'
 export default {
-  mixins: [ sideDrawer, feedback, jingtumLib ],
+  mixins: [ sideDrawer, feedback, jingtumLib, advancedWebView ],
   data() {
     return {
       walletIndex: 0,
@@ -159,13 +159,6 @@ export default {
     remoteStatus: function () {
       return this.swtcRemote && this.swtcRemote.isConnected() 
     },
-    pageClasses: function() {
-      return {
-        // add top class so we can apply styles to specific platforms
-        "platform-ios": platformModule.isIOS,
-        "platform-android": platformModule.isAndroid
-      };
-    },
     logMsgs() {
       return this.msgs.map( e => `${JSON.stringify(e.msg, '', 2)}\n`)
     }
@@ -179,23 +172,6 @@ export default {
       console.log(msg)
       this.$store.commit('appendMsg',msg)
     },
-   	awv(url) {
-      try {
-        //let AdvancedWebViewOptions = {
-        let opt = {
-          url: url,
-          showTitle: true,
-          toolbarColor: '#336699',
-          toolbarControlsColor: '#333',
-          isClosed: closed => {
-            console.log(closed);
-          }
-        }
-        openAdvancedUrl(opt);
-      } catch (error) {
-        console.log(error);
-      }
-	  },
     openurl(url) {
       openUrl(url)
     },

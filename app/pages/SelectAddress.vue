@@ -56,7 +56,7 @@ export default {
     },
     onItemTap({ item }) {
       console.log(`Tapped on ${item.address}`)
-      this.toClipboard(item.secret)
+      this.toClipboard(item.address)
 			//this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {

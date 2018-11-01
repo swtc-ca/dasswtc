@@ -6,6 +6,7 @@ import JingtumLib from './../pages/JingtumLib'
 import Possible from './../pages/Possible'
 import Configuration from './../pages/Configuration'
 import OfflineSign from './../pages/OfflineSign'
+import OfflineSignTx from './../pages/OfflineSignTx'
 import BuildPaymentTransaction from './../pages/BuildPaymentTransaction'
 
 const routes = {
@@ -17,6 +18,7 @@ const routes = {
     Possible,
     Configuration,
     OfflineSign,
+    OfflineSignTx,
     BuildPaymentTransaction
 }
 

@@ -34,7 +34,7 @@
         </StackLayout>
       </Stacklayout>
       <GridLayout row="1" class="segmented-bar" verticalAlignment="bottom" columns="*,*,*,*">
-        <Button class="segmented-item m-b-0 p-b-0" col="0" @tap="activeSegment='钱包'" text="钱包"></Button>
+        <Button class="segmented-item" col="0" @tap="activeSegment='钱包'" text="钱包"></Button>
         <Button class="segmented-item" col="1" @tap="activeSegment='服务器'" text="服务器"></Button>
         <Button class="segmented-item" col="2" @tap="activeSegment='反馈'" text="反馈"></Button>
         <Button class="segmented-item" col="3" @tap="activeSegment='风格'" text="风格"></Button>
