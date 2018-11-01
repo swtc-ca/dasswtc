@@ -4,11 +4,16 @@
 
 // Override variables here
 
+$btn-padding-x: 5;
+$btn-padding-y: 5;
+$btn-margin-x: 8;
+$btn-margin-y: 3;
+
+
 @import '~nativescript-theme-core/scss/index';
 
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
-
 Label {
   vertical-align: center;
 }
@@ -107,4 +112,18 @@ Label {
 }
 .fab {
   font-family: Font Awesome 5 Brands, fa-brands-400;
+}
+.segmented-item {
+  background-color: $accent;
+  margin: 1 1 0 1;
+  height: 30;
+}
+.android .segmented-item {
+  vertical-align: bottom;
+  margin: 0;
+  padding: 0;
+  font-size: 14;
+}
+.ios .segmented-item {
+  font-size: 16;
 }

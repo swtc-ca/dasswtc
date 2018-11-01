@@ -7,23 +7,24 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="60,80,80,auto,100,*" ref="mainLayout">
+    <GridLayout ~mainContent columns="*" rows="60,auto,80,80,auto,100,*" ref="mainLayout">
       <DropDown ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
-      <GridLayout row="1" columns="auto,*">
+      <Label row="1" class="hr-light" />
+      <GridLayout row="2" columns="auto,*">
         <Label col="0" text="支付方" />
-        <TextField col="1" :text="wallet.address" editable="false" style="font-size:12" />
+        <TextField class="t-14" col="1" :text="wallet.address" editable="false" />
       </GridLayout>
-      <GridLayout row="2" columns="auto,*,auto,10">
+      <GridLayout row="3" columns="auto,*,auto,10">
         <Label col="0" text="接收方" />
-        <TextField col="1" v-model="destination" style="font-size:12" />
+        <TextField class="t-14" col="1" v-model="destination" />
         <Label class="ion ionicon" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
       </GridLayout>
-      <GridLayout row="3" columns="100,*,auto">
+      <GridLayout row="4" columns="100,*,auto">
         <Label col="0" text="支付SWTC" />
-        <TextField col="1" v-model="quantity" />
+        <TextField class="t-14" col="1" v-model="quantity" />
         <Button class="btn btn-primary btn-active" col="2" text="生成交易" @tap="onGenerate" />
       </GridLayout>
-      <TextView hint="交易数据" row="4" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
+      <TextView class="t-14" hint="交易数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
     </GridLayout>
   </Page>
 </template>
@@ -126,7 +127,4 @@ export default {
 </script>
 
 <style scoped>
-TextView {
-  font-size: 14;
-}
 </style>

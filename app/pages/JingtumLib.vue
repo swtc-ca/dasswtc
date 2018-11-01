@@ -64,7 +64,7 @@
       <StackLayout row="0" :visibility="activeSegment === 'play' ? 'visible' : 'collapse'">
         <StackLayout :visibility="wallet.address === 'undefined' ? 'collapse' : 'visible'">
           <GridLayout ref="walletRef" columns="80,*,2*,90" rows="40">
-            <Label col="0">井通</Label>
+            <Label class="h3" col="0">井通</Label>
             <Label col="1" :text="sequence ? '序' + sequence : ''" />
             <Label col="2" :text="balance ? '余' + balance : ''" />
             <Label col="3" :text="!!price ? '价' + price : ''" />
@@ -108,12 +108,12 @@
           </GridLayout>
         </StackLayout>
       </StackLayout>
-      <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*,*,*">
-        <Button class="segmentitem" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
-        <Button class="segmentitem" col="1" @tap="activeSegment='api'" text="API"></Button>
-        <Button class="segmentitem" col="2" @tap="activeSegment='base'" text="BASE"></Button>
-        <Button class="segmentitem" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
-        <Button class="segmentitem" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
+      <GridLayout row="1" class="segmented-bar" verticalAlignment="bottom" columns="auto,*,*,*,auto">
+        <Button class="segmented-item" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
+        <Button class="segmented-item" col="1" @tap="activeSegment='api'" text="API"></Button>
+        <Button class="segmented-item" col="2" @tap="activeSegment='base'" text="BASE"></Button>
+        <Button class="segmented-item" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
+        <Button class="segmented-item" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
       </Gridlayout>
     </GridLayout>
   </Page>
@@ -428,12 +428,6 @@ export default {
 </script>
 
 <style scoped>
-Button {
-  padding-bottom: 1;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-}
 .openurl {
   font-size: 20;
   horizontal-align: right;
@@ -443,12 +437,5 @@ Button {
   padding-bottom: 6;
   horizontal-align: center;
   vertical-align: middle;
-}
-.segmentGroup {
-}
-.segmentitem {
-  padding-left: 2;
-  padding-right: 2;
-  margin: 0;
 }
 </style>

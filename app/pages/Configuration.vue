@@ -21,23 +21,23 @@
         </StackLayout>
         <StackLayout :visibility="activeSegment === '反馈' ? 'visible' : 'collapse'">
             <GridLayout rows="60" columns="*,auto">
-              <Label col="0" text="实时反馈" />
-              <Switch col="1" v-model="autoFeedback" />
+              <Label col="0" text="反馈" />
+              <Switch class="switch" col="1" v-model="autoFeedback" />
             </GridLayout>
             <GridLayout rows="60" columns="*,auto">
-              <Label col="0" text="实时提示" />
-              <Switch col="1" v-model="autoToast" />
+              <Label col="0" text="提示" />
+              <Switch class="switch" col="1" v-model="autoToast" />
             </GridLayout>
         </StackLayout>
         <StackLayout :visibility="activeSegment === '风格' ? 'visible' : 'collapse'">
             <ListPicker :items="cssThemes" v-model="themeId" />
         </StackLayout>
       </Stacklayout>
-      <GridLayout row="1" class="segmentGroup" verticalAlignment="bottom" columns="*,*,*,*">
-        <Button class="segmentitem" col="0" @tap="activeSegment='钱包'" text="钱包"></Button>
-        <Button class="segmentitem" col="1" @tap="activeSegment='服务器'" text="服务器"></Button>
-        <Button class="segmentitem" col="2" @tap="activeSegment='反馈'" text="反馈"></Button>
-        <Button class="segmentitem" col="3" @tap="activeSegment='风格'" text="风格"></Button>
+      <GridLayout row="1" class="segmented-bar" verticalAlignment="bottom" columns="*,*,*,*">
+        <Button class="segmented-item m-b-0 p-b-0" col="0" @tap="activeSegment='钱包'" text="钱包"></Button>
+        <Button class="segmented-item" col="1" @tap="activeSegment='服务器'" text="服务器"></Button>
+        <Button class="segmented-item" col="2" @tap="activeSegment='反馈'" text="反馈"></Button>
+        <Button class="segmented-item" col="3" @tap="activeSegment='风格'" text="风格"></Button>
       </Gridlayout>
     </GridLayout>
   </Page>
@@ -119,18 +119,4 @@ export default {
 </script>
 
 <style scoped>
-Button {
-  padding-bottom: 1;
-  margin: 0;
-  height: 44;
-  text-align: center;
-  vertical-align: middle;
-}
-.segmentGroup {
-}
-.segmentitem {
-  padding-left: 2;
-  padding-right: 2;
-  margin: 0;
-}
 </style>
