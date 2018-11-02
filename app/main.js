@@ -13,12 +13,11 @@ Vue.use(RadListView)
 Vue.filter("L", localize)
 import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
 TNSFontIcon.paths = {
-  fa: './assets/fontawesome.css',
+  //fa: './assets/fontawesome.css',
   ion: './assets/ionicons.css',
 };
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);
-//Themes.applyTheme('./assets/cssThemes/core.light.css')
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
@@ -70,9 +69,9 @@ new Vue({
   },
   created(){
     // initialize jingtum servers
-    const SWTCSERVERS = [{ server: "wss://c04.jingtum.com:5020", display: "井通节点04"}, { server: "wss://c05.jingtum.com:5020", display: "井通节点05"}, {server: "ws://swtc.daszichan.com:5020", display: "CA生态节点" }]
+    const SWTCSERVERS = [{ server: "wss://c04.jingtum.com:5020", display: "井通节点04"}, { server: "wss://c05.jingtum.com:5020", display: "井通节点05"}]
     if (store.getters.swtcServers.length === 0) {
-      console.log("add servers")
+      console.log("add initial servers")
       SWTCSERVERS.reverse().forEach( server => store.commit('addSwtcServer', server))
       store.commit('saveSwtcServers')
     } else {

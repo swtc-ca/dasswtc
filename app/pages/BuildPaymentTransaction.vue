@@ -7,31 +7,31 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="60,auto,auto,auto,auto,auto,100,100,*" ref="mainLayout">
-      <DropDown ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
+    <GridLayout ~mainContent columns="*" rows="60,auto,auto,auto,auto,auto,auto,auto,100,*" ref="mainLayout">
+      <DropDown class="m-10 p-5" ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <Label row="1" class="hr-light" />
-      <GridLayout row="2" columns="auto,*">
+      <GridLayout class="m-10 p-5" row="2" columns="auto,*">
         <Label col="0" text="支付方" />
         <TextField class="t-14" col="1" :text="wallet.address" editable="false" />
       </GridLayout>
-      <GridLayout row="3" columns="auto,*,auto,10">
+      <GridLayout class="m-10 p-5" row="3" columns="auto,*,auto,10">
         <Label col="0" text="接收方" />
         <TextField class="t-14" col="1" v-model="destination" />
         <Label class="ion ionicon" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
       </GridLayout>
-      <GridLayout row="4" columns="100,*">
+      <GridLayout class="m-10 p-5" row="4" columns="100,*">
         <Label col="0" text="账号序号" />
         <TextField class="t-14" col="1" v-model="sequence" />
       </GridLayout>
-      <GridLayout row="5" columns="100,*,auto">
+      <GridLayout class="m-10 p-5" row="5" columns="100,*,auto">
         <Label col="0" text="支付SWTC" />
         <TextField class="t-14" col="1" v-model="quantity" />
-        <Button class="btn btn-primary btn-active" col="2" text="生成交易" @tap="onGenerate" />
+        <Button :isEnabled="!!destination" class="btn btn-primary btn-active" col="2" text="生成交易" @tap="onGenerate" />
       </GridLayout>
-      <TextView class="t-14" hint="交易数据" row="6" autocorrect="false" maxLength="3000" :text="result" editable="false" @tap="showResult"/>
-      <Button class="btn btn-primary" :isEnabled="!!tx" row="7" text="签名" :visibility="signed ? 'collapse' : 'visible'" @tap="onSign" />
-      <TextView :visibility="signed ? 'visible' : 'collapse'" class="t-14" hint="签名数据" row="7" autocorrect="false" maxLength="3000" :text="result_signed" editable="false" @tap="showResult2"/>
-      <TextView :visibility="signed ? 'visible' : 'collapse'" @tap="showResult3" class="t-14" hint="签名" row="8" autocorrect="false" maxLength="3000" :text="signature" editable="false"/>
+      <TextView class="t-14 m-10 p-5" hint="交易数据" row="6" autocorrect="false" maxLength="3000" :text="result" editable="false" @tap="showResult"/>
+      <Button class="btn btn-primary" :isEnabled="!!tx" row="7" text="签名" @tap="onSign" />
+      <TextView :visibility="signed ? 'visible' : 'collapse'" class="t-14" hint="签名数据" row="8" autocorrect="false" maxLength="3000" :text="result_signed" editable="false" @tap="showResult2"/>
+      <TextView :visibility="signed ? 'visible' : 'collapse'" @tap="showResult3" class="t-14" hint="签名" row="9" autocorrect="false" maxLength="3000" :text="signature" editable="false"/>
     </GridLayout>
   </Page>
 </template>

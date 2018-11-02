@@ -12,7 +12,7 @@
         @tap="goToPage(page.component, page.navigateoption)">
         <Label col="0"
           :text="page.name" />
-          <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
+          <Label col="1" class="ion" :text="'ion-ios-arrow-forward' | fonticon" />
       </GridLayout>
       <Label text="我的设置" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"
@@ -20,7 +20,7 @@
           v-for="(page, i) in mines" :key="i + 100"
           @tap="goToPage(page.component, page.navigateoption)">
         <Label col="0" :text="page.name" />
-        <Label col="1" class="fa fas" :text="'fa-angle-right' | fonticon" />
+        <Label col="1" class="ion" :text="'ion-ios-arrow-forward' | fonticon" />
       </GridLayout>
       <Label text="关于" class="sideLabel sideLightGrayLabel"></Label>
       <GridLayout rows="*" columns="*,auto"

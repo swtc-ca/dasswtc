@@ -17,11 +17,14 @@
         <Label class="docimportant" text="本地签名" />
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
-          Remote({server: server, local_sign: true})
-          tx = Remote.buildTx()
+          remote = new Remote({server: server, local_sign: true})
+          tx = remote.buildTx()
           tx.setSequence()
+          tx.addMemo()
           tx.setSecret()
           tx.sign()
+          tx.tx_json, tx.tx_json.TxnSignature, tx.tx_json.blob
+          tx.submit()
           </TextView>
         </ScrollView>
       </StackLayout>
@@ -34,10 +37,11 @@
         <Label class="docimportant" text="离线签名" />
         <ScrollView>
           <TextView style="font-size:16;" editable="false">
-          Wallet.sign
-          Wallet.verify
-          Wallet.signTx
-          Wallet.verifyTx
+          wallet = new Wallet(secret)
+          wallet.sign
+          wallet.verify
+          wallet.signTx
+          wallet.verifyTx
           </TextView>
         </ScrollView>
       </StackLayout>
@@ -49,7 +53,7 @@
         <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
         <Label class="docimportant" text="提交本地签名的交易" />
         <ScrollView>
-          <TextView style="font-size:16;" editable="false">
+          <TextView class="t-16" editable="false">
           POST /v2/blob
           { "blob": "123456787...." }
           </TextView>
@@ -57,7 +61,7 @@
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'output' ? 'visible' : 'collapse'">
         <ScrollView>
-          <TextView :text="logMsgs" fontSize="12" editable="false">
+          <TextView :text="logMsgs" class="t-12" editable="false">
           </TextView>
         </ScrollView>
       </StackLayout>

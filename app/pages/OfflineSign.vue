@@ -49,8 +49,7 @@ export default {
   watch: {
     wallet (v) {
       console.log("wallet changed")
-      let verifyWallet = this.swtcClassWallet(v.secret)
-      this.verified = verifyWallet.verify(this.toSign, this.result)
+      this.verified = false
     }
   },
   methods: {

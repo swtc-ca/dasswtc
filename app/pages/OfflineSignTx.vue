@@ -8,17 +8,17 @@
     </ActionBar>
 
     <GridLayout ~mainContent columns="*" rows="60,auto,100,auto,auto,100,50,*" ref="mainLayout">
-      <DropDown ref="dropdown" row="0" hint="选择签名钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
+      <DropDown class="m-10 p-5" ref="dropdown" row="0" hint="选择签名钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <Label row="1" class="hr-light" />
-      <TextView class="t-14" hint="需要签名的数据
+      <TextView class="t-14 m-10" hint="需要签名的数据
       可以扫码
       通常用于签署交易" row="2" autocorrect="false" maxLength="3000" v-model="toSign" />
-      <Label horizontalAlignment="center" class="ion ionicon" row="3" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
-      <Button class="btn btn-primary btn-active" row="4" text="使用钱包签名" @tap="onSign" />
-      <TextView class="t-14" hint="签名后数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
-      <Button row="6" text="签名验证" @tap="onVerify" class="btn btn-primary btn-active" :visibility="verified ? 'collapse' : 'visible'" />
-      <Label row="6" :visibility="verified ? 'visible' : 'collapse'" class="t-14" :text="'签名已经验证: ' + wallet.address" />
-      <Label row="7" :visibility="!verified ? 'visible' : 'collapse'" class="t-14" :text="'签名未验证: ' + wallet.address" />
+      <Label horizontalAlignment="center" class="m-10 p-5 ion" row="3" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
+      <Button :isEnabled="!!toSign" class="btn btn-primary btn-active" row="4" text="使用钱包签名" @tap="onSign" />
+      <TextView class="t-14 m-10 p-5" hint="签名后数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
+      <Button row="6" :isEnabled="!!result" text="签名验证" @tap="onVerify" class="btn btn-primary btn-active" />
+      <Label row="7" :visibility="verified ? 'visible' : 'collapse'" class="t-14 m-10 p-5" :text="'签名已经验证: ' + wallet.address" />
+      <Label row="7" :visibility="!verified ? 'visible' : 'collapse'" class="t-14 m-10 p-5" :text="'签名未验证: ' + wallet.address" />
     </GridLayout>
   </Page>
 </template>
@@ -49,8 +49,7 @@ export default {
   watch: {
     wallet (v) {
       console.log("wallet changed")
-      let verifyWallet = this.swtcClassWallet(v.secret)
-      this.verified = verifyWallet.verify(this.toSign, this.result)
+      this.verified = false
     }
   },
   methods: {
