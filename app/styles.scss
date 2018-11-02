@@ -18,6 +18,14 @@ Label {
   vertical-align: center;
 }
 
+TextView {
+  border-width: 1;
+}
+
+TextField {
+  padding-left: 5;
+}
+
 .title {
     text-align: center;
     padding-left: 16;

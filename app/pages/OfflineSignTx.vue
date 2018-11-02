@@ -13,7 +13,7 @@
       <TextView class="t-14 m-10" hint="需要签名的数据
       可以扫码
       通常用于签署交易" row="2" autocorrect="false" maxLength="3000" v-model="toSign" />
-      <Label horizontalAlignment="center" class="m-10 p-5 ion" row="3" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
+      <Button class="btn btn-primary ion" row="3" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
       <Button :isEnabled="!!toSign" class="btn btn-primary btn-active" row="4" text="使用钱包签名" @tap="onSign" />
       <TextView class="t-14 m-10 p-5" hint="签名后数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>
       <Button row="6" :isEnabled="!!result" text="签名验证" @tap="onVerify" class="btn btn-primary btn-active" />

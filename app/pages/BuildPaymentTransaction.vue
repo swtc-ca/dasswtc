@@ -7,31 +7,38 @@
                   @tap="switchDrawer()"/>
     </ActionBar>
 
-    <GridLayout ~mainContent columns="*" rows="60,auto,auto,auto,auto,auto,auto,auto,100,*" ref="mainLayout">
+    <GridLayout ~mainContent columns="*" rows="auto,auto,auto,auto,auto,auto,*" ref="mainLayout">
       <DropDown class="m-10 p-5" ref="dropdown" row="0" hint="选择支付钱包" selectedIndex="0" :items="wallets.map(w => w.address)"  @selectedIndexChanged="onSelect" />
       <Label row="1" class="hr-light" />
-      <GridLayout class="m-10 p-5" row="2" columns="auto,*">
+      <GridLayout class="m-5 p-5" row="2" columns="auto,*">
         <Label col="0" text="支付方" />
-        <TextField class="t-14" col="1" :text="wallet.address" editable="false" />
+        <TextField class="t-12 textfield" col="1" :text="wallet.address" editable="false" />
       </GridLayout>
-      <GridLayout class="m-10 p-5" row="3" columns="auto,*,auto,10">
+      <GridLayout class="m-5 p-5" row="3" columns="auto,*,auto,10">
         <Label col="0" text="接收方" />
-        <TextField class="t-14" col="1" v-model="destination" />
-        <Label class="ion ionicon" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
+        <TextField class="t-12 textfield" col="1" hint="接收方地址" v-model="destination" />
+        <Label class="ion ionicon t-12" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
       </GridLayout>
-      <GridLayout class="m-10 p-5" row="4" columns="100,*">
+      <GridLayout class="m-5 p-5" row="4" columns="100,*,100,*">
         <Label col="0" text="账号序号" />
-        <TextField class="t-14" col="1" v-model="sequence" />
+        <TextField class="t-12" col="1" v-model="sequence" />
+        <Label col="2" text="支付SWTC" />
+        <TextField class="t-12" col="3" v-model="quantity" />
       </GridLayout>
-      <GridLayout class="m-10 p-5" row="5" columns="100,*,auto">
-        <Label col="0" text="支付SWTC" />
-        <TextField class="t-14" col="1" v-model="quantity" />
-        <Button :isEnabled="!!destination" class="btn btn-primary btn-active" col="2" text="生成交易" @tap="onGenerate" />
+      <GridLayout row="5" columns="*,*">
+        <Button :isEnabled="!!destination" class="btn btn-primary btn-active" col="0" text="生成交易" @tap="onGenerate" />
+        <Button class="btn btn-primary" :isEnabled="!!tx" col="1" text="签名交易" @tap="onSign" />
       </GridLayout>
-      <TextView class="t-14 m-10 p-5" hint="交易数据" row="6" autocorrect="false" maxLength="3000" :text="result" editable="false" @tap="showResult"/>
-      <Button class="btn btn-primary" :isEnabled="!!tx" row="7" text="签名" @tap="onSign" />
-      <TextView :visibility="signed ? 'visible' : 'collapse'" class="t-14" hint="签名数据" row="8" autocorrect="false" maxLength="3000" :text="result_signed" editable="false" @tap="showResult2"/>
-      <TextView :visibility="signed ? 'visible' : 'collapse'" @tap="showResult3" class="t-14" hint="签名" row="9" autocorrect="false" maxLength="3000" :text="signature" editable="false"/>
+      <ScrollView class="m-10 p-5" row="6">
+        <StackLayout>
+        <Label text="交易数据/哈希" />
+        <TextView hint="transaction data" :visibility="!!result ? 'visible' : 'collapse'" class="t-12" autocorrect="false" maxLength="3000" :text="result" editable="false" @tap="showResult"/>
+        <Label text="BLOB" />
+        <TextView hint="transaction blob" :visibility="signed ? 'visible' : 'collapse'" class="t-12" autocorrect="false" maxLength="3000" :text="result_signed" editable="false" @tap="showResult2"/>
+        <Label text="印戳" />
+        <TextView hint="transaction signature" :visibility="signed ? 'visible' : 'collapse'" @tap="showResult3" class="t-12" autocorrect="false" maxLength="3000" :text="signature" editable="false"/>
+        </StackLayout>
+      </ScrollView>
     </GridLayout>
   </Page>
 </template>
@@ -58,7 +65,7 @@ export default {
       result: '',
       result_signed: '',
       signature: '',
-      sequence: 0
+      sequence: 1
     }
   },
   computed: {
@@ -90,22 +97,30 @@ export default {
       this.$refs.dropdown.nativeView.close()
     },
     onSign() {
-      this.tx.sign( (e,r) => {
-        if (e) { console.log(e) }
-          console.log(r)
-          console.log('signed')
-          this.signed = true
-          this.result_signed = r
-          this.signature = this.tx.tx_json.TxnSignature
-          delete this.tx.tx_json.TxnSignature
-          delete this.tx.tx_json.blob
-          this.result = jser.from_json(this.tx.tx_json).hash(0x53545800)
+      try {
+        this.tx.sign( (e,r) => {
+        if (e) {
+          console.log(e)
+          this.result_signed = "交易数据不正确"
+        }
+        console.log(r)
+        console.log('signed')
+        this.signed = true
+        this.result_signed = r
+        this.signature = this.tx.tx_json.TxnSignature
+        delete this.tx.tx_json.TxnSignature
+        delete this.tx.tx_json.blob
+        this.result = jser.from_json(this.tx.tx_json).hash(0x53545800)
 
-          console.log(this.tx.tx_json)
-          console.log(this.result)
-          console.log(this.signature)
-          console.log(this.wallet.secret)
-      })
+        console.log(this.tx.tx_json)
+        console.log(this.result)
+        console.log(this.signature)
+        console.log(this.wallet.secret)
+        })
+      } catch (e) {
+          console.log(e)
+          this.result_signed = "交易数据不正确"
+      }
     },
     onGenerate() {
       console.log("生成交易")
@@ -172,4 +187,7 @@ export default {
 </script>
 
 <style scoped>
+.ios .textfield {
+  border-bottom-width: 1;
+}
 </style>
