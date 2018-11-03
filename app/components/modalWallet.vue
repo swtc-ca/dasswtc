@@ -1,8 +1,11 @@
 <template>
     <StackLayout>
-      <Label class="h3" text="地址" horizontalAlignment="center"></Label>
+      <GridLayout verticalAlignment="top" columns="auto,*">
+        <Label col="0" fontSize="32" class="ion" :text="'ion-ios-arrow-dropleft' | fonticon" @tap="$modal.close()" />
+        <Label col="1" class="h3 m-10 p-10 text-center" text="地址"></Label>
+      </GridLayout>
       <Image :src="imgAddressSrc" :width="width" :height="height" />
-      <Label class="h3" text="私钥" textAlignment="center"></Label>
+      <Label class="h3 m-10 p-10 text-center" text="私钥"></Label>
       <Image :src="imgSecretSrc" :width="width" :height="height" />
     </StackLayout>
 </template>

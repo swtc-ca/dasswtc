@@ -1,6 +1,9 @@
 <template>
     <StackLayout>
-      <Label class="h2 p-10" :text="title" horizontalAlignment="center"></Label>
+      <GridLayout verticalAlignment="top" columns="auto,*">
+        <Label col="0" fontSize="32" class="ion" :text="'ion-ios-arrow-dropleft' | fonticon" @tap="$modal.close()" />
+        <Label col="1" class="h2 p-10 text-center" :text="title"></Label>
+      </GridLayout>
       <Image :src="src" :width="width" :height="height" />
     </StackLayout>
 </template>
