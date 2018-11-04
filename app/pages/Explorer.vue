@@ -12,7 +12,8 @@
         <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本高度" class="h4" col="0" row="0" />
         <Label :visibility="!searching ? 'visible' : 'collapse'" text="交易数" class="h4" col="1" row="0"/>
         <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本哈希" class="h4" col="2" row="0"/>
-        <Label :visibility="!searching ? 'visible' : 'collapse'" :text="'ion-ios-search' | fonticon" class="h4 ion" col="3" row="0" @tap="searching=!searching" />
+        <Label :visibility="(!searching && isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-hourglass' | fonticon" class="h4 ion" col="3" row="0" />
+        <Label :visibility="(!searching && !isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-search' | fonticon" class="h4 ion" col="3" row="0" @tap="searching=!searching" />
         <SearchBar :visibility="searching ? 'visible' : 'collapse'" row="0" col="0" colSpan="4" hint="搜索" keyboardType="email" autocorrect="false" autocapitalizationType="none" v-model="searchitem"  @submit="onSearch" @clear="onClear" />
       </GridLayout>
       <item-list
@@ -35,10 +36,11 @@ import LedgerList from './../components/ledgerList'
 var callback_on_ledger = () => {}
 import sideDrawer from '~/mixins/sideDrawer'
 import jingtumLib from '~/mixins/jingtumLib'
+import activityIndicator from '~/mixins/activityIndicator'
 import modalExplorerSearch from '~/components/modalExplorerSearch'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  mixins: [ sideDrawer, jingtumLib ],
+  mixins: [ sideDrawer, jingtumLib, activityIndicator ],
   components: {
     'item-list': LedgerList,
   },
@@ -53,37 +55,60 @@ export default {
   },
   methods: {
     ...mapMutations(['appendMsg', 'addSwtcLedger', 'setSwtcServer', 'saveSwtcServer']),
+    ...mapActions(['toClipboard']),
     onSearch() {
       console.log(this.searchitem)
+      this.isBusying = true
       this.searching = !this.searching
-      let searchresult
+      let searchresult = ''
       let callback = (e,r) => {
         if (e) {
-          searchresult = e
+          searchresult = { error: e }
         } else {
           searchresult = r
         }
         this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+        this.isBusying = false
       }
       if (!this.searchitem) {
         console.log("empty search")
+        this.isBusying = false
         return ''
       } else if (this.searchitem.length < 10) {
         let height = Number(this.searchitem)
         if (!isNaN(height)) {
           //search height
           console.log("search is a number")
-          this.swtcQueryLedger(height, true, callback)
+          //this.swtcQueryLedger(height, true, callback)
+          this.isBusy = true
+          this.swtcRemote.requestLedger({ledger_index:height,transactions:true}).submitAsync().then( result => {
+              searchresult = result
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+            }).catch(error => {
+              searchresult = { error: error }
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+            })
         } else {
           //try token
           console.log("token search")
           searchresult = "查询通证还没有实现"
+          this.isBusying = false
           this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         }
       } else if (this.searchitem.startsWith('j')) {
         // search an address
         console.log("address search")
-        this.swtcRequestAccountInfo(this.searchitem, callback)
+        this.swtcRemote.requestAccountInfo({account: this.searchitem}).submitAsync().then( result => {
+              searchresult = result
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+        }).catch(error => {
+              searchresult = { error: error }
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+        })
       } else {
         // try hash
         console.log("hash search")
@@ -91,11 +116,27 @@ export default {
           if (e) {
             this.swtcQueryLedger(this.searchitem, true, callback)
           } else {
+            this.isBusying = false
             searchresult = r
             this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
           }
         }
-        this.swtcQueryTransaction(this.searchitem, callback2)
+        this.swtcRemote.requestTx({hash: this.searchitem}).submitAsync().then( result => {
+          searchresult = result
+          this.isBusying = false
+          this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+        }).catch(error => {
+          console.log("transaction not found, try ledger")
+          this.swtcRemote.requestLedger({ledger_index:this.searchitem,transactions:true}).submitAsync().then( result => {
+              searchresult = result
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+            }).catch(error => {
+              searchresult = { error: error }
+              this.isBusying = false
+              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+            })
+        })
       }
       this.searchitem = ''
     },
@@ -110,7 +151,8 @@ export default {
       console.log("received watchrefersh")
     },
     onItemTap({ item }) {
-      console.log(`Tapped on ${item.address}`)
+      console.log(`Tapped on ${item.ledger_hash}`)
+      this.toClipboard(item.ledger_hash)
     },
     onPulling (listview) {
       listview.notifyPullToRefreshFinished()
@@ -135,26 +177,31 @@ export default {
       this.saveSwtcServer()
     }
     this.swtcRemote = this.swtcNewRemote(this.server)
+    this.isBusying = true
   },
   mounted() {
     console.log("mounted")
     console.log("connect local remote")
     console.log(this.server)
-    this.swtcConnect((error, result) => {
-      if (error) {
-        console.log("connect error")
-        console.log(error)
-        this.appendMsg(error)
-      } else {
+    this.swtcRemote.connectAsync().then( result => {
         console.log("connected")
+        this.isBusying = false
         console.log(result)
         this.appendMsg(result)
         // connected to the remote now, install ledger monitoring
         console.log("connected local remote")
-        callback_on_ledger = msg => { console.log(msg); this.addSwtcLedger(msg); this.appendMsg(msg) }
-        this.swtcRemote.on('ledger_closed', callback_on_ledger)
-      }
-    })
+        //callback_on_ledger = msg => { console.log(msg); this.addSwtcLedger(msg); this.appendMsg(msg) }
+        this.swtcRemote.on('ledger_closed', msg => {
+         console.log(msg)
+         this.addSwtcLedger(msg)
+         this.appendMsg(msg) 
+        })
+      }).catch( error => {
+        console.log("connect error")
+        console.log(error)
+        this.appendMsg(error)
+        this.isBusying = true
+      })
     console.log(this.msgs)
   },
   destroyed () {

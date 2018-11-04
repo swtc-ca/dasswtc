@@ -1,8 +1,8 @@
 <template>
     <StackLayout style="width:100%;height:100%">
-      <GridLayout verticalAlignment="top" columns="auto,*">
-        <Label col="0" fontSize="32" class="ion" :text="'ion-ios-arrow-dropleft' | fonticon" @tap="$modal.close()" />
-        <Label col="1" class="t-24 m-10 p-10 text-center" :text="title"></Label>
+      <GridLayout verticalAlignment="top" columns="*,auto">
+        <Label col="0" class="t-24 m-10 p-10 text-center" :text="title"></Label>
+        <Label col="1" fontSize="32" class="ion" :text="'ion-ios-close-circle-outline' | fonticon" @tap="$modal.close()" />
       </GridLayout>
        <TextView class="t-10" v-model="resultstring" editable="false" />
     </StackLayout>

@@ -1,7 +1,7 @@
 require('nativescript-nodeify/nodeify')
 const JLib = require('jingtum-lib')
-var PromiseBB = require("bluebird")
-PromiseBB.promisifyAll(JLib)
+var Bluebird = require("bluebird")
+Bluebird.promisifyAll(JLib)
 const jser = require('jingtum-lib/lib/Serializer.js').Serializer
 const PREFIX = 0x53545800
 const Remote = JLib.Remote
