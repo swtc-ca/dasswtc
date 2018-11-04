@@ -8,13 +8,14 @@
     </ActionBar>
 
     <StackLayout ~mainContent>
-      <GridLayout columns="80, 60, *, auto" rows="*" class="item" height="60" backgroundColor="White">
-        <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本高度" class="h4" col="0" row="0" />
-        <Label :visibility="!searching ? 'visible' : 'collapse'" text="交易数" class="h4" col="1" row="0"/>
-        <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本哈希" class="h4" col="2" row="0"/>
-        <Label :visibility="(!searching && isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-hourglass' | fonticon" class="h4 ion" col="3" row="0" />
-        <Label :visibility="(!searching && !isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-search' | fonticon" class="h4 ion" col="3" row="0" @tap="searching=!searching" />
-        <SearchBar :visibility="searching ? 'visible' : 'collapse'" row="0" col="0" colSpan="4" hint="搜索" keyboardType="email" autocorrect="false" autocapitalizationType="none" v-model="searchitem"  @submit="onSearch" @clear="onClear" />
+      <GridLayout columns="80, 60, *, auto" rows="*" class="item" height="55" backgroundColor="White">
+        <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本高度" class="h3" col="0" row="0" />
+        <Label :visibility="!searching ? 'visible' : 'collapse'" text="交易数" class="h3" col="1" row="0"/>
+        <Label :visibility="!searching ? 'visible' : 'collapse'" text="账本哈希" class="h3" col="2" row="0"/>
+        <Label :visibility="(!searching && isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-hourglass' | fonticon" class="h3 ion" col="3" row="0" />
+        <Label :visibility="(!searching && !isBusying) ? 'visible' : 'collapse'" :text="'ion-ios-search' | fonticon" class="h3 ion" col="3" row="0" @tap="searching=!searching" />
+        <TextField :visibility="searching ? 'visible' : 'collapse'" row="0" col="0" colSpan="4" class="h3 searchitem" style="padding-left:30;" keyboardType="search" autocorrect="false" autocapitalizationType="none" v-model="searchitem" @returnPress="onSearch"/>
+        <Label :visibility="searching ? 'visible' : 'collapse'" row="0" col="0" class="h3 ion" :text="'ion-ios-search' | fonticon" style="padding-left:5;"/>
       </GridLayout>
       <item-list
         ref="list"
@@ -218,4 +219,10 @@ export default {
 </script>
 
 <style scoped>
+.searchitem {
+  border-radius: 10;
+  border-width: 1;
+  padding: 2;
+  margin: 2;
+}
 </style>

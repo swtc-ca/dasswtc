@@ -16,7 +16,7 @@
       </GridLayout>
       <GridLayout class="m-5 p-5" row="3" columns="auto,*,auto,10">
         <Label col="0" text="接收方" />
-        <TextField class="t-12 textfield" col="1" hint="接收方地址" v-model="destination" />
+        <TextField class="t-12 textfield" col="1" hint="接收方地址" autocapitalizationType="none" v-model="destination" />
         <Label class="ion ionicon t-12" col="2" :text="'ion-md-qr-scanner' | fonticon" @tap="onScanDestination"/>
       </GridLayout>
       <GridLayout class="m-5 p-5" row="4" columns="100,*,100,*">
