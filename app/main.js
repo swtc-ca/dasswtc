@@ -19,11 +19,14 @@ TNSFontIcon.paths = {
 TNSFontIcon.loadCss();
 Vue.filter('fonticon', fonticon);
 
+require('nativescript-ui-chart/vue')
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 Vue.registerElement('SwipeLayout', () => require('nativescript-swipe-layout').SwipeLayout)
 Vue.registerElement('CardView', () => require('nativescript-cardview').CardView)
 Vue.registerElement('Ripple', () => require('nativescript-ripple').Ripple)
 Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown)
+Vue.registerElement('BottomNavigation', () => require('nativescript-bottom-navigation').BottomNavigation)
+Vue.registerElement('BottomNavigationTab', () => require('nativescript-bottom-navigation').BottomNavigationTab)
 Vue.registerElement('CheckBox', () => require('nativescript-checkbox').CheckBox, {
   model: {
     prop: 'checked',

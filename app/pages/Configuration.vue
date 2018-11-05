@@ -28,6 +28,13 @@
               <Label col="0" text="提示" />
               <Switch class="switch" col="1" v-model="autoToast" />
             </GridLayout>
+            <GridLayout rows="*" height="300">
+		      		<RadCartesianChart row="0">
+		      			<BarSeries v-tkCartesianSeries :items="favoriteFruits" categoryProperty="type" valueProperty="count" />
+		      			<CategoricalAxis v-tkCartesianHorizontalAxis />
+		      			<LinearAxis v-tkCartesianVerticalAxis />
+		      		</RadCartesianChart>
+		      	</GridLayout>
         </StackLayout>
         <StackLayout :visibility="activeSegment === '风格' ? 'visible' : 'collapse'">
             <ListPicker :items="cssThemes" v-model="themeId" />
@@ -51,6 +58,7 @@ import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
 import themes from '~/mixins/themes'
 //import Themes from 'nativescript-themes'
+//require('nativescript-ui-chart/vue')
 export default {
   mixins: [ sideDrawer, feedback, jingtumLib, themes ],
   data() {
@@ -58,6 +66,13 @@ export default {
       walletIndex: 0,
       serverIndex: 0,
       activeSegment: '钱包',
+      favoriteFruits: [
+                { type: "🍎", count: 7 },
+                { type: "🍌", count: 15 },
+                { type: "🍍", count: 12 },
+                { type: "🍒", count: 30 },
+                { type: "🍇", count: 16 }
+      ]
     }
   },
   computed: {

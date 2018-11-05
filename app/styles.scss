@@ -111,13 +111,14 @@ TextField {
 .segmented-item {
   background-color: $accent;
   margin: 1 1 0 1;
-  height: 30;
+  height: 34;
 }
 .android .segmented-item {
   vertical-align: bottom;
   margin: 0;
   padding: 0;
   font-size: 14;
+  border-bottom: 0;
 }
 .ios .segmented-item {
   font-size: 16;

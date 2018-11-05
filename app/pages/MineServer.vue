@@ -8,8 +8,8 @@
     </ActionBar>
 
     <GridLayout ~mainContent columns="*" rows="*" ref="mainLayout">
-		  <FloatingBubble ref="bubble" text="不能删除默认节点">
-      <item-list
+		  <FloatingBubble row="0" ref="bubble" text="不能删除默认节点">
+      <item-list row="0"
         ref="list"
         :items="servers"
         :pulltorefresh="true"
@@ -37,15 +37,16 @@
 import ItemList from './../components/serverList'
 import FabButton from './../components/fabButton'
 import FabItem from './../components/fabItem'
-import FloatingBubble from "./../components/floatingBubble";
+import FloatingBubble from "./../components/floatingBubble"
 const app = require('tns-core-modules/application')
 const platform = require('tns-core-modules/platform')
 
 import sideDrawer from '~/mixins/sideDrawer'
 import vibrator from '~/mixins/vibrator'
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import fancyAlert from '~/mixins/fancyAlert'
+import { mapGetters, mapMutations, mapActions } from "vuex"
 export default {
-  mixins: [ sideDrawer, vibrator ],
+  mixins: [ sideDrawer, vibrator, fancyAlert ],
   components: {
     'item-list': ItemList,
     FabItem,
@@ -54,7 +55,7 @@ export default {
   },
   data() {
     return {
-      isActive: false,
+			isActive: false,
     }
   },
   computed: {
@@ -101,6 +102,7 @@ export default {
 			if (this.server.server == item.server) {
 				this.vibrator.vibrate()
 			}
+			console.log("fancy alert")
     },
     onPulling (listview) {
       listview.notifyPullToRefreshFinished()
