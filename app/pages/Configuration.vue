@@ -26,15 +26,8 @@
             </GridLayout>
             <GridLayout rows="60" columns="*,auto">
               <Label col="0" text="提示" />
-              <Switch class="switch" col="1" v-model="autoToast" />
+              <Switch class="switch" col="1" v-model="autoPrompt" />
             </GridLayout>
-            <GridLayout rows="*" height="300">
-		      		<RadCartesianChart row="0">
-		      			<BarSeries v-tkCartesianSeries :items="favoriteFruits" categoryProperty="type" valueProperty="count" />
-		      			<CategoricalAxis v-tkCartesianHorizontalAxis />
-		      			<LinearAxis v-tkCartesianVerticalAxis />
-		      		</RadCartesianChart>
-		      	</GridLayout>
         </StackLayout>
         <StackLayout :visibility="activeSegment === '风格' ? 'visible' : 'collapse'">
             <ListPicker :items="cssThemes" v-model="themeId" />
@@ -81,11 +74,11 @@ export default {
   },
   methods: {
     ...mapMutations([
-      "appendMsg", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer"
+      "appendMsg", "appendMsgPrompt", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer"
     ]),
-    ...mapActions(['showLastLogToasts', 'toClipboard']),
+    ...mapActions(['showLastLogToasts', 'showLastLogPrompt', 'toClipboard']),
     applySelectedTheme () {
-        this.appendMsg('应用主题')
+        this.appendMsgPrompt('应用主题')
         let themeFile = this.$store.getters.currentThemeFile.split('/').reverse()[0]
         //const cssText = require(this.$store.getters.currentThemeFileS)
         //Themes.applyThemeCss(cssText, themeFile)
@@ -102,7 +95,7 @@ export default {
         this.appendMsg(this.server)
       } else {
         console.log('no server selected')
-        this.appendMsg('请选择一个服务器')
+        this.appendMsgPrompt('请选择一个服务器')
       }
     },
     onWalletSelected() {
@@ -114,7 +107,7 @@ export default {
         this.appendMsg(this.wallet)
       } else {
         console.log('no wallet selected')
-        this.appendMsg('请选择一个钱包')
+        this.appendMsgPrompt('请选择一个钱包')
       }
     },
   },

@@ -133,9 +133,10 @@ import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
 import advancedWebView from '~/mixins/advancedWebView'
+import fancyAlert from '~/mixins/fancyAlert'
 import { openUrl } from "tns-core-modules/utils/utils"
 export default {
-  mixins: [ sideDrawer, feedback, jingtumLib, advancedWebView ],
+  mixins: [ sideDrawer, feedback, jingtumLib, advancedWebView, fancyAlert ],
   data() {
     return {
       walletIndex: 0,
@@ -169,12 +170,12 @@ export default {
   },
   methods: {
     ...mapMutations([
-      "appendMsg", "addSwtcWallet", "saveSwtcWallets", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer", "setSwtcActivated","setSwtcPrice", "setSwtcSequence", "setSwtcBalance"
+      "appendMsgFeedback", "appendMsgPrompt", "addSwtcWallet", "saveSwtcWallets", "setSwtcWallet", "saveSwtcWallet", "setSwtcServer", "saveSwtcServer", "setSwtcActivated","setSwtcPrice", "setSwtcSequence", "setSwtcBalance"
     ]),
     ...mapActions(['showLastLogToasts', 'toClipboard']),
     callback_message (msg) {
       console.log(msg)
-      this.$store.commit('appendMsg',msg)
+      this.$store.commit('appendMsgFeedback',msg)
     },
     openurl(url) {
       openUrl(url)
@@ -183,39 +184,34 @@ export default {
       console.log(args.object.__vue_element_ref__)
       console.log(this.segmentIndex)
       console.log(this.activeSegment)
-//      this.appendMsg(args.object.__vue_element_ref__)
     },
-    showLastLog() {
-      this.showLastLogToasts()
-    },
-
     onPayment(){
       console.log("donation")
-      this.appendMsg(`测试支付赞助 ${this.payMemo}`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
+      this.appendMsgPrompt(`测试支付赞助 ${this.payMemo}`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)} }
       this.swtcPay(this.wallet, 'jGxW97eCqxfAWvmqSgNkwc2apCejiM89bG',this.payValue,'SWT','',this.payMemo,cbErrResult)
     },
     onOfferSell(){
       console.log("manage offers")
-      this.appendMsg(`操作挂单...`)
+      this.appendMsgPrompt(`操作挂单...`)
       let takerpays = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takergets = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       this.swtcRequestOffer(this.wallet, 'Sell', takergets, takerpays)
     },
     onOfferBuy(){
       console.log("manage offers")
-      this.appendMsg(`操作挂单...`)
+      this.appendMsgPrompt(`操作挂单...`)
       let takergets = {value: `${this.offerCNY}`, currency: 'CNY', issuer: 'jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or'}
       let takerpays = {value: `${this.offerSWT}`, currency: 'SWT', issuer: ''}
       this.swtcRequestOffer(this.wallet, 'Buy', takergets, takerpays)
     },
     onOrderBook() {
       console.log("query orderbooks")
-      this.appendMsg(`查询市场...`)
+      this.appendMsgPrompt(`查询市场...`)
       var callbackGetPrice =  (err, result) => {
         if(err) {
           console.log(err)
-          this.appendMsg(err)
+          this.appendMsgFeedback(err)
         } else {
           if (typeof(result) === 'object') {
             let firstRecord = result.offers[0]
@@ -223,11 +219,11 @@ export default {
             this.setSwtcPrice(Math.floor(10000 * Number(firstRecord.TakerGets.value) * 1000000 / Number(firstRecord.TakerPays)) / 10000)
             this.offerCNY = this.price
             result.offers.forEach(r => offers.push(`${Math.floor(Number(r.TakerPays) / 1000000)}SWT <-> ${Math.floor(r.TakerGets.value)}CNY`))
-            this.appendMsg(offers.slice(0,10))
+            this.appendMsgFeedback(offers.slice(0,10))
             console.log(offers)
           } else {
             console.log(result);
-            this.appendMsg(result)
+            this.appendMsgFeedback(result)
           }
         }
       }
@@ -245,7 +241,7 @@ export default {
       } else {
         this.swtcRemote.on('ledger_closed', this.callback_message)
       }
-      this.appendMsg(`更改账本接收...`)
+      this.appendMsgPrompt(`更改账本接收...`)
       this.onLedger = !this.onLedger
     },
     onListenTransaction() {
@@ -255,42 +251,46 @@ export default {
       } else {
         this.swtcRemote.on('transactions', this.callback_message)
       }
-      this.appendMsg(`更改交易接收...`)
+      this.appendMsgPrompt(`更改交易接收...`)
       this.onTransaction = !this.onTransaction
     },
     onWalletOffers() {
       console.log("query offers")
-      this.appendMsg(`查询挂单...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
+      this.appendMsgPrompt(`查询挂单...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)} }
       this.swtcRequestAccountOffers(this.wallet.address, cbErrResult)
     },
     onWalletRelations() {
       console.log("query relation")
-      this.appendMsg(`查询关系...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
+      this.appendMsgPrompt(`查询关系...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)} }
       this.swtcRequestAccountRelations(this.wallet.address, this.qrRelation, cbErrResult)
     },
     onWalletTums() {
       console.log("available tums")
-      this.appendMsg(`查询可用通证...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
+      this.appendMsgPrompt(`查询可用通证...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)} }
       this.swtcRequestAccountTums(this.wallet.address, cbErrResult)
     },
     onWalletHistory() {
       console.log("history")
-      this.appendMsg(`查询支付记录...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)} }
+      this.appendMsgPrompt(`查询支付记录...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)} }
       this.swtcRequestAccountTx(this.wallet.address, cbErrResult)
     },
     onWalletBalance() {
       console.log("update balance")
-      this.appendMsg("查余额...");
+      this.appendMsgPrompt("查余额...");
       let callbackAccount =  (err, result) => {
         if(err) {
           console.log(err)
-          this.appendMsg(err)
+          this.appendMsgFeedback(err)
           if (err === 'Account not found.') {
-            alert({title: "注意", message: "账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试", okButtonText: "好"})
+            this.tnsFaAlert.showInfo(
+              "注意",
+              "账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试. IOS平台已禁用次测试",
+              "知道了"
+            )
           }
         } else {
           this.setSwtcActivated(true)
@@ -299,39 +299,41 @@ export default {
             this.setSwtcSequence(result.account_data.Sequence)
             this.setSwtcBalance(Math.floor(result.account_data.Balance / 10000) / 100)
           }
-          this.appendMsg(result)
+          this.appendMsgFeedback(result)
         }
       }
       this.swtcRequestAccountInfo(this.wallet.address, callbackAccount);
     },
     onQueryLedger(){
       console.log("querying ledger ...")
-      this.appendMsg(`查询账本...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
+      this.appendMsgPrompt(`查询账本...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)}}
       this.swtcQueryLedger(this.qrLedgerTransaction, true, cbErrResult)
     },
     onQueryTransaction(){
       console.log("querying transaction ...")
-      this.appendMsg(`查询交易...`)
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
+      this.appendMsgPrompt(`查询交易...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)}}
       this.swtcQueryTransaction(this.qrLedgerTransaction, cbErrResult)
     },
     onRemoteInfo() {
-      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsg(err)} else {console.log(result); this.appendMsg(result)}}
+      this.appendMsgPrompt(`查询服务器信息...`)
+      let cbErrResult = (err, result) => {if(err) { console.log(err); this.appendMsgFeedback(err)} else {console.log(result); this.appendMsgFeedback(result)}}
       this.swtcRequestServerInfo(cbErrResult);
     },
     onRemoteConnection() {
       console.log("switching remote connection")
       this.remoteConnecting = true
       console.log("server connection change")
+      this.appendMsgPrompt(`切换连接状态...`)
       var callbackConnect =  (err, result) =>{
           this.remoteConnecting = false;
           if(err) {
             console.log(err)
-            this.appendMsg(err)
+            this.appendMsgFeedback(err)
           } else {
             console.log(result)
-            this.appendMsg(result)
+            this.appendMsgFeedback(result)
           }
         }
       if (this.remoteStatus) {
@@ -341,7 +343,7 @@ export default {
         this.remoteConnecting = false
         this.setSwtcPrice(0)
         this.setSwtcBalance(0)
-        this.appendMsg('remote disconnected')
+        this.appendMsgFeedback('remote disconnected')
       } else {
         this.swtcConnect(callbackConnect)
       }
@@ -355,10 +357,10 @@ export default {
         console.log(this.server)
         this.swtcRemote = this.swtcNewRemote(this.server.server)
         console.log(this.server.server)
-        this.appendMsg(this.server)
+        this.appendMsgFeedback(this.server)
       } else {
         console.log('no server selected')
-        this.appendMsg('请选择一个服务器')
+        this.appendMsgPrompt('请选择一个服务器')
       }
     },
     onWalletSelected() {
@@ -367,10 +369,10 @@ export default {
         this.setSwtcWallet(this.wallets[this.walletIndex])
         this.saveSwtcWallet()
         console.log(this.wallet.address)
-        this.appendMsg(this.wallet)
+        this.appendMsgFeedback(this.wallet)
       } else {
         console.log('no wallet selected')
-        this.appendMsg('请选择一个钱包')
+        this.appendMsgPrompt('请选择一个钱包')
       }
     },
   },

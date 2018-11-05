@@ -15,16 +15,16 @@ export default {
         get () { return this.$store.getters.autoFeedback },
         set (v) { this.$store.commit('setAutoFeedback', v) }
       },
-      autoToast: {
-        get () { return this.$store.getters.autoToast },
-        set (v) { this.$store.commit('setAutoToast', v) }
+      autoPrompt: {
+        get () { return this.$store.getters.autoPrompt },
+        set (v) { this.$store.commit('setAutoPrompt', v) }
       }
     },
     watch: {
       // we watch the drawer prop for changes and open/close the sideDrawer accordingly
       lastMsgFeedback (v) {
-        if (this.autoFeedback) { this.showLastLogFeedback() }
-        if (this.autoToast) { this.$store.dispatch('showLastLogToasts') }
+        if (this.autoFeedback && v.category === 'feedback') { this.showLastLogFeedback() }
+        if (this.autoPrompt && v.category === 'prompt') { this.$store.dispatch('showLastLogPrompt') }
       }
     },
     methods: {
@@ -33,12 +33,14 @@ export default {
         if (typeof(message) === typeof({})) {
           message = JSON.stringify(message, '', 2)
         }
-        this.feedback.show({
-          title: "输出",
-          message: message,
-          duration: 2000,
-          onTap: () => this.feedback.hide()
-        })
+        if (this.autoPrompt) {
+          this.feedback.show({
+            title: "输出",
+            message: message,
+            duration: 2000,
+            onTap: () => this.feedback.hide()
+          })
+        }
       },
     },
     created () {

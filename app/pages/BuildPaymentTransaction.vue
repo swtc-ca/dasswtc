@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ addSwtcWallet: 'addSwtcWallet', setSwtcWallet: 'setSwtcWallet', saveSwtcWallets: 'saveSwtcWallets', saveSwtcWallet: 'saveSwtcWallet', appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
+    ...mapMutations({ addSwtcWallet: 'addSwtcWallet', setSwtcWallet: 'setSwtcWallet', saveSwtcWallets: 'saveSwtcWallets', saveSwtcWallet: 'saveSwtcWallet', appendMsg: 'appendMsgPrompt', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
     ...mapActions(['scan', 'showLastLogToasts', 'toClipboard']),
     showResult3() {
       this.toClipboard(this.result_signed)
@@ -98,6 +98,7 @@ export default {
     },
     onSign() {
       try {
+        this.appendMsg('签名')
         this.tx.sign( (e,r) => {
         if (e) {
           console.log(e)

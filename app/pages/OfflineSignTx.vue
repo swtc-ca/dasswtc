@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ appendMsg: 'appendMsg', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
+    ...mapMutations({ appendMsg: 'appendMsgPrompt', appendMsgFeedback: 'appendMsgFeedback', removeServer: 'removeSwtcServer', saveServers: 'saveSwtcServers', addServer: 'addSwtcServer', setServer: 'setSwtcServer', saveServer: 'saveSwtcServer'}),
     ...mapActions(['scan', 'toClipboard']),
     onFabItemTap(args) {
 			console.log(args)
@@ -83,11 +83,11 @@ export default {
 				console.log("Scan format: " + result.format);
         console.log("Scan text:   " + result.text);
         this.toSign = result.text
-				this.appendMsg(result)
+				this.appendMsgFeedback(result)
            },
            (error) => {
                 console.log("No scan: " + error);
-			    this.appendMsg(error)
+			    this.appendMsgFeedback(error)
            }
   	    )
     },
