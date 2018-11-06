@@ -25,8 +25,8 @@ const getters = {
     //swtcRemote: (state) => state.swtcRemote,
 }
 const mutations = {
-    //addSwtcLedger: (state, v) => { v.timestamp = new Date().getTime(); state._swtcLedgers.unshift(v) },
-    addSwtcLedger: (state, v) => state._swtcLedgers.unshift(Object.assign({}, v, {timestamp: (new Date()).getTime()})),
+    addSwtcLedger: (state, v) => state._swtcLedgers.unshift(v),
+    //addSwtcLedger: (state, v) => state._swtcLedgers.unshift(Object.assign({}, v, {timestamp: (new Date()).getTime()})),
     addSwtcWallet: (state, v) => { if (state._swtcWallets.filter(e => e.address === v.address).length < 1)  { state._swtcWallets.unshift(v) } },
     removeSwtcWallet: (state, v) => state._swtcWallets.splice(state._swtcWallets.indexOf(v),1),
     setSwtcWallet: (state, v) => state._swtcWallet = Object.assign({}, {address: v.address, secret: v.secret}),

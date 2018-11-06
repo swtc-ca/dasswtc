@@ -32,11 +32,12 @@ import FloatingBubble from "./../components/floatingBubble";
 
 import sideDrawer from '~/mixins/sideDrawer'
 import jingtumLib from '~/mixins/jingtumLib'
+import feedback from '~/mixins/feedback'
 import vibrator from '~/mixins/vibrator'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import ModalWallet from './../components/modalWallet'
 export default {
-  mixins: [ sideDrawer, vibrator, jingtumLib ],
+  mixins: [ sideDrawer, vibrator, jingtumLib, feedback ],
   components: {
     'item-list': ItemList,
 		FloatingBubble
@@ -49,19 +50,21 @@ export default {
   computed: {
   },
   methods: {
-    ...mapMutations({addWallet: 'addSwtcWallet', saveWallets: 'saveSwtcWallets'}),
-    ...mapActions(['showLastLogToasts', 'toClipboard']),
+    ...mapMutations({appendMsgPrompt: 'appendMsgPrompt', appendMsgFeedback: 'appendMsgFeedback', addWallet: 'addSwtcWallet', saveWallets: 'saveSwtcWallets'}),
+    ...mapActions(['toClipboard']),
     onWatchRefresh() {
       console.log("received watchrefersh")
     },
     onItemTap({ item }) {
       console.log(`Tapped on ${item.address}`)
+      this.appendMsgPrompt(`拷贝地址`)
       this.toClipboard(item.address)
 			//this.$showModal(ModalWallet, {props: {wallet: item, width: 200, height: 200}})
     },
     onPulling (listview) {
       this.vibrator.vibrate()
 			this.$refs.bubble.show()
+      this.appendMsgPrompt(`下拉刷新`)
 			setTimeout(() => this.$refs.bubble.hide(),2000)
       setTimeout(() => {
         for (let i=0; i < 10; i++){
@@ -73,6 +76,7 @@ export default {
     },
     onItemSelected (item) {
       this.vibrator.vibrate()
+      this.appendMsgPrompt(`添加选中的地址`)
       this.addWallet(item)
       this.saveWallets()
       this.itemList.splice(this.itemList.indexOf(item), 1)
@@ -80,6 +84,7 @@ export default {
     },
     onItemDeleted (item) {
       this.vibrator.vibrate()
+      this.appendMsgPrompt(`删除选中的地址`)
       this.itemList.splice(this.itemList.indexOf(item), 1)
       this.$refs.list.refresh()
     },

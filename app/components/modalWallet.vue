@@ -1,13 +1,17 @@
-<template>
+<template lang="html">
+  <Frame>
+  <Page class="page">
+    <ActionBar class="action-bar" title="信息">
+      <ActionItem @tap="$modal.close"  ios.position="right" ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel" /> 
+    </ActionBar>
     <StackLayout>
-      <GridLayout verticalAlignment="top" columns="*,auto">
-        <Label col="0" class="h3 m-10 p-10 text-center" text="地址"></Label>
-        <Label col="1" fontSize="32" class="ion" :text="'ion-ios-close-circle-outline' | fonticon" @tap="$modal.close()" />
-      </GridLayout>
+      <Label class="h3 m-10 p-10 text-center" text="地址"></Label>
       <Image :src="imgAddressSrc" :width="width" :height="height" />
       <Label class="h3 m-10 p-10 text-center" text="私钥"></Label>
       <Image :src="imgSecretSrc" :width="width" :height="height" />
     </StackLayout>
+  </Page>
+  </Frame>
 </template>
 
 <script>

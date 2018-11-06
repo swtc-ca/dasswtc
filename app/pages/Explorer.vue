@@ -38,12 +38,13 @@ import LedgerList from './../components/ledgerList'
 var callback_on_ledger = () => {}
 import sideDrawer from '~/mixins/sideDrawer'
 import jingtumLib from '~/mixins/jingtumLib'
+import feedback from '~/mixins/feedback'
 import activityIndicator from '~/mixins/activityIndicator'
 import modalExplorerSearch from '~/components/modalExplorerSearch'
 import modalChart from '~/components/modalChart'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  mixins: [ sideDrawer, jingtumLib, activityIndicator ],
+  mixins: [ sideDrawer, jingtumLib, activityIndicator, feedback ],
   components: {
     'item-list': LedgerList,
   },
@@ -52,20 +53,22 @@ export default {
       searchitem: '',
       searching: false,
       //showChart: false,
-      chartData: [{timestamp: new Date().getTime(), txn_count: 1}]
+      chartData: []
     }
   },
   computed: {
     ...mapGetters({ledgers: 'swtcLedgers', msgs: 'msgs', server: 'swtcServer', servers: 'swtcServers'}),
   },
   methods: {
-    ...mapMutations(['appendMsg', 'addSwtcLedger', 'setSwtcServer', 'saveSwtcServer']),
+    ...mapMutations(['appendMsg', 'appendMsgFeedback', 'appendMsgPrompt', 'addSwtcLedger', 'setSwtcServer', 'saveSwtcServer']),
     ...mapActions(['toClipboard']),
     showChart() {
-      this.$showModal(modalChart, {props: {chartData: this.chartData}})
+      this.appendMsgPrompt('显示图表')
+      this.$showModal(modalChart, {fullscreen: true, props: {title: '交易数目图表', chartData: this.chartData}})
     },
     onSearch() {
       console.log(this.searchitem)
+      this.appendMsgPrompt('搜索...')
       this.isBusying = true
       this.searching = !this.searching
       let searchresult = ''
@@ -75,7 +78,7 @@ export default {
         } else {
           searchresult = r
         }
-        this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+        this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         this.isBusying = false
       }
       if (!this.searchitem) {
@@ -92,18 +95,18 @@ export default {
           this.swtcRemote.requestLedger({ledger_index:height,transactions:true}).submitAsync().then( result => {
               searchresult = result
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
             }).catch(error => {
               searchresult = { error: error }
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
             })
         } else {
           //try token
           console.log("token search")
           searchresult = "查询通证还没有实现"
           this.isBusying = false
-          this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+          this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         }
       } else if (this.searchitem.startsWith('j')) {
         // search an address
@@ -111,11 +114,11 @@ export default {
         this.swtcRemote.requestAccountInfo({account: this.searchitem}).submitAsync().then( result => {
               searchresult = result
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         }).catch(error => {
               searchresult = { error: error }
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         })
       } else {
         // try hash
@@ -126,23 +129,23 @@ export default {
           } else {
             this.isBusying = false
             searchresult = r
-            this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+            this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
           }
         }
         this.swtcRemote.requestTx({hash: this.searchitem}).submitAsync().then( result => {
           searchresult = result
           this.isBusying = false
-          this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+          this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
         }).catch(error => {
           console.log("transaction not found, try ledger")
           this.swtcRemote.requestLedger({ledger_index:this.searchitem,transactions:true}).submitAsync().then( result => {
               searchresult = result
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
             }).catch(error => {
               searchresult = { error: error }
               this.isBusying = false
-              this.$showModal(modalExplorerSearch, {props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
+              this.$showModal(modalExplorerSearch, {fullscreen: true, props: {title: '搜索结果', searchitem: this.searchitem, result: searchresult}})
             })
         })
       }
@@ -160,6 +163,7 @@ export default {
     },
     onItemTap({ item }) {
       console.log(`Tapped on ${item.ledger_hash}`)
+      this.appendMsgPrompt('拷贝账本哈希')
       this.toClipboard(item.ledger_hash)
     },
     onPulling (listview) {
@@ -203,7 +207,7 @@ export default {
          console.log(msg)
          this.addSwtcLedger(msg)
          this.appendMsg(msg) 
-         this.chartData.push(Object.assign({}, msg, {timestamp: new Date().getTime()}))
+         this.chartData.push(Object.assign({}, msg, {timestamp: new Date()}))
          console.log(`current chart length: ${this.chartData.length}`)
         })
       }).catch( error => {

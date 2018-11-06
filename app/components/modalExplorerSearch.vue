@@ -1,11 +1,14 @@
-<template>
-    <StackLayout style="width:100%;height:100%">
-      <GridLayout verticalAlignment="top" columns="*,auto">
-        <Label col="0" class="t-24 m-10 p-10 text-center" :text="title"></Label>
-        <Label col="1" fontSize="32" class="ion" :text="'ion-ios-close-circle-outline' | fonticon" @tap="$modal.close()" />
-      </GridLayout>
+<template lang="html">
+  <Frame>
+  <Page class="page">
+    <ActionBar class="action-bar" :title="title">
+      <ActionItem @tap="$modal.close"  ios.position="right" ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel" /> 
+    </ActionBar>
+    <StackLayout verticalAlignment="middle">
        <TextView class="t-10" v-model="resultstring" editable="false" />
     </StackLayout>
+  </Page>
+  </Frame>
 </template>
 
 <script>
