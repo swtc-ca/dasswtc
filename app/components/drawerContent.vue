@@ -29,7 +29,7 @@
         <Label col="0" :text="org.name" class="drawer-item"></Label>
         <Label col="1" class="t-12 ion" :text="'ion-md-open' | fonticon" />
       </GridLayout>
-      <Label text="版本:  0.2.4" class="sideLabel sideLightGrayLabel"></Label>
+      <Label text="版本:  0.3.0" class="sideLabel sideLightGrayLabel"></Label>
     </StackLayout>
   </ScrollView>
 </template>
