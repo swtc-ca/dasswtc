@@ -1,5 +1,7 @@
 # DAS SWTC
 
+-  Even easier develope mobile app than web app
+-  移动应用比web应用开发更加直接和简单
 -  Jingtum Lib Play by DAS
 -  井通区块链node.js库
 -  NativeScript + nativescript-nodeify
@@ -14,43 +16,63 @@
 
 -  known了解node.js/javascript
 -  can setup development environment following documents 能按照文档搭建开发环境 nativescript.org
+-  we always use the latest stable version 文档只针对最新的稳定版本
 
 ## prepare 准备
 
 -  nativescript-core
-   -  tns create myapp
+   -  tns create myapp --js
    -  cd myapp
       - npm install
       - tns plugin add nativescript-nodeify
       - tns plugin add nativescript-websockets
       - npm install jingtum-lib
-      - patch two jingtum-lib files from this git repo at ./patched
-      - tns run ios or tns run android
+      - patch two (brorand, jingtum-lib) files from this git repo at ./patched
+      - patch webpack.config.js from ./patched/webpack.config.js-tns-create-js
+      - tns run --bundle
          - in ./app/main-view-model.js, you can now use jingtum-lib
            - require("nativescript-nodeify")
            - var JingtumLib = require("jingtum-lib")
            - var Wallet = JingtumLib.Wallet
            - var Remote = JingtumLib.Remote
+           - optionally you can promisify jingtum-lib with the shipped bluebird library
 -  nativescript-vue
-   - refer 参考 nativescript-vue.org
-   - vue init nativescript-vue/vue-cli-template myapp
-   - cd myapp
+   -  refer 参考 nativescript-vue.org
+   -  tns create myapp --vue
+   -  cd myapp
       - npm install
       - tns plugin add nativescript-nodeify
          - remove ./hooks/after-prepare/nativescript-nodeify.js
       - tns plugin add nativescript-websockets
       - npm install jingtum-lib
-      - patch two jingtum-lib files from this git repo at ./patched
-      - update webpack.config.js with the version in this repository
-      - tns run ios --bundle or tns run android --bundle
+      - patch two (brorand, jingtum-lib) files from this git repo at ./patched
+      - patch webpack.config.js from ./patched/webpack.config.js-tns-create-vue
+      - tns run --bundle
         - in ./app/components/App.vue, you can now use jingtum-lib
            - require("nativescript-nodeify")
            - var JingtumLib = require("jingtum-lib")
            - var Wallet = JingtumLib.Wallet
            - var Remote = JingtumLib.Remote
+           - optionally you can promisify jingtum-lib with the shipped bluebird library
+
+## plugins tested 插件
+-  cardview
+-  swipe layout
+-  theme
+-  ui chart/listview/drawer
+-  webview
+-  qrcode barcode
+-  fonticon
+-  drop down
+-  feedback
+-  toasts
+-  fancy alert
+-  rippling
+-  vibrate
+-  vuex
 
 ## iterate 迭代
--  fast iteration since it is javascript and xml based with so may libraries
+-  fast iteration since it is javascript and xml based with so many libraries
 
 ## publish 发布
 -  google play is simple
