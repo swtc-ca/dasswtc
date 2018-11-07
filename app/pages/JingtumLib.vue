@@ -288,7 +288,7 @@ export default {
           if (err === 'Account not found.') {
             this.tnsFaAlert.showInfo(
               "注意",
-              "账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试. IOS平台已禁用次测试",
+              "账号未激活, 转入35个井通和0.1CNY可以体验账号相关测试. IOS平台已禁用此测试",
               "知道了"
             )
           }
@@ -380,23 +380,6 @@ export default {
     console.log("jingtum app created")
     if (this.wallet && this.wallet.hasOwnProperty('address')) {
       this.walletIndex = this.wallets.indexOf(this.wallets.filter(w => w.address === this.wallet.address)[0])
-    } else if (this.wallets.length > 0) {
-      let wallet = this.wallets[0]
-      this.setSwtcWallet(wallet)
-      this.saveSwtcWallet()
-    } else {
-      let wallet = this.swtcNewWallet()
-      this.addSwtcWallet(wallet)
-      this.saveSwtcWallets()
-      this.setSwtcWallet(wallet)
-      this.saveSwtcWallet()
-    }
-    if (this.server && this.server.hasOwnProperty('server')) {
-      this.serverIndex = this.servers.indexOf(this.servers.filter(s => s.server === this.server.server)[0])
-    } else {
-      let swtcServer =  this.servers[Math.floor(Math.random() * this.servers.length)]
-      this.setSwtcServer(swtcServer)
-      this.saveSwtcServer()
     }
   },
   mounted() {

@@ -31,6 +31,30 @@ export default {
       }
     },
     computed: {
+      swtcRemotes: {
+        get () { return this.$store.getters.swtcRemotes },
+      },
+      swtcWallets: {
+          get () { return this.$store.getters.swtcWallets },
+          set (v) { this.$store.commit('addSwtcWallet',v) ; this.$store.commit('saveSwtcWallets')}
+      },
+      swtcWallet: {
+          get () { return this.$store.getters.swtcWallet },
+          set (v) { this.$store.commit('setSwtcWallet', v); this.$store.commit('saveSwtcWallet') }
+      },
+      swtcServers: {
+          get () { return this.$store.getters.swtcServers },
+          set (v) { this.$store.commit('addSwtcServer', v); this.$store.commit('saveSwtcServers')}
+      },
+      swtcServer: {
+          get () { return this.$store.getters.swtcServer },
+          set (v) { this.$store.commit('setSwtcServer', v); this.$store.commit('saveSwtcServer') }
+      },
+    },
+    watch: {
+        swtcRemotes (v) {
+            console.log("remote in store changed")
+        }
     },
     methods: {
       swtcClassWallet(secret) {
@@ -127,5 +151,24 @@ export default {
     },
     created () {
       console.log('mixins jingtumlib created')
+      if (this.swtcServer && this.swtcServer.hasOwnProperty('server')) {
+      } else {
+        let swtcServer =  this.swtcServers[Math.floor(Math.random() * this.swtcServers.length)]
+        this.swtcServer = swtcServer
+      }
+      console.log("prepare default wallet")
+      if (this.swtcWallet && this.swtcWallet.hasOwnProperty('address')) {
+          console.log("good")
+      } else {
+          console.log("bad")
+        if (this.swtcWallets.length > 0) {
+          let wallet = this.swtcWallets[0]
+          this.swtcWallet = wallet
+        } else {
+          let wallet = this.swtcNewWallet()
+          this.swtcWallets = wallet
+          this.swtcWallet = wallet
+        }
+      }
     }
 }

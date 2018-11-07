@@ -43,10 +43,11 @@ const platform = require('tns-core-modules/platform')
 import sideDrawer from '~/mixins/sideDrawer'
 import vibrator from '~/mixins/vibrator'
 //import themes from '~/mixins/themes'
+import statusBar from '~/mixins/statusBar'
 import { mapState, mapGetters, mapMutations } from "vuex"
 import ModalWallet from './../components/modalWallet'
 export default {
-  mixins: [ sideDrawer, vibrator ],
+  mixins: [ sideDrawer, vibrator, statusBar ],
   components: {
     'item-list': ItemList,
     FabItem,
@@ -80,8 +81,8 @@ export default {
         setTimeout(() => this.$navigateTo(this.$routes.SelectAddress), 50)
 			}
     }, 
-    pageLoaded() {
-      console.log("page loaded")
+    pageLoaded(args) {
+			console.log("my wallets page loaded")
 			let fabItemContainer = this.$refs.fabItemContainer.nativeView
 			let fabItemPosition = this.$refs.fabItemPosition.nativeView
 			let mainLayout = this.$refs.mainLayout.nativeView
@@ -92,6 +93,7 @@ export default {
 				fabItemPosition.android.setClipChildren(false)
 				mainLayout.android.setClipChildren(false)
 			}	
+			this.statusBarAndroid(args)
     },
     onWatchRefresh() {
       console.log("received watchrefersh")

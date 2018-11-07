@@ -1,4 +1,8 @@
 import * as applicationSettings from "tns-core-modules/application-settings"
+require('nativescript-nodeify/nodeify')
+const JLib = require('jingtum-lib')
+var Bluebird = require("bluebird")
+Bluebird.promisifyAll(JLib)
 
 const state = {
     _swtcWallets: JSON.parse(applicationSettings.getString('SWTCWALLETS') || '[]'),
@@ -10,7 +14,7 @@ const state = {
     _swtcBalance: 0,
     _swtcPrice: 0,
     _swtcActivated: false,
-    //swtcRemote: null,
+    _swtcRemotes: [],
  }
 const getters = {
     swtcLedgers: (state) => state._swtcLedgers,
@@ -22,10 +26,10 @@ const getters = {
     swtcBalance: (state) => state._swtcBalance,
     swtcPrice: (state) => state._swtcPrice,
     swtcActivated: (state) => state._swtcActivated,
-    //swtcRemote: (state) => state.swtcRemote,
+    swtcRemotes: (state) => state._swtcRemotes
 }
 const mutations = {
-    addSwtcLedger: (state, v) => state._swtcLedgers.unshift(v),
+    addSwtcLedger: (state, v) => { if (state._swtcLedgers.indexOf(v) === -1) { state._swtcLedgers.unshift(v) } } ,
     //addSwtcLedger: (state, v) => state._swtcLedgers.unshift(Object.assign({}, v, {timestamp: (new Date()).getTime()})),
     addSwtcWallet: (state, v) => { if (state._swtcWallets.filter(e => e.address === v.address).length < 1)  { state._swtcWallets.unshift(v) } },
     removeSwtcWallet: (state, v) => state._swtcWallets.splice(state._swtcWallets.indexOf(v),1),
@@ -37,6 +41,7 @@ const mutations = {
     setSwtcBalance: (state, v) => state._swtcBalance = v,
     setSwtcPrice: (state, v) => state._swtcPrice = v,
     setSwtcActivated: (state, v) => state._swtcActivated = v,
+    setSwtcRemotes: (state, v) => state._swtcRemotes.splice(0, 1, new JLib.Remote({server: v.server, local_sign: true})),
 
     saveSwtcWallets: (state) => applicationSettings.setString('SWTCWALLETS', JSON.stringify(state._swtcWallets)),
     saveSwtcServers: (state) => applicationSettings.setString('SWTCSERVERS', JSON.stringify(state._swtcServers)),

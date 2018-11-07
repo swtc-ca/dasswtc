@@ -163,20 +163,10 @@ export default {
     console.log("created")
     if (this.wallet && this.wallet.hasOwnProperty('address')) {
       this.walletIndex = this.wallets.indexOf(this.wallets.filter(w => w.address === this.wallet.address)[0])
-    } else {
-      let wallet = this.swtcNewWallet()
-      this.addSwtcWallet(wallet)
-      this.saveSwtcWallets()
-      this.setSwtcWallet(wallet)
-      this.saveSwtcWallet()
-    }
+    } 
     console.log("create local remote")
     if (this.server && this.server.hasOwnProperty('server')) {
       console.log(this.server.server)
-    } else {
-      let swtcServer =  this.servers[Math.floor(Math.random() * this.servers.length)]
-      this.setServer(swtcServer)
-      this.saveServer()
     }
     this.swtcRemote = this.swtcNewRemote(this.server)
   },

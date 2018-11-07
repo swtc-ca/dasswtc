@@ -12,7 +12,7 @@
       <Label row="1" class="hr-light" />
       <TextView class="t-14 m-10" hint="需要签名的数据
       可以扫码
-      通常用于签署交易" row="2" autocorrect="false" maxLength="3000" v-model="toSign" />
+      通常用于签署交易" row="2" autocorrect="false" maxLength="3000" autocapitalizationType="none" v-model="toSign" />
       <Button class="btn btn-primary ion" row="3" :text="'ion-md-qr-scanner' | fonticon" @tap="onScan"/>
       <Button :isEnabled="!!toSign" class="btn btn-primary btn-active" row="4" text="使用钱包签名" @tap="onSign" />
       <TextView class="t-14 m-10 p-5" hint="签名后数据" row="5" autocorrect="false" maxLength="3000" v-model="result" editable="false" @tap="showResult"/>

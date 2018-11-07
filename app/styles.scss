@@ -9,7 +9,6 @@ $btn-padding-y: 5;
 $btn-margin-x: 8;
 $btn-margin-y: 3;
 
-
 @import '~nativescript-theme-core/scss/index';
 
 // Global SCSS styling
@@ -56,6 +55,10 @@ TextField {
 .action-bar {
   height: 40;
 }
+//.android .action-bar {
+//  padding-top: 20;
+//  height: 60;
+//}
 
 .item {
   padding: 10;

@@ -1,8 +1,8 @@
 <template lang="html">
   <Frame>
-  <Page class="page">
+  <Page class="page" @loaded="modalLoaded">
     <ActionBar class="action-bar" :title="title">
-      <ActionItem @tap="$modal.close"  ios.position="right" ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel" /> 
+      <ActionItem @tap="$modal.close"  ios.position="right" ios.systemIcon="14" android.systemIcon="ic_menu_close_clear_cancel" />
     </ActionBar>
     <StackLayout verticalAligment="middle">
       <GridLayout rows="*" height="*">
@@ -19,8 +19,10 @@
 </template>
 
 <script>
+import statusBar from '~/mixins/statusBar'
 export default {
   name: 'Chart',
+  mixins: [ statusBar ],
   props: {
     chartData: {
       type: Array,
@@ -42,6 +44,10 @@ export default {
       console.log("taped inside modal")
       this.$emit('modalTap', event)
     },
+    modalLoaded (args) {
+      console.log('modal loaded')
+      this.statusBarAndroid()
+    }
   },
   created() {
     console.log("modal chart created")

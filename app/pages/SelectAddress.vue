@@ -100,7 +100,7 @@ export default {
   },
   mounted() {
     if ( this.$store.debug ) {
-      console.log("destroyed")
+      console.log("mounted")
     }
   },
   destroyed () {

@@ -1,5 +1,5 @@
 <template>
-  <Page class="page">
+  <Page class="page" @loaded="loaded">
     <ActionBar
       class="action-bar"
       title="浏览器实况">
@@ -40,11 +40,12 @@ import sideDrawer from '~/mixins/sideDrawer'
 import jingtumLib from '~/mixins/jingtumLib'
 import feedback from '~/mixins/feedback'
 import activityIndicator from '~/mixins/activityIndicator'
+import statusBar from '~/mixins/statusBar'
 import modalExplorerSearch from '~/components/modalExplorerSearch'
 import modalChart from '~/components/modalChart'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  mixins: [ sideDrawer, jingtumLib, activityIndicator, feedback ],
+  mixins: [ sideDrawer, jingtumLib, activityIndicator, feedback, statusBar ],
   components: {
     'item-list': LedgerList,
   },
@@ -176,25 +177,24 @@ export default {
       this.removeWallet(item)
       this.saveWallets()
       this.$refs.list.refresh()
+    },
+    loaded(args) {
+      console.log("explorer page loaded")
+      this.statusBarAndroid(args)
     }
   },
   created() {
     console.log("created")
     console.log("create local remote")
-    if (this.server && this.server.hasOwnProperty('server')) {
-      console.log(this.server.server)
-    } else {
-      let swtcServer =  this.servers[Math.floor(Math.random() * this.servers.length)]
-      this.setSwtcServer(swtcServer)
-      this.saveSwtcServer()
-    }
-    this.swtcRemote = this.swtcNewRemote(this.server)
+    //this.$store.commit('setSwtcRemotes', this.server)
     this.isBusying = true
+    this.swtcRemote = this.swtcNewRemote(this.server)
   },
   mounted() {
     console.log("mounted")
     console.log("connect local remote")
     console.log(this.server)
+    this.ledgers.forEach(e => this.chartData.unshift(e))
     this.swtcRemote.connectAsync().then( result => {
         console.log("connected")
         this.isBusying = false
@@ -207,7 +207,8 @@ export default {
          console.log(msg)
          this.addSwtcLedger(msg)
          this.appendMsg(msg) 
-         this.chartData.push(Object.assign({}, msg, {timestamp: new Date()}))
+
+         this.chartData.push(Object.assign({}, {timestamp: new Date()}, msg))
          console.log(`current chart length: ${this.chartData.length}`)
         })
       }).catch( error => {

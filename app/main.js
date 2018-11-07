@@ -33,10 +33,10 @@ Vue.registerElement('CheckBox', () => require('nativescript-checkbox').CheckBox,
     event: 'checkedChange'
   }
 })
-Vue.config.silent = (TNS_ENV === 'production')
+//Vue.config.silent = (TNS_ENV === 'production')
 
 // test application lifecycle
-const application = require("tns-core-modules/application");
+const application = require("tns-core-modules/application")
 application.on(application.launchEvent, (args) => {
   console.log(`launched`)
 })
@@ -47,6 +47,7 @@ application.on(application.resumeEvent, (args) => {
   console.log(`resumed`)
 })
 application.on(application.displayedEvent, (args) => {
+  console.log(`displayedEvent`)
 })
 application.on(application.exitEvent, (args) => {
   console.log(`exited`)
