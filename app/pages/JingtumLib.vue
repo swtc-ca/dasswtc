@@ -8,55 +8,53 @@
     </ActionBar>
 
     <Gridlayout ~mainContent rows="*,auto" cols="*">
-      <StackLayout row="0" :visibility="activeSegment === 'lib' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
+      <GridLayout row="0" columns="*" rows="auto,*" :visibility="activeSegment === 'lib' ? 'visible' : 'collapse'">
+        <GridLayout row="0" columns="auto,*,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="jingtum-lib" col="0" />
-          <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
+          <Button col="1" horizontalAlignment="center" class="btn" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
+          <Label class="openurl ion" col="2" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter1_connect.html')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter1_connect.html')"/>
-        <Label class="docimportant" text="本地签名" />
-        <ScrollView>
-          <TextView style="font-size:16;" editable="false">
-          remote = new Remote({server: server, local_sign: true})
-          tx = remote.buildTx()
-          tx.setSequence()
-          tx.addMemo()
-          tx.setSecret()
-          tx.sign()
-          tx.tx_json, tx.tx_json.TxnSignature, tx.tx_json.blob
-          tx.submit()
-          </TextView>
+        <ScrollView row="1">
+          <ListView for="item in libItems" class="list-group" @itemTap="onItemTap">
+            <v-template>
+              <GridLayout class="list-group-item" rows="*" columns="auto, *">
+                <Label row="0" col="1" :text="item" />
+              </GridLayout>
+            </v-template>
+          </ListView>
         </ScrollView>
-      </StackLayout>
-      <StackLayout row="0" :visibility="activeSegment === 'base' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
+      </GridLayout>
+      <GridLayout row="0" columns="*" rows="auto,*" :visibility="activeSegment === 'base' ? 'visible' : 'collapse'">
+        <GridLayout row="0" columns="auto,*,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="基础库钱包签名" col="0" />
-          <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
+          <Button col="1" horizontalAlignment="center" class="btn" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
+          <Label class="openurl ion" col="2" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/chapter2_account_new.html')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/chapter2_account_new.html')"/>
-        <Label class="docimportant" text="离线签名" />
-        <ScrollView>
-          <TextView style="font-size:16;" editable="false">
-          wallet = new Wallet(secret)
-          wallet.sign
-          wallet.verify
-          wallet.signTx
-          wallet.verifyTx
-          </TextView>
+        <ScrollView row="1">
+          <ListView for="item in baseItems" class="list-group" @itemTap="onItemTap">
+            <v-template>
+              <GridLayout class="list-group-item" rows="*" columns="auto, *">
+                <Label row="0" col="1" :text="item" />
+              </GridLayout>
+            </v-template>
+          </ListView>
         </ScrollView>
-      </StackLayout>
+      </GridLayout>
       <StackLayout row="0" :visibility="activeSegment === 'api' ? 'visible' : 'collapse'">
-        <GridLayout columns="*,auto,10,auto" verticalAlignment="top">
+        <GridLayout columns="auto,*,auto" verticalAlignment="top">
           <Label textVerticalAlignment="center" class="openrul" text="API 访问适合移动应用" col="0" />
+          <Button col="1" horizontalAlignment="center" class="btn" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
           <Label class="openurl ion" col="3" :text="'ion-md-open' | fonticon" @tap="openurl('http://developer.jingtum.com/api2_doc.html#')"></Label>
         </GridLayout>
-        <Button height="60" class="docimportant btn btn-primary" text="在线文档" @tap="awv('http://developer.jingtum.com/api2_doc.html#')"/>
         <Label class="docimportant" text="提交本地签名的交易" />
         <ScrollView>
-          <TextView class="t-16" editable="false">
-          POST /v2/blob
-          { "blob": "123456787...." }
-          </TextView>
+          <ListView for="item in apiItems" class="list-group" @itemTap="onItemTap">
+            <v-template>
+              <GridLayout class="list-group-item" rows="*" columns="auto, *">
+                <Label row="0" col="1" :text="item" />
+              </GridLayout>
+            </v-template>
+          </ListView>
         </ScrollView>
       </StackLayout>
       <StackLayout row="0" :visibility="activeSegment === 'output' ? 'visible' : 'collapse'">
@@ -155,7 +153,26 @@ export default {
       activeSegment: 'play',
       apis: [],
       base: ['Wallet.generate', 'Wallet.fromSecret', 'Wallet.isValidAddress', 'Wallet.isValidSecret', 'Wallet.sign', 'Wallet.verify', 'Wallet.address', 'Wallet.secret', 'Wallet.toJson', 'Wallet.getPublicKey', 'Wallet.signTx', 'Wallet.verifyTx'],
-      lib: []
+      libItems: [
+         `remote = new Remote({server: server, local_sign: true}) `,
+         `tx = remote.buildTx() `,
+         `tx.setSequence() `,
+         `tx.addMemo() `,
+         `tx.setSecret() `,
+         `tx.sign() `,
+         `tx.tx_json, tx.tx_json.TxnSignature, tx.tx_json.blob `,
+         `tx.submit() `,
+      ],
+      baseItems: [
+         `wallet = new Wallet(secret)`,
+         `wallet.sign`,
+         `wallet.verify`,
+         `wallet.signTx`,
+         `wallet.verifyTx`,
+      ],
+      apiItems: [
+          `POST /v2/blob {"blob": "123456787...."}`
+      ]
     };
   },
   computed: {
@@ -375,6 +392,9 @@ export default {
         this.appendMsgPrompt('请选择一个钱包')
       }
     },
+    onItemTap(event) {
+      console.log("You tapped: " + this.libItems[event.index])
+    }
   },
   created() { 
     console.log("jingtum app created")
@@ -398,9 +418,13 @@ export default {
   horizontal-align: right;
 }
 .docimportant {
-  font-size: 24;
+  font-size: 16;
   padding-bottom: 6;
   horizontal-align: center;
   vertical-align: middle;
 }
+ .list-group-item {
+    padding: 8;
+    font-size: 12;
+ }
 </style>
