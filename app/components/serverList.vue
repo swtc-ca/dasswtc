@@ -7,13 +7,12 @@
                @itemTap="onItemTap"
                @pullToRefreshInitiated="onPullToRefreshInitiated"
                @itemReordered="onItemReordered"
+               class="list-group"
                @itemSwipeProgressStarted="onSwipeStarted">
     <v-template>
-      <GridLayout columns="10,*" rows="*" class="item" backgroundColor="White">
-        <Label text="" col="0"></Label>
-        <StackLayout col="1">
-          <Label :text="item.display" class="h3" col="1"/>
-        </StackLayout>
+      <GridLayout columns="60,*" rows="*" class="list-group-item" backgroundColor="White">
+        <Label col="0" :text="$store.getters.swtcServer.server === item.server ? '(默认)' : ''" class="h3" />
+        <Label :text="item.display" class="h3" col="1"/>
       </GridLayout>
     </v-template>
 

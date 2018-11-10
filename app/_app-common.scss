@@ -1,0 +1,122 @@
+// Place any CSS rules you want to apply on both iOS and Android here.
+// This is where the vast majority of your CSS code goes.
+
+//Font icon
+.fa {
+   font-family: "FontAwesome";
+}
+.ion {
+  font-family: Ionicons, ionicons;
+  font-size: 24;
+}
+//Action bar
+.page {
+    align-items: center;
+    flex-direction: column;
+  }
+
+Label {
+  vertical-align: center;
+}
+
+TextView {
+  border-width: 1;
+}
+
+TextField {
+  padding-left: 5;
+}
+
+.action-item,
+NavigationButton {
+    color: $ab-color;
+}
+
+.action-item:disabled {
+    color: rgba($ab-color, 0.5);
+}
+
+Slider {
+  background-color: $accent;
+  color: $accent;
+}
+
+.text {
+    color: $blue-dark;
+}
+
+.text-primary {
+    color: $accent-dark;
+}
+
+.text-secondary {
+    color: $blue-50;
+}
+
+.title {
+    text-align: center;
+    padding-left: 16;
+}
+
+.message {
+    vertical-align: center;
+    text-align: center;
+    font-size: 20;
+}
+
+.drawer-close-button {
+  margin-top: 10;
+  padding: 10 10 10 10;
+  margin-bottom: 10;
+}
+
+.drawer-item {
+    padding: 8 16;
+    font-size: 12;
+}
+
+.item {
+  padding: 10;
+  border-color: $grey;
+  border-bottom-width: 1;
+  border-bottom-style: solid;
+}
+
+.big {
+  font-size: 20;
+}
+
+.thumbnail {
+  margin-right: 10;
+}
+
+.swipe-item {
+  color: white;
+  padding: 8;
+}
+
+.swipe-item.left {
+  background-color: #240774;
+}
+
+.swipe-item.right {
+  background-color: #79000a;
+}
+
+.drawer {
+  padding: 10;
+  background-color: $background;
+}
+
+.sideLogo {
+  margin-bottom: 10;
+}
+
+.sideLabel {
+  font-size: 16;
+  padding: 5;
+}
+
+.sideLightGrayLabel {
+  background-color: $grey;
+}

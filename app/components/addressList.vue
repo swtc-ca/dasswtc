@@ -1,6 +1,7 @@
 <template>
   <RadListView ref="listView"
                for="item in items"
+               class="list-group"
                :pullToRefresh="pulltorefresh"
                itemReorder="true"
                :swipeActions="swipeactions"
@@ -9,11 +10,11 @@
                @itemReordered="onItemReordered"
                @itemSwipeProgressStarted="onSwipeStarted">
     <v-template>
-      <GridLayout columns="10,*" rows="*" class="item" backgroundColor="White">
-        <Label text="" col="0"></Label>
+      <GridLayout columns="10,*" rows="*" class="list-group-item" backgroundColor="White">
+        <Label col="0" text="" class="h3" />
         <StackLayout col="1">
-          <Label :text="item.address" class="h3" col="1"/>
-          <Label v-if="!pulltorefresh" :text="item.secret" class="h4" col="1"/>
+          <Label :text="item.address" class="h3 listdefault" />
+          <Label v-if="pulltorefresh" :text="item.secret" class="h4" />
         </StackLayout>
       </GridLayout>
     </v-template>
@@ -100,5 +101,8 @@ export default {
 </script>
 
 <style lang="scss">
+.listdefault {
+  font-weight: bold;
+}
 </style>
 

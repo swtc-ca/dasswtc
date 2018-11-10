@@ -57,7 +57,7 @@
           </ListView>
         </ScrollView>
       </StackLayout>
-      <StackLayout row="0" :visibility="activeSegment === 'output' ? 'visible' : 'collapse'">
+      <StackLayout row="0" :visibility="activeSegment === 'logs' ? 'visible' : 'collapse'">
         <ScrollView>
           <TextView :text="logMsgs" class="t-12" editable="false">
           </TextView>
@@ -110,13 +110,9 @@
           </GridLayout>
         </StackLayout>
       </StackLayout>
-      <GridLayout row="1" class="segmented-bar" verticalAlignment="bottom" columns="auto,*,*,*,auto">
-        <Button class="segmented-item" col="0" @tap="activeSegment='play'" text="PLAY"></Button>
-        <Button class="segmented-item" col="1" @tap="activeSegment='api'" text="API"></Button>
-        <Button class="segmented-item" col="2" @tap="activeSegment='base'" text="BASE"></Button>
-        <Button class="segmented-item" col="3" @tap="activeSegment='lib'" text="LIB"></Button>
-        <Button class="segmented-item" col="4" @tap="activeSegment='output'" text="OUTPUT"></Button>
-      </Gridlayout>
+      <SegmentedBar class="segmented-bar" row="1" v-if="segmentList" @selectedIndexChange="onSegmentChange" v-model="selectedSegment">
+        <SegmentedBarItem v-for="(segment,index) in segmentList" :key="index" :title="segment" />
+      </SegmentedBar>
     </GridLayout>
   </Page>
 </template>
@@ -125,8 +121,6 @@
 const dialogs = require('tns-core-modules/ui/dialogs')
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import * as platformModule from "tns-core-modules/platform";
-//import JingtumLibService from './../services/JingtumLibService';
-//const jingtumLibService = new JingtumLibService('jingtumlib');
 import sideDrawer from '~/mixins/sideDrawer'
 import feedback from '~/mixins/feedback'
 import jingtumLib from '~/mixins/jingtumLib'
@@ -137,6 +131,9 @@ export default {
   mixins: [ sideDrawer, feedback, jingtumLib, advancedWebView, fancyAlert ],
   data() {
     return {
+      segmentList: ['play', 'api', 'base', 'lib', 'logs'],
+      selectedSegment: 0,
+      //activeSegment: 'play',
       walletIndex: 0,
       serverIndex: 0,
       remoteConnecting: false,
@@ -148,9 +145,6 @@ export default {
       qrRelation: 'trust',
       offerSWT: 1,
       offerCNY: 0.01,
-      segmentItems: ['api', 'base', 'lib', 'play', 'output'],
-      segmentIndex: 3,
-      activeSegment: 'play',
       apis: [],
       base: ['Wallet.generate', 'Wallet.fromSecret', 'Wallet.isValidAddress', 'Wallet.isValidSecret', 'Wallet.sign', 'Wallet.verify', 'Wallet.address', 'Wallet.secret', 'Wallet.toJson', 'Wallet.getPublicKey', 'Wallet.signTx', 'Wallet.verifyTx'],
       libItems: [
@@ -183,7 +177,8 @@ export default {
     },
     logMsgs() {
       return this.msgs.map( e => `${JSON.stringify(e.msg, '', 2)}\n`)
-    }
+    },
+    activeSegment() { return this.segmentList[this.selectedSegment] }
   },
   methods: {
     ...mapMutations([
@@ -198,9 +193,8 @@ export default {
       openUrl(url)
     },
     onSegmentChange(args) {
-      console.log(args.object.__vue_element_ref__)
-      console.log(this.segmentIndex)
-      console.log(this.activeSegment)
+      //console.log(args.object.__vue_element_ref__)
+      console.log(this.selectedSegment)
     },
     onPayment(){
       console.log("donation")
