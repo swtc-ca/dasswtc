@@ -5,7 +5,7 @@
       <ActionItem @tap="$modal.close"  ios.position="right" ios.systemIcon="14" android.systemIcon="ic_menu_close_clear_cancel" />
     </ActionBar>
     <StackLayout verticalAlignment="middle">
-      <Image :src="src" :width="width" :height="height" />
+      <Image :src="src" :width="width" :height="height" @tap="onTap" />
     </StackLayout>
   </Page>
   </Frame>
@@ -14,6 +14,7 @@
 <script>
 import statusBar from '~/mixins/statusBar'
 var imageSource = require('image-source')
+var fs = require('file-system')
 export default {
   name: 'qr-code',
   mixins: [ statusBar ],
@@ -45,11 +46,22 @@ export default {
     onTap (event) {
       console.log("taped inside qrcode")
       this.$emit('qrTap', event)
+      this.onSave()
     },
     modalLoaded (args) {
       console.log('modal loaded')
       this.statusBarAndroid()
-    }
+    },
+    onSave() {
+    	let folder
+    	if (global.android) {
+    		folder = android.os.Environment.getExternalStoragePublicDirectory (android.os.Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/"
+    		let path = fs.path.join(folder, "zxingdemo001.jpg")
+    		let saved = this.img.imageSource.saveToFile(path, "jpeg")
+    	} else {
+    		UIImageWriteToSavedPhotosAlbum(this.src.ios, null, null, null);
+    	}
+    },
   },
   created() {
     console.log("qrcode components created")

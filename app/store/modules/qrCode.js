@@ -13,7 +13,7 @@ export default {
       encode ({getters, commit}, text='daszichan 2018', height=300, width=300, format=ZXing.QR_CODE) {
         console.log("encode")
         return getters.zxing.createBarcode({encode: text, height: height, width: width, format: format})
-      }
+      },
     },
     created () {
       console.log('qrcode created')
